@@ -1,0 +1,16 @@
+# pnpm settings for this project (it is a single package, not a monorepo).
+
+# A newly published package version must be at least one day old before pnpm installs it.
+# Most hijacked npm releases are found and pulled within hours.
+minimumReleaseAge: 1440
+
+# Only packages listed here may run install scripts. None need one today (Vite 8 ships prebuilt
+# Rolldown binaries). Add one only with a reason in the commit message.
+allowBuilds: {}
+
+# eslint-plugin-jsx-a11y 6.10 lists ESLint up to v9 as its peer, but it uses none of the APIs
+# ESLint 10 removed (checked 2026-11-15), and tests/guardrails/eslint-rules.test.ts runs it.
+# Remove this once the plugin declares ESLint 10.
+peerDependencyRules:
+  allowedVersions:
+    eslint-plugin-jsx-a11y>eslint: "10"

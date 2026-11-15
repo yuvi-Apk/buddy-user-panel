@@ -1,0 +1,8 @@
+{
+  "common": {
+    "appName": "Buddy"
+  },
+  "app": {
+    "setupNotice": "Buddy is being set up. The screens arrive step by step."
+  }
+}

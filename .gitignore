@@ -1,0 +1,32 @@
+# dependencies
+node_modules
+
+# build output
+dist
+dev-dist
+*.tsbuildinfo
+
+# env files: only .env.sample and .env.test are committed
+.env
+.env.*
+!.env.sample
+!.env.test
+
+# test output
+coverage
+playwright-report
+test-results
+blob-report
+
+# logs
+logs
+*.log
+
+# caches and editors
+.eslintcache
+.cache
+.idea
+.DS_Store
+
+# Claude Code personal settings
+.claude/settings.local.json
