@@ -14,6 +14,14 @@ folder or file; `pnpm test:watch` reruns as you type.
 The test for `src/api/api-client.ts` is `tests/unit/api/api-client.test.ts`. `tests/README.md` lists
 the few test files that cover several small components.
 
+### Is this file tested already?
+
+1. Look at the same path under `tests/unit/`.
+2. Look in the table in `tests/README.md` (a few test files cover several small components).
+3. Search `tests/` for the function or component name: some code is covered by a bigger test.
+
+Nothing found means it is not tested.
+
 ### A component test
 
 ```tsx
@@ -132,7 +140,7 @@ versions.
 - `CLAUDE.md` is the short brief: commands, what never to do, when a change is done.
 - `.claude/rules/` holds the detailed rules; each file loads when Claude works on matching files.
 - `.claude/skills/` has step-by-step recipes: `new-module`, `add-page`, `add-api-hook`,
-  `add-ui-component`.
+  `add-ui-component`, `write-tests`.
 - Two hooks run by themselves: one formats every file Claude edits, one blocks any command that
   touches your `.env`.
 - Claude commits only when you tell it to.
