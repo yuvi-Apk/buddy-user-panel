@@ -1,8 +1,8 @@
 // The menus of every role. Phones show `tabs` in the bottom bar, plus a "More" tab
 // that opens `more`; laptops show both lists in the sidebar.
 //
-// Every item must point to a route its role may open: tests/project-rules/routes.test.ts checks it
-//. A menu only hides things; the server decides access.
+// Every item must point to a route its role may open: tests/project-rules/routes.test.ts checks it.
+// A menu only hides things; the server decides access.
 import {
   Building,
   CalendarCheck,
@@ -30,7 +30,7 @@ export interface NavItem {
 
 export interface RoleNavigation {
   /** Where the role lands after login, and where a page it may not open sends it. */
-  home: string;
+  homePath: string;
   /** The bottom bar on phones: at most 4, because "More" takes the 5th place. */
   tabs: readonly NavItem[];
   /** Behind "More" on phones, below the main items in the sidebar. */
@@ -40,61 +40,69 @@ export interface RoleNavigation {
 export const LOGIN_PATH = "/login";
 
 /** The most tabs a phone bar shows before "More". */
-export const MAX_TABS = 4;
+export const MAX_BOTTOM_TABS = 4;
 
-const item = (path: string, labelKey: LangKey, icon: LucideIcon): NavItem => ({
+const createNavItem = (
+  path: string,
+  labelKey: LangKey,
+  icon: LucideIcon
+): NavItem => ({
   path,
   labelKey,
   icon,
 });
 
-const today = item("/today", "nav.today", CalendarCheck);
-const plan = item("/plan", "nav.plan", Route);
-const topics = item("/topics", "nav.topics", Layers);
-const ask = item("/ask", "nav.ask", MessageCircleQuestionMark);
-const profile = item("/profile", "nav.profile", CircleUser);
-const settings = item("/settings", "nav.settings", Settings);
-const join = item("/join", "nav.join", UserPlus);
-const dashboard = item(
+const today = createNavItem("/today", "nav.today", CalendarCheck);
+const plan = createNavItem("/plan", "nav.plan", Route);
+const topics = createNavItem("/topics", "nav.topics", Layers);
+const ask = createNavItem("/ask", "nav.ask", MessageCircleQuestionMark);
+const profile = createNavItem("/profile", "nav.profile", CircleUser);
+const settings = createNavItem("/settings", "nav.settings", Settings);
+const join = createNavItem("/join", "nav.join", UserPlus);
+const dashboard = createNavItem(
   "/organization/dashboard",
   "nav.dashboard",
   LayoutDashboard
 );
-const classes = item("/organization/classes", "nav.classes", School);
-const members = item("/organization/members", "nav.members", UsersRound);
-const requests = item("/organization/requests", "nav.requests", Inbox);
-const invites = item("/organization/invites", "nav.invites", Mail);
-const organizationSettings = item(
+const classes = createNavItem("/organization/classes", "nav.classes", School);
+const members = createNavItem(
+  "/organization/members",
+  "nav.members",
+  UsersRound
+);
+const requests = createNavItem("/organization/requests", "nav.requests", Inbox);
+const invites = createNavItem("/organization/invites", "nav.invites", Mail);
+const organizationSettings = createNavItem(
   "/organization/settings",
   "nav.organizationSettings",
   Building
 );
 
-export const NAVIGATION: Readonly<Record<UserRole, RoleNavigation>> = {
+export const NAVIGATION_BY_ROLE: Readonly<Record<UserRole, RoleNavigation>> = {
   INDIVIDUAL: {
-    home: today.path,
+    homePath: today.path,
     tabs: [today, plan, topics, ask],
     more: [profile, join, settings],
   },
   STUDENT: {
-    home: today.path,
+    homePath: today.path,
     tabs: [today, plan, topics, ask],
     more: [profile, settings],
   },
   TEACHER: {
-    home: dashboard.path,
+    homePath: dashboard.path,
     tabs: [dashboard, classes],
     more: [profile, settings],
   },
   ORGANIZATION_ADMIN: {
-    home: dashboard.path,
+    homePath: dashboard.path,
     tabs: [dashboard, classes, members, requests],
     more: [invites, organizationSettings, profile, settings],
   },
 };
 
-export function homeFor(role: UserRole): string {
-  return NAVIGATION[role].home;
+export function getHomePathForRole(role: UserRole): string {
+  return NAVIGATION_BY_ROLE[role].homePath;
 }
 
 export const ROLE_LABEL_KEYS: Readonly<Record<UserRole, LangKey>> = {

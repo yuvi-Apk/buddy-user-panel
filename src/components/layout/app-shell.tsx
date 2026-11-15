@@ -7,7 +7,7 @@
 // app and the content, nothing to wander off to.
 import type { ReactNode } from "react";
 import { OfflineBanner } from "@/components/feedback/offline-banner";
-import { NAVIGATION } from "@/config/navigation";
+import { NAVIGATION_BY_ROLE } from "@/config/navigation";
 import type { SessionUser } from "@/auth/session-store";
 import { BottomNav } from "./bottom-nav";
 import { BrandMark } from "./brand-mark";
@@ -22,7 +22,7 @@ export interface AppShellProps {
 }
 
 export function AppShell({ user, onSignOut, children }: AppShellProps) {
-  const navigation = NAVIGATION[user.role];
+  const navigation = NAVIGATION_BY_ROLE[user.role];
 
   return (
     <div className="min-h-dvh bg-background">

@@ -5,7 +5,7 @@
 import type { RouteObject } from "react-router";
 import { describe, expect, it } from "vitest";
 import { appRoutes, buildRoutes } from "@/app/router";
-import { MAX_TABS, NAVIGATION } from "@/config/navigation";
+import { MAX_BOTTOM_TABS, NAVIGATION_BY_ROLE } from "@/config/navigation";
 import en from "@/lang/en.json";
 import { textAt } from "@/lang";
 import { USER_ROLES } from "@/auth/roles";
@@ -75,9 +75,9 @@ describe("navigation", () => {
   it.each(USER_ROLES)(
     "every %s menu item opens a page that role may open",
     (role) => {
-      const { home, tabs, more } = NAVIGATION[role];
+      const { homePath, tabs, more } = NAVIGATION_BY_ROLE[role];
       const problems = [
-        home,
+        homePath,
         ...[...tabs, ...more].map((item) => item.path),
       ].flatMap((path) => {
         const route = byPath.get(path);
@@ -93,8 +93,8 @@ describe("navigation", () => {
   it.each(USER_ROLES)(
     "%s has at most %i tabs before More, and no item twice",
     (role) => {
-      const { tabs, more } = NAVIGATION[role];
-      expect(tabs.length).toBeLessThanOrEqual(MAX_TABS);
+      const { tabs, more } = NAVIGATION_BY_ROLE[role];
+      expect(tabs.length).toBeLessThanOrEqual(MAX_BOTTOM_TABS);
       const paths = [...tabs, ...more].map((item) => item.path);
       expect(new Set(paths).size).toBe(paths.length);
     }
@@ -102,7 +102,7 @@ describe("navigation", () => {
 
   it("every menu label is a sentence in en.json", () => {
     const unknown = USER_ROLES.flatMap((role) =>
-      [...NAVIGATION[role].tabs, ...NAVIGATION[role].more]
+      [...NAVIGATION_BY_ROLE[role].tabs, ...NAVIGATION_BY_ROLE[role].more]
         .filter((item) => textAt(en, item.labelKey) === item.labelKey)
         .map((item) => `${role} ${item.path}: ${item.labelKey}`)
     );

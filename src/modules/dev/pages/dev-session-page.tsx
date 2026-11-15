@@ -8,7 +8,7 @@ import { Inline, Stack } from "@/components/layout/stack";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { homeFor, ROLE_LABEL_KEYS } from "@/config/navigation";
+import { getHomePathForRole, ROLE_LABEL_KEYS } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
 import { USER_ROLES, type UserRole } from "@/auth/roles";
 import { endLocalSession, signIn } from "@/auth/session";
@@ -71,7 +71,7 @@ export function DevSessionPage() {
 
   const signInAs = (role: UserRole) => {
     signIn({ accessToken: `dev-session-${role}`, user: FAKE_USERS[role] });
-    void navigate(homeFor(role));
+    void navigate(getHomePathForRole(role));
   };
 
   return (
@@ -94,7 +94,8 @@ export function DevSessionPage() {
                       {textAt(lang, ROLE_LABEL_KEYS[role])}
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      {FAKE_USERS[role].name} · lands on {homeFor(role)}
+                      {FAKE_USERS[role].name} · lands on{" "}
+                      {getHomePathForRole(role)}
                     </span>
                   </Stack>
                   <Button

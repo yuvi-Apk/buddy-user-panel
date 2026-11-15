@@ -9,7 +9,7 @@
 // Each module lists its own pages in its routes.ts with createPageRoute.
 // tests/project-rules/routes.test.ts checks them against src/config/navigation.ts.
 import { createBrowserRouter, redirect, type RouteObject } from "react-router";
-import { homeFor, LOGIN_PATH } from "@/config/navigation";
+import { getHomePathForRole, LOGIN_PATH } from "@/config/navigation";
 import { authRoutes } from "@/modules/auth";
 import { chatRoutes } from "@/modules/chat";
 import { devRoutes } from "@/modules/dev";
@@ -61,7 +61,7 @@ const homeHandle: PageRouteInfo = {
 async function homeRedirect(): Promise<Response> {
   const session = await waitUntilSessionIsKnown();
   const role = session.status === "signed-in" ? session.user?.role : undefined;
-  return redirect(role ? homeFor(role) : LOGIN_PATH);
+  return redirect(role ? getHomePathForRole(role) : LOGIN_PATH);
 }
 
 export function buildRoutes(

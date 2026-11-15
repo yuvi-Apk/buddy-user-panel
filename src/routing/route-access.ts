@@ -3,7 +3,7 @@
 //   "public"               anyone (an email link, the 404 page)
 //   "guest"                signed-out people only (login, sign-up); signed-in people go home
 //   ["TEACHER", ...]       these roles only: signed out → /login?redirect=…, wrong role → home
-import { homeFor, LOGIN_PATH } from "@/config/navigation";
+import { getHomePathForRole, LOGIN_PATH } from "@/config/navigation";
 import type { UserRole } from "@/auth/roles";
 import type { SessionState } from "@/auth/session-store";
 import { getSafeRedirectPath } from "@/utils/safe-redirect";
@@ -22,11 +22,14 @@ export function getRedirectPathIfBlocked(
 
   if (access === "guest") {
     if (!role) return null;
-    return getSafeRedirectPath(url.searchParams.get("redirect"), homeFor(role));
+    return getSafeRedirectPath(
+      url.searchParams.get("redirect"),
+      getHomePathForRole(role)
+    );
   }
 
   if (!role) return buildLoginPathWithReturn(url);
-  return access.includes(role) ? null : homeFor(role);
+  return access.includes(role) ? null : getHomePathForRole(role);
 }
 
 /** "/login?redirect=%2Fplan%3Fweek%3D2", so login brings the person returnPath where they were. */
