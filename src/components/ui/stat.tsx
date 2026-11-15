@@ -1,8 +1,8 @@
 // A number with its label, and an optional trend line ("+12% this week").
-// A falling trend is shown calmly in muted ink: never red, never amber (core-rules #2).
+// A falling trend is shown calmly in muted ink: never red, never amber.
 import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface StatTrend {
   direction: "up" | "down" | "flat";

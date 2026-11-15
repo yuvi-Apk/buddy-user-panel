@@ -1,4 +1,4 @@
-// Installing Buddy on the home screen (pwa.md).
+// Installing Buddy on the home screen.
 //
 //   const install = useInstallPrompt();
 //   install.status === "available"   → <Button onClick={install.promptInstall}>…</Button>

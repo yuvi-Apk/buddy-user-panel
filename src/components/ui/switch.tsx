@@ -2,7 +2,7 @@
 // a form, use Checkbox instead.
 import { Switch as SwitchPrimitive } from "radix-ui";
 import { type ComponentProps, type ReactNode, useId } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface SwitchProps extends Omit<
   ComponentProps<typeof SwitchPrimitive.Root>,

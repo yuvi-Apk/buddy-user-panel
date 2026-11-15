@@ -4,7 +4,7 @@
 import type { ReactNode } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export function LoadingState({
   children,

@@ -1,5 +1,6 @@
-// ESLint guardrails. Each ban enforces a rule in .claude/rules/core-rules.md, and its message names
-// the rule number. tests/guardrails/eslint-rules.test.ts proves every ban still fires.
+// ESLint config. Besides the usual React and TypeScript rules it holds the project bans (fetch,
+// storage, env, raw form elements, typed-in text, imports across modules). Each message says what
+// to do instead. tests/project-rules/eslint-rules.test.ts proves every ban still fires.
 import tanstackQuery from "@tanstack/eslint-plugin-query";
 import { defineConfig, globalIgnores } from "eslint/config";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
@@ -8,9 +9,6 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
-import { importBoundaries } from "./eslint/import-boundaries.js";
-
-const buddy = { rules: { "import-boundaries": importBoundaries } };
 
 // --- syntax bans (no-restricted-syntax) -------------------------------------
 
@@ -20,32 +18,32 @@ const envBan = {
   selector:
     "MemberExpression[object.type='MetaProperty'][property.name='env']:not(MemberExpression[property.name='DEV'] > MemberExpression.object)",
   message:
-    "Read env only through `env` from src/config/env.ts (core-rules #12). Only `import.meta.env.DEV` may be used elsewhere.",
+    "Read env only through `env` from src/config/env.ts. Only `import.meta.env.DEV` may be used elsewhere.",
 };
 
 const innerHtmlBan = {
   selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
   message:
-    "dangerouslySetInnerHTML is banned (core-rules #11). Render text, or markdown without raw HTML.",
+    "dangerouslySetInnerHTML is banned. Render text, or markdown without raw HTML.",
 };
 
 const defaultExportBan = {
   selector: "ExportDefaultDeclaration",
-  message: "Use a named export (core-rules #19).",
+  message: "Use a named export.",
 };
 
 const rawElementBan = {
   selector: "JSXOpeningElement[name.name=/^(button|input|select|textarea)$/]",
   message:
-    "Use the shared components from @/components/ui (Button, TextField, ...) instead of raw form elements (core-rules #4).",
+    "Use the shared components from @/components/ui (Button, TextField, ...) instead of raw form elements.",
 };
 
 // --- global bans (no-restricted-globals / no-restricted-properties) ---------
 
 const FETCH_MESSAGE =
-  "Only src/lib/api/ calls fetch (core-rules #9). Use your feature's api/ hook.";
+  "Only src/api/ calls fetch. Use the api/ hook of your module.";
 const STORAGE_MESSAGE =
-  "Browser storage only through src/lib/storage.ts, and never for tokens or personal data (core-rules #8).";
+  "Browser storage only through src/utils/storage.ts, and never for tokens or personal data.";
 
 const fetchGlobal = [{ name: "fetch", message: FETCH_MESSAGE }];
 const storageGlobals = ["localStorage", "sessionStorage", "indexedDB"].map(
@@ -65,7 +63,7 @@ const storageProperties = [
   "indexedDB",
 ].flatMap((name) => onGlobalObjects(name, STORAGE_MESSAGE));
 
-// --- screen text (core-rules #5) --------------------------------------------
+// --- screen text --------------------------------------------
 
 const literalTextBan = [
   "error",
@@ -83,10 +81,36 @@ const literalTextBan = [
         "^description$",
       ],
     },
-    message:
-      "Screen text lives in src/lang/en.json. Read it with useLang() (core-rules #5).",
+    message: "Screen text lives in src/lang/en.json. Read it with useLang().",
   },
 ];
+
+// --- imports between folders (no-restricted-imports) --------------------------
+//
+//   src/app            may import everything
+//   src/modules/<x>    its own files with relative paths ("../components/x"), another module only
+//                      through its index ("@/modules/auth"), never src/app
+//   everything else    is shared code: never imports a module or src/app
+
+const TESTS_IMPORT = {
+  group: ["@tests/*", "@tests/**"],
+  message: "App code never imports test helpers.",
+};
+const MODULE_FILES_IMPORT = {
+  group: ["@/modules/*/**"],
+  message:
+    'Import another module only through its index ("@/modules/auth"). Inside a module, use relative paths.',
+};
+const APP_IMPORT = {
+  group: ["@/app", "@/app/**"],
+  message: "Only src/main.tsx and src/app may import src/app.",
+};
+const ANY_MODULE_IMPORT = {
+  group: ["@/modules", "@/modules/**"],
+  message:
+    "Shared code never imports a module. Move the shared part into components/, hooks/ or utils/.",
+};
+const restrictImports = (...patterns) => ["error", { patterns }];
 
 // --- config -----------------------------------------------------------------
 
@@ -98,7 +122,6 @@ export default defineConfig(
     "playwright-report/**",
     "test-results/**",
     "public/**",
-    ".claude/**",
   ]),
 
   // TypeScript, type-checked (the same base as the backend).
@@ -132,12 +155,15 @@ export default defineConfig(
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
       jsxA11y.flatConfigs.recommended,
-      // Query keys list every value the query uses; no unstable query clients (data-and-api.md).
+      // Query keys list every value the query uses; no unstable query clients .
       tanstackQuery.configs["flat/recommended-strict"],
     ],
-    plugins: { buddy },
     rules: {
-      "buddy/import-boundaries": "error",
+      "no-restricted-imports": restrictImports(
+        TESTS_IMPORT,
+        APP_IMPORT,
+        ANY_MODULE_IMPORT
+      ),
       "no-restricted-syntax": ["error", envBan, innerHtmlBan, defaultExportBan],
       "no-restricted-globals": ["error", ...fetchGlobal, ...storageGlobals],
       "no-restricted-properties": [
@@ -148,7 +174,7 @@ export default defineConfig(
     },
   },
 
-  // Tailwind classes must exist in our design system (core-rules #1): Tailwind's own palette is
+  // Tailwind classes must exist in our design system: Tailwind's own palette is
   // removed in index.css, so `bg-indigo-600` or `text-xs` is reported as unknown, like a typo.
   // Class order is left to the Prettier plugin.
   {
@@ -166,16 +192,20 @@ export default defineConfig(
   // Screen text never sits in JSX (dev tools and tests are exempt).
   {
     files: ["src/**/*.tsx"],
-    ignores: ["src/**/*.test.tsx", "src/test/**", "src/features/dev/**"],
+    ignores: ["src/modules/dev/**"],
     plugins: { i18next },
     rules: { "i18next/no-literal-string": literalTextBan },
   },
 
-  // Features build screens only from the shared components.
+  // Modules build screens only from the shared components, and stay out of each other's files.
   {
-    files: ["src/features/**/*.tsx"],
-    ignores: ["src/**/*.test.tsx"],
+    files: ["src/modules/**/*.{ts,tsx}"],
     rules: {
+      "no-restricted-imports": restrictImports(
+        TESTS_IMPORT,
+        APP_IMPORT,
+        MODULE_FILES_IMPORT
+      ),
       "no-restricted-syntax": [
         "error",
         envBan,
@@ -198,8 +228,7 @@ export default defineConfig(
 
   // The only caller of fetch.
   {
-    files: ["src/lib/api/**/*.ts"],
-    ignores: ["src/**/*.test.ts"],
+    files: ["src/api/**/*.ts"],
     rules: {
       "no-restricted-globals": ["error", ...storageGlobals],
       "no-restricted-properties": ["error", ...storageProperties],
@@ -208,7 +237,7 @@ export default defineConfig(
 
   // The only user of browser storage.
   {
-    files: ["src/lib/storage.ts"],
+    files: ["src/utils/storage.ts"],
     rules: {
       "no-restricted-globals": ["error", ...fetchGlobal],
       "no-restricted-properties": ["error", ...fetchProperties],
@@ -217,20 +246,22 @@ export default defineConfig(
 
   // The only file that may write to the console (development builds only).
   {
-    files: ["src/lib/logger.ts"],
+    files: ["src/utils/logger.ts"],
     rules: { "no-console": "off" },
   },
 
-  // Tests may touch storage and fetch to check the code that wraps them.
+  // src/app and main.tsx put the modules together.
   {
-    files: ["src/**/*.test.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
+    files: ["src/app/**/*.{ts,tsx}", "src/main.tsx"],
     rules: {
-      "no-restricted-globals": "off",
-      "no-restricted-properties": "off",
+      "no-restricted-imports": restrictImports(
+        TESTS_IMPORT,
+        MODULE_FILES_IMPORT
+      ),
     },
   },
 
-  // Plain JS files (this config, the local ESLint rule) are not part of the TypeScript project.
+  // Plain JS files (this config, config scripts) are not part of the TypeScript project.
   {
     files: ["**/*.js", "**/*.mjs"],
     extends: [tseslint.configs.disableTypeChecked],

@@ -1,5 +1,5 @@
 import { Separator as SeparatorPrimitive } from "radix-ui";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface DividerProps {
   orientation?: "horizontal" | "vertical";

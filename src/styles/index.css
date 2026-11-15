@@ -1,6 +1,6 @@
 /*
   Tailwind, plus the mapping from our tokens to Tailwind utilities. No color values here: they all
-  live in tokens.css (core-rules #1). Read .claude/rules/design-system.md before changing this file.
+  live in tokens.css. 
 */
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -140,7 +140,7 @@
     border-color: var(--color-border);
   }
 
-  /* One focus style everywhere, only for keyboard focus (core-rules #14). */
+  /* One focus style everywhere, only for keyboard focus. */
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;

@@ -1,11 +1,11 @@
 /*
-  "Paper & Ink": the only file with color values (core-rules #1).
+  "Paper & Ink": the only file with color values.
 
   <html data-mode="light|dark" data-accent="indigo-ink|lagoon|orchid|graphite">
   :root is light mode with the Indigo Ink theme. Each block below overrides only what changes.
 
-  tests/guardrails/contrast.test.ts reads this file and checks every text and border pair for
-  WCAG AA in every theme × mode (core-rules #3). Keep it simple for that test: one declaration per
+  tests/project-rules/contrast.test.ts reads this file and checks every text and border pair for
+  WCAG AA in every theme × mode. Keep it simple for that test: one declaration per
   line, opaque hex colors for every color the test checks, no nesting, no @media.
 
   Each color family has four tokens:
@@ -31,7 +31,7 @@
   --border: #e3e0d8;
   --input: #8a857b;
 
-  /* Meaning colors: the same in every theme (core-rules #2) */
+  /* Meaning colors: the same in every theme */
   --progress: #2d7a4b;
   --progress-foreground: #ffffff;
   --progress-soft: #e5f3eb;

@@ -3,7 +3,7 @@
 import { WifiOff } from "lucide-react";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export function OfflineBanner({ className }: { className?: string }) {
   const online = useOnlineStatus();

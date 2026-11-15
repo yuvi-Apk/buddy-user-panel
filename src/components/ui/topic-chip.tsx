@@ -1,9 +1,9 @@
 // A topic and how the student is doing with it: "Algebra · Needs practice".
-// Always an icon and a word as well as the color, for color-blind students (core-rules #2).
+// Always an icon and a word as well as the color, for color-blind students.
 // "Needs practice" uses the growth sprout, never a warning sign: weak topics are where growth is.
 import { Sprout, TrendingUp } from "lucide-react";
 import { useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export type TopicStrength = "strong" | "needs-practice";
 

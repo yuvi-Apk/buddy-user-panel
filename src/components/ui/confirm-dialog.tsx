@@ -17,7 +17,7 @@ export interface ConfirmDialogProps {
   description: ReactNode;
   confirmLabel: string;
   cancelLabel?: string;
-  /** `destructive` only when the action can't be undone (core-rules #2). */
+  /** `destructive` only when the action can't be undone. */
   tone?: "primary" | "destructive";
   /**
    * May return a promise; the dialog closes when it resolves. If it throws or rejects, the dialog

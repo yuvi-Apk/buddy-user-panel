@@ -13,7 +13,7 @@ import { X } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type { ComponentProps, ReactNode } from "react";
 import { useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { IconButton } from "./button";
 import { overlayClasses, sheetClasses } from "./dialog-styles";
 

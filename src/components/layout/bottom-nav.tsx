@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/responsive-dialog";
 import type { RoleNavigation } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
-import type { SessionUser } from "@/lib/auth/session-schemas";
-import { cn } from "@/lib/cn";
+import type { SessionUser } from "@/auth/session-store";
+import { cn } from "@/utils/cn";
 import { AccountSummary } from "./account-summary";
 import { NavList } from "./side-nav";
 

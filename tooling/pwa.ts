@@ -1,9 +1,9 @@
-// The PWA set-up (pwa.md), used by vite.config.ts and checked by tests/guardrails/pwa.test.ts.
+// The PWA set-up, used by vite.config.ts and checked by tests/project-rules/pwa.test.ts.
 //
 //   - A new version waits for the person to tap "Reload" (registerType "prompt"), so the app never
 //     reloads in the middle of a quiz. src/pwa/update-prompt.tsx asks.
 //   - The service worker precaches only the built static files. Nothing from /api is ever cached
-//     (core-rules #13): answers hold personal data, and phones are shared.
+//    : answers hold personal data, and phones are shared.
 //   - Colors come from tokens.css and the name from en.json, so nothing is typed twice.
 import type { ManifestOptions, VitePWAOptions } from "vite-plugin-pwa";
 import en from "../src/lang/en.json" with { type: "json" };

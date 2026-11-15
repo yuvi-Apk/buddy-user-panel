@@ -1,5 +1,5 @@
 import { LoaderCircle } from "lucide-react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 /** A turning circle, for inside buttons. Hidden from screen readers: the button says it is busy. */
 export function Spinner({ className }: { className?: string }) {

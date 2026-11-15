@@ -1,6 +1,6 @@
 // The top bar on phones and tablets (under lg). Laptops have the sidebar instead.
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { BrandMark } from "./brand-mark";
 
 export function TopBar({

@@ -1,8 +1,8 @@
-// The menus of every role (features.md). Phones show `tabs` in the bottom bar, plus a "More" tab
+// The menus of every role. Phones show `tabs` in the bottom bar, plus a "More" tab
 // that opens `more`; laptops show both lists in the sidebar.
 //
-// Every item must point to a route its role may open: tests/guardrails/routes.test.ts checks it
-// (core-rules #6). A menu only hides things; the server decides access (core-rules #7).
+// Every item must point to a route its role may open: tests/project-rules/routes.test.ts checks it
+//. A menu only hides things; the server decides access.
 import {
   Building,
   CalendarCheck,
@@ -20,7 +20,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import type { LangKey } from "@/lang";
-import type { UserRole } from "@/lib/auth/roles";
+import type { UserRole } from "@/auth/roles";
 
 export interface NavItem {
   path: string;

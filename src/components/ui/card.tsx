@@ -2,7 +2,7 @@
 //   <Card><CardHeader><CardTitle>…</CardTitle><CardDescription>…</CardDescription></CardHeader>
 //         <CardContent>…</CardContent><CardFooter>…</CardFooter></Card>
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export function Card({ className, ...props }: ComponentProps<"div">) {
   return (

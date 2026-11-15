@@ -3,7 +3,7 @@
 //   <Inline gap={2} justify="between">…</Inline> side by side, wrapping on small screens
 //   <Grid columns={{ base: 1, md: 2, lg: 3 }}>…</Grid>
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 // Full class names, so Tailwind can find them in the source.
 const gaps = {

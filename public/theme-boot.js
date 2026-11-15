@@ -1,7 +1,7 @@
 // Runs before the first paint (a plain script in index.html's <head>), so the page never flashes
 // the wrong theme. It applies the choice saved by src/theme/theme-store.ts.
-// Keep the key and the lists in step with src/lib/storage.ts and src/theme/themes.ts:
-// tests/guardrails/theme-boot.test.ts checks them.
+// Keep the key and the lists in step with src/utils/storage.ts and src/theme/themes.ts:
+// tests/project-rules/theme-boot.test.ts checks them.
 (function () {
   var MODES = ["light", "dark", "system"];
   var ACCENTS = ["indigo-ink", "lagoon", "orchid", "graphite"];

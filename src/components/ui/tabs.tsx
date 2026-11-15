@@ -2,7 +2,7 @@
 // navigation; for picking a value use SegmentedControl.
 import { Tabs as TabsPrimitive } from "radix-ui";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export const Tabs = TabsPrimitive.Root;
 

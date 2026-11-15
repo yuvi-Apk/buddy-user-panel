@@ -3,7 +3,7 @@
 import { CircleCheck } from "lucide-react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { type ComponentProps, type ReactNode, useId } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface ChoiceCardOption {
   value: string;

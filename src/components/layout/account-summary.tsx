@@ -2,8 +2,8 @@
 import { Avatar } from "@/components/ui/avatar";
 import { ROLE_LABEL_KEYS } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
-import type { SessionUser } from "@/lib/auth/session-schemas";
-import { cn } from "@/lib/cn";
+import type { SessionUser } from "@/auth/session-store";
+import { cn } from "@/utils/cn";
 
 export function AccountSummary({
   user,

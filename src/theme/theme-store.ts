@@ -1,9 +1,9 @@
 // The person's theme choice: a mode (light, dark, system) and an accent (one of the 4 themes).
 //
-// It is applied to <html data-mode data-accent>, remembered through src/lib/storage.ts, and while
+// It is applied to <html data-mode data-accent>, remembered through src/utils/storage.ts, and while
 // the mode is "system" it follows the phone's dark-mode setting live. public/theme-boot.js applies
 // the same saved choice before the first paint, so the page never flashes the wrong colors.
-import { readStored, writeStored } from "@/lib/storage";
+import { readStored, writeStored } from "@/utils/storage";
 import {
   type Accent,
   DEFAULT_ACCENT,

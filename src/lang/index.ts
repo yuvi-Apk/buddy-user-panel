@@ -1,4 +1,4 @@
-// All screen text. Read .claude/rules/lang.md before adding text or a language.
+// All screen text.
 //
 //   const lang = useLang();
 //   <h1>{lang.auth.loginTitle}</h1>
@@ -45,7 +45,7 @@ export function textAt(lang: Lang, key: LangKey): string {
   return typeof value === "string" ? value : key;
 }
 
-/** Every language the app can show. Adding one is described in .claude/rules/lang.md. */
+/** Every language the app can show. */
 export const LANGUAGES = ["en"] as const;
 export type LanguageCode = (typeof LANGUAGES)[number];
 

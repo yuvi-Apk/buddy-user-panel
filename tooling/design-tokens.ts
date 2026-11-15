@@ -1,6 +1,6 @@
-// Reads src/styles/tokens.css, the only file with color values (core-rules #1), and works out the
+// Reads src/styles/tokens.css, the only file with color values, and works out the
 // value of every token for one mode and theme, the way the browser's cascade does.
-// Used by tests/guardrails/contrast.test.ts, and by config that needs a token's value.
+// Used by tests/project-rules/contrast.test.ts, and by config that needs a token's value.
 //
 // It understands only what tokens.css may contain: plain rules on `:root` and
 // `[data-mode="…"]` / `[data-accent="…"]` attribute selectors, declarations, and var(). Anything

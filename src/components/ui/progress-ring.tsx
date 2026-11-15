@@ -1,6 +1,6 @@
 // A round progress indicator with the percentage in the middle (dashboards, today's plan).
 import { fill, useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import type { ProgressTone } from "./progress-bar";
 
 const sizes = {

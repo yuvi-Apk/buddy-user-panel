@@ -1,4 +1,4 @@
-// The placeholder for screens whose feature is not built yet.
+// The placeholder for screens whose module is not built yet.
 //   <ComingSoon />                                  inside a page
 //   <ComingSoonPage title={lang.nav.today} />       a whole placeholder screen
 import { Hammer } from "lucide-react";

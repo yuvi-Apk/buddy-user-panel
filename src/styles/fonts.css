@@ -1,5 +1,5 @@
 /*
-  Self-hosted fonts (core-rules #18): no Google CDN, so they work offline and need no CSP exception.
+  Self-hosted fonts: no Google CDN, so they work offline and need no CSP exception.
   Each package splits its font by script (unicode-range), so a phone downloads only what it shows.
 
   Lexend: headings. Built from reading-fluency research to reduce visual stress.

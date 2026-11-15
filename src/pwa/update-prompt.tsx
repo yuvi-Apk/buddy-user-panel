@@ -1,4 +1,4 @@
-// Registers the service worker and asks before using a new version (pwa.md). The new version
+// Registers the service worker and asks before using a new version. The new version
 // waits until the person taps Reload, so the app never reloads in the middle of a quiz. Mounted
 // once, in src/app/app.tsx. In development the service worker is off and this shows nothing.
 import { RefreshCw } from "lucide-react";
@@ -7,7 +7,7 @@ import { useRegisterSW } from "virtual:pwa-register/react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast-store";
 import { useLang } from "@/lang";
-import { logger } from "@/lib/logger";
+import { logger } from "@/utils/logger";
 
 export function UpdatePrompt() {
   const lang = useLang();

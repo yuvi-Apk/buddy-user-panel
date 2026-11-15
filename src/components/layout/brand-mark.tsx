@@ -1,7 +1,7 @@
 // The app's name with its mark, at the top of the sidebar and the phone top bar.
 import { GraduationCap } from "lucide-react";
 import { useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export function BrandMark({ className }: { className?: string }) {
   const lang = useLang();

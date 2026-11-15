@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 /**
  * A grey placeholder shaped like the content that is loading. Hidden from screen readers:

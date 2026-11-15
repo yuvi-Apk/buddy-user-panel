@@ -3,7 +3,7 @@
 import { cva } from "class-variance-authority";
 import { CircleAlert, CircleCheck, Info, Sprout } from "lucide-react";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 const alertVariants = cva("flex gap-3 rounded-card border p-4", {
   variants: {

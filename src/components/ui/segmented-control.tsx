@@ -2,7 +2,7 @@
 // It is a radio group, so arrow keys move between the options.
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { type ReactNode, useId } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface SegmentOption {
   value: string;

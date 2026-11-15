@@ -8,7 +8,7 @@
 import type { ReactNode } from "react";
 import { OfflineBanner } from "@/components/feedback/offline-banner";
 import { NAVIGATION } from "@/config/navigation";
-import type { SessionUser } from "@/lib/auth/session-schemas";
+import type { SessionUser } from "@/auth/session-store";
 import { BottomNav } from "./bottom-nav";
 import { BrandMark } from "./brand-mark";
 import { SideNav } from "./side-nav";

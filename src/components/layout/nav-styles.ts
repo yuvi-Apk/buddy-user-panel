@@ -1,7 +1,7 @@
 // The look of a menu item in the sidebar and the "More" sheet. The selected item is tinted with
 // the primary color and marked with aria-current="page" (NavLink sets it), never by color alone:
 // it also gets a bar on its edge.
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export function listItemClasses(isActive: boolean): string {
   return cn(

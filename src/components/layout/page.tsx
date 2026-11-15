@@ -5,7 +5,7 @@
 //   </Page>
 // Page sets the gutters (16px phone, 24px tablet, 32px laptop) and the content width.
 import { type ReactNode, useId } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface PageProps {
   /** `content` (up to about 1120px) by default; `reading` for long text (68 characters). */

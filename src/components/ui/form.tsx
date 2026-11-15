@@ -17,7 +17,7 @@ import {
   type UseFormReturn,
   useFormContext,
 } from "react-hook-form";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { Button, type ButtonProps } from "./button";
 
 export interface FormProps<Values extends FieldValues> extends Omit<

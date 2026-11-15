@@ -2,7 +2,7 @@
 // which is the easiest to use with a thumb and with a screen reader.
 import { ChevronDown } from "lucide-react";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { Field, type FieldTextProps } from "./field";
 import { useFieldIds } from "./use-field-ids";
 

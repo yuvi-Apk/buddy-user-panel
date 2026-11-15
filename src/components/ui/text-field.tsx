@@ -9,7 +9,7 @@
 // Inputs are always 16px: smaller text makes iOS zoom into the page.
 import { Search } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { Field, type FieldTextProps } from "./field";
 import { useFieldIds } from "./use-field-ids";
 

@@ -1,6 +1,6 @@
 // What a screen shows when there is nothing yet: an icon, a title, one sentence, one action.
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface EmptyStateProps {
   icon?: ReactNode;

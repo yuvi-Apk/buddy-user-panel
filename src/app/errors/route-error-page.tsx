@@ -8,8 +8,8 @@ import { ErrorState } from "@/components/feedback/error-state";
 import { FocusShell } from "@/components/layout/app-shell";
 import { Page } from "@/components/layout/page";
 import { useLang } from "@/lang";
-import { isApiError } from "@/lib/api/api-error";
-import { logger } from "@/lib/logger";
+import { isApiError } from "@/api/api-error";
+import { logger } from "@/utils/logger";
 import { NotFoundPage } from "./not-found-page";
 
 export function RouteError() {

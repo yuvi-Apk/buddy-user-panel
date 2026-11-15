@@ -1,12 +1,12 @@
 // The top of the route tree. Sets the browser tab title from the route's titleKey, and after each
 // navigation moves focus to the new page's heading, so screen readers announce the new page
-// (design-system.md). Also the loading screen while the session is restored at start.
+//. Also the loading screen while the session is restored at start.
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { MAIN_CONTENT_ID } from "@/components/layout/skip-link";
 import { fill, textAt, useLang } from "@/lang";
-import { useRouteTitleKey } from "@/lib/routing/route-handle";
+import { useRouteTitleKey } from "@/routing/define-route";
 
 export function RootLayout() {
   useDocumentTitle();

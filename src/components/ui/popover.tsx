@@ -1,7 +1,7 @@
 // A small panel that opens next to its button, for extra detail or a short form.
 import { Popover as PopoverPrimitive } from "radix-ui";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export const Popover = PopoverPrimitive.Root;
 export const PopoverTrigger = PopoverPrimitive.Trigger;

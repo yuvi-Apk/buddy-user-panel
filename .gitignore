@@ -6,11 +6,10 @@ dist
 dev-dist
 *.tsbuildinfo
 
-# env files: only .env.sample and .env.test are committed
+# env files: only .env.sample is committed
 .env
 .env.*
 !.env.sample
-!.env.test
 
 # test output
 coverage
@@ -27,6 +26,3 @@ logs
 .cache
 .idea
 .DS_Store
-
-# Claude Code personal settings
-.claude/settings.local.json

@@ -2,7 +2,7 @@
 // options with a picture or a description use ChoiceCardGroup.
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { type ComponentProps, type ReactNode, useId } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { FieldError } from "./field";
 
 export interface RadioOption {

@@ -1,20 +1,34 @@
-// The only reader of import.meta.env (core-rules #12). Every value is checked with Zod when the
-// app starts (env-schema.ts); a bad value stops the app with a message that names the variable,
-// never its value.
+// The env variables the app reads. This is the only file that touches import.meta.env; the rest
+// of the app imports `env` from here.
 //
-// Everything here ends up in the browser bundle, where anyone can read it: never a secret.
-// Adding a variable: .claude/rules/env.md (schema in env-schema.ts, .env.sample, .env.test).
-import { parseAppEnv } from "./env-schema";
+// Adding a variable: add it to the schema and to `env` below, then to .env.sample and your .env.
+// VITE_* values are built into the app, so anyone can read them in the browser.
+import { z } from "zod";
 
-export { parseAppEnv } from "./env-schema";
+const envSchema = z.object({
+  /** Where the backend's API lives: "/api/v1" on the same site, or a full URL. */
+  VITE_API_BASE_URL: z
+    .string()
+    .trim()
+    .min(1)
+    .default("/api/v1")
+    .transform((url) => url.replace(/\/+$/, "")),
+});
 
-const parsed = parseAppEnv(import.meta.env);
+/** Checks the raw values and stops the app with a clear message when one is wrong. */
+export function parseEnv(rawEnv: Record<string, unknown>) {
+  const result = envSchema.safeParse(rawEnv);
+  if (result.success) return result.data;
+  throw new Error(
+    `The env variables are not valid. Compare your .env with .env.sample.\n${z.prettifyError(result.error)}`
+  );
+}
+
+const parsedEnv = parseEnv(import.meta.env);
 
 export const env = {
-  apiBaseUrl: parsed.VITE_API_BASE_URL,
-  /** True in `pnpm dev` and tests. Dev-only screens (/dev/ui, /dev/session) exist only then. */
-  // To leave dev-only code out of production, check `import.meta.env.DEV` itself instead: the
-  // bundler only removes code behind that literal check (src/features/dev/routes.ts does this).
+  apiBaseUrl: parsedEnv.VITE_API_BASE_URL,
+  /** True in `pnpm dev` and in tests. */
   isDev: import.meta.env.DEV,
   /** True while `pnpm test` runs. */
   isTest: import.meta.env.MODE === "test",

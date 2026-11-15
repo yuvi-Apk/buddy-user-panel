@@ -2,8 +2,8 @@
 import { Outlet, useNavigate } from "react-router";
 import { AppShell, FocusShell } from "@/components/layout/app-shell";
 import { LOGIN_PATH } from "@/config/navigation";
-import { signOut } from "@/lib/auth/session-actions";
-import { useSession } from "@/lib/auth/session-store";
+import { signOut } from "@/auth/session";
+import { useSession } from "@/auth/session-store";
 
 /** Signed-in screens: top bar and tabs on phones, sidebar on laptops. */
 export function ShellLayout() {

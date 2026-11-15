@@ -2,7 +2,7 @@
 // Fields use it through TextField, PasswordField, SelectField, … rather than directly.
 import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export interface FieldTextProps {
   /** Always visible above the control. Every field needs one. */
@@ -57,7 +57,7 @@ export function Field({
   );
 }
 
-/** An error line under a field or a group. Red is for real errors only (core-rules #2). */
+/** An error line under a field or a group. Red is for real errors only. */
 export function FieldError({
   id,
   children,

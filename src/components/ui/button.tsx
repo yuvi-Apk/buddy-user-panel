@@ -1,4 +1,4 @@
-// Buttons. One look for every action in the app (core-rules #4).
+// Buttons. One look for every action in the app.
 //
 //   <Button onClick={save}>{lang.common.save}</Button>
 //   <Button variant="outline" size="sm">…</Button>
@@ -8,7 +8,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { Spinner } from "./spinner";
 
 const buttonVariants = cva(
@@ -28,7 +28,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive-hover",
       },
-      // sm grows to the 44px touch size on touch screens (core-rules #14).
+      // sm grows to the 44px touch size on touch screens.
       size: {
         sm: "h-9 px-3 text-sm pointer-coarse:h-11",
         md: "h-11 px-4 text-base",

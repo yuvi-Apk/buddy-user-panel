@@ -1,6 +1,6 @@
-// Two test projects:
-//   app         src/**/*.test.ts(x), in a browser-like DOM (jsdom)
-//   guardrails  tests/**/*.test.ts, in Node: repo-wide rules (lint bans, naming, text files, ...)
+// Every test lives in tests/ (see tests/README.md). Two projects run with `pnpm test`:
+//   unit           tests/unit/           same folders as src/, in a browser-like DOM (jsdom)
+//   project-rules  tests/project-rules/  rules for the whole project (colors, naming, lint bans), in Node
 import { defineConfig, mergeConfig } from "vitest/config";
 import { createViteConfig } from "./vite.config.ts";
 
@@ -14,18 +14,18 @@ export default defineConfig((configEnv) =>
         {
           extends: true,
           test: {
-            name: "app",
+            name: "unit",
             environment: "jsdom",
-            include: ["src/**/*.test.{ts,tsx}"],
-            setupFiles: ["./src/test/setup.ts"],
+            include: ["tests/unit/**/*.test.{ts,tsx}"],
+            setupFiles: ["./tests/helpers/setup.ts"],
           },
         },
         {
           extends: true,
           test: {
-            name: "guardrails",
+            name: "project-rules",
             environment: "node",
-            include: ["tests/**/*.test.ts"],
+            include: ["tests/project-rules/**/*.test.ts"],
             // Linting fixture code takes a few seconds on the first run.
             testTimeout: 30_000,
           },

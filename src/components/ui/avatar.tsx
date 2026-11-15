@@ -1,6 +1,6 @@
 // A person's picture, or their initials when there is none (or it fails to load).
 import { Avatar as AvatarPrimitive } from "radix-ui";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 const sizes = {
   sm: "size-8 text-sm",
@@ -10,7 +10,7 @@ const sizes = {
 
 export interface AvatarProps {
   name: string;
-  /** An image URL from our API. Links built from data must pass safeUrl() first (core-rules #11). */
+  /** An image URL from our API. */
   src?: string;
   size?: keyof typeof sizes;
   className?: string;

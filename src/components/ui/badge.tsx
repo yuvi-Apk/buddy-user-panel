@@ -1,8 +1,8 @@
 // A small label with a meaning color. `weak` is only for weak topics, `destructive` only for
-// errors (core-rules #2). Pair the color with a word, and an icon when there is room.
+// errors. Pair the color with a word, and an icon when there is room.
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 const badgeVariants = cva(
   "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-semibold whitespace-nowrap [&_svg]:size-4 [&_svg]:shrink-0",

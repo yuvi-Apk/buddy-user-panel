@@ -1,6 +1,6 @@
 // The 4 themes ("accents") and 3 modes. Their colors live in src/styles/tokens.css, their names
 // and moods in src/lang/en.json (theme.accents). public/theme-boot.js lists the same ids;
-// tests/guardrails/theme-boot.test.ts keeps the two in step.
+// tests/project-rules/theme-boot.test.ts keeps the two in step.
 import type { Lang } from "@/lang";
 
 export const ACCENTS = ["indigo-ink", "lagoon", "orchid", "graphite"] as const;

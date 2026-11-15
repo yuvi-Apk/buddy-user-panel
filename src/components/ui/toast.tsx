@@ -5,7 +5,7 @@ import { CircleAlert, CircleCheck, Info, X } from "lucide-react";
 import { Toast as ToastPrimitive } from "radix-ui";
 import { useSyncExternalStore } from "react";
 import { useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { IconButton } from "./button";
 import {
   dismissToast,

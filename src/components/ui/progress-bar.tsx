@@ -2,7 +2,7 @@
 //   <ProgressBar label={lang.plan.weekProgress} value={4} max={7} />
 import { useId } from "react";
 import { fill, useLang } from "@/lang";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 
 export type ProgressTone = "primary" | "progress" | "weak" | "destructive";
 

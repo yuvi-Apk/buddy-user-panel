@@ -3,7 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "@/app/app";
 import { createAppRouter } from "@/app/router";
-import { startSession } from "@/lib/auth/start-session";
+import { startSession } from "@/auth/session";
 import { startInstallPromptCapture } from "@/pwa/use-install-prompt";
 import { startThemeSync } from "@/theme";
 
