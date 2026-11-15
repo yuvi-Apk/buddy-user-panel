@@ -8,8 +8,24 @@
     />
     <!-- The app is behind a login. The marketing website is the page search engines should find. -->
     <meta name="robots" content="noindex" />
+    <meta
+      name="description"
+      content="Your study buddy: a plan for every day, practice for the topics that need it, and answers to your doubts."
+    />
     <title>Buddy</title>
-    <!-- Applies the saved theme before the first paint, so the page never flashes the wrong colors. -->
+
+    <!-- Icons, made from public/logo.svg by `pnpm pwa:icons`. The manifest link is added by the build. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
+
+    <!-- Installed on iPhone and iPad: opens without browser bars, named Buddy on the home screen. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Buddy" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!-- Applies the saved theme before the first paint, so the page never flashes the wrong colors.
+         A file, not an inline script: the CSP allows no inline scripts. -->
     <script src="/theme-boot.js"></script>
   </head>
   <body>

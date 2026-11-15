@@ -33,18 +33,33 @@ Many people using Buddy are minors, often on shared phones and school computers.
 
 ## Headers and CSP
 
-Defined once in `security-headers.config.ts`, used by `vite preview`, copied to the host on deploy:
+Defined once in `security-headers.config.ts`. `pnpm preview` sends them; `pnpm build` writes them
+to `dist/_headers` (Netlify and Cloudflare Pages read it; for another host, copy them into its
+config). `tests/guardrails/security-headers.test.ts` checks them.
 
 ```
-default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: <api>;
-font-src 'self'; connect-src 'self' <api>; worker-src 'self'; manifest-src 'self';
-object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: <api>;
+font-src 'self'; connect-src 'self' <api>; worker-src 'self'; manifest-src 'self'; media-src 'self' blob:;
+object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'none';
+upgrade-insecure-requests
 ```
 
-plus HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
-`Permissions-Policy: camera=(), microphone=(), geolocation=()`, `Cross-Origin-Opener-Policy: same-origin`.
-No inline scripts (the theme boot script is a file in `public/`). No third-party scripts, fonts,
-trackers or CDNs (core-rules #18).
+plus HSTS, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+`Referrer-Policy: strict-origin-when-cross-origin`, a `Permissions-Policy` that turns off camera,
+microphone, location, payment and USB, `Cross-Origin-Opener-Policy: same-origin` and
+`Cross-Origin-Resource-Policy: same-origin`. `<api>` is added only when `VITE_API_BASE_URL` is on
+another site. The local preview leaves out HSTS and `upgrade-insecure-requests` (it is plain http).
+
+- Scripts: `'self'` only. No inline scripts (the theme boot script is a file in `public/`; the
+  service worker is registered from the bundle), no `eval`, no third-party scripts, fonts,
+  trackers or CDNs (core-rules #18).
+- Styles allow `'unsafe-inline'` for one reason: Radix dialogs lock page scrolling with a small
+  `<style>` tag. Inline CSS can't run code. Don't add other inline styles or `<style>` tags.
+- When the app needs camera or microphone (voice doubts, later), change `Permissions-Policy` to
+  `microphone=(self)`, never to `*`.
+- Source maps are built "hidden" (no file links to them) for a future error tracker. Leave
+  `dist/**/*.map` out of the deploy, or upload them only to the error tracker.
+- A new external origin (an image CDN, an error tracker) needs a reason and a CSP change here.
 
 ## Login screens
 

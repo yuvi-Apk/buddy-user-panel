@@ -39,7 +39,8 @@ blocks it. If something is missing, add it to `src/components/ui/` (skill: `add-
   `components.json`). Its output is a draft: swap its classes for our tokens and scales (ESLint
   reports the ones that don't exist), keep our prop names, and never keep color variables it adds
   to `index.css` (the colors guardrail fails on them).
-- Nothing may write a `<style>` tag or inject CSS at runtime: the CSP blocks it. That is why toasts
+- Nothing may write a `<style>` tag or inject CSS at runtime. The CSP allows inline styles only
+  because Radix's dialog scroll lock needs one (security.md); don't add more. That is why toasts
   are built on Radix Toast and not on a library that injects its own styles.
 - Variants with `class-variance-authority`, classes merged with `cn()` from `@/lib/cn`.
 - Tokens only (core-rules #1). Visible focus ring. Works with the keyboard and a screen reader.

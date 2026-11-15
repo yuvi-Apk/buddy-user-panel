@@ -31,6 +31,7 @@ matching files. The backend is `../backend` and follows its own `CLAUDE.md`.
 | One test file                      | `pnpm test src/lang/lang.test.ts`            |
 | Production build / serve it        | `pnpm build` / `pnpm preview`                |
 | Format                             | `pnpm format`                                |
+| App icons from `public/logo.svg`   | `pnpm pwa:icons`                             |
 
 ## Never
 
@@ -74,5 +75,6 @@ reviews and commits, then tells you to continue.
 The foundation is built in five steps. Done: **1** (tooling, text system, rules), **2** (design
 tokens, 4 themes × light/dark, the shared components, the UI gallery) and **3** (env, API client,
 session, router with role access, app shell, placeholder screens, the dev session switcher at
-`/dev/session`). Still to come: **4** PWA and security headers; **5** browser tests, docs and skills. The rules describe the finished foundation, so a
+`/dev/session`) and **4** (installable PWA, update prompt, icons, CSP and security headers). Still
+to come: **5** browser tests, docs and skills. The rules describe the finished foundation, so a
 file they name may not exist until its step lands; until then that rule is enforced by review.

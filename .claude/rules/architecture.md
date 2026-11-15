@@ -36,14 +36,16 @@ src/
   components/       ui/ (the shared set), layout/ (app shell, nav, page, stack…), feedback/ (empty,
                     error, loading, offline, coming soon)
   hooks/            shared hooks (use-media-query, use-online-status)
-  pwa/              update prompt, install prompt
+  pwa/              update-prompt (new version ready), use-install-prompt (Install the app)
   test/             test setup, render helper, MSW mock of the backend
   features/<x>/     one folder per feature (see features.md)
 ```
 
-Outside `src/`: `public/` (files served as they are, such as `theme-boot.js`), `tests/guardrails/`
-(repo-wide rules), `tooling/` (Node helpers shared by config files and guardrails, such as the
-`tokens.css` reader), `eslint/` (our own lint rules), `e2e/` (browser tests).
+Outside `src/`: `public/` (files served as they are: `theme-boot.js`, the logo and the icons made
+from it, `robots.txt`), `tests/guardrails/` (repo-wide rules), `tooling/` (Node helpers shared by
+config files and guardrails: the `tokens.css` reader, the PWA options, the dev-server env),
+`eslint/` (our own lint rules), `e2e/` (browser tests), and at the root
+`security-headers.config.ts` (CSP and headers) and `pwa-assets.config.ts` (icon generation).
 
 ## Who may import what
 

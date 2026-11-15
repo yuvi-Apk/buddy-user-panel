@@ -1,11 +1,11 @@
 // core-rules #12: .env.sample and .env.test list exactly the variables the schemas read
-// (src/config/env.ts for the browser, tooling/dev-server-env.ts for the dev server), the test
+// (src/config/env-schema.ts for the browser, tooling/dev-server-env.ts for the dev server), the test
 // values pass the schemas, and no browser variable looks like a secret.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseEnv } from "node:util";
 import { describe, expect, it } from "vitest";
-import { appEnvSchema, parseAppEnv } from "@/config/env";
+import { appEnvSchema, parseAppEnv } from "@/config/env-schema";
 import {
   devServerEnvSchema,
   parseDevServerEnv,

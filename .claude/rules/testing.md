@@ -58,6 +58,12 @@ can load Vitest twice and fail with "Vitest failed to find the current suite".
 - `routes`: every route has access and a title; every menu item opens a route its role may open;
   at most 4 tabs. It loads the real route tree, so it runs in jsdom (`// @vitest-environment jsdom`).
 - `env-files`: `.env.sample` and `.env.test` list exactly the schemas' variables, with valid values.
+- `pwa`: prompt before updating, no runtime caching, `/api` never served the app shell, manifest
+  fields and token colors, every icon file present, the logo's colors.
+- `security-headers`: the CSP directives and headers, and an `index.html` with no inline script or
+  outside URL.
+- Code that uses `virtual:pwa-register/react` is tested by mocking that module with `vi.mock`
+  (`src/pwa/pwa.test.tsx`); it is the only module mock allowed.
 
 `tooling/design-tokens.ts` reads `tokens.css` and resolves each token per theme × mode; use it
 rather than parsing the file again.

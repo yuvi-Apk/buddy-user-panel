@@ -30,7 +30,13 @@ describe("env", () => {
     }
   );
 
-  it("refuses a missing value", () => {
-    expect(() => parseAppEnv({})).toThrow(/VITE_API_BASE_URL/);
+  it("uses /api/v1 when the variable is missing, so a plain build works", () => {
+    expect(parseAppEnv({}).VITE_API_BASE_URL).toBe("/api/v1");
+  });
+
+  it("refuses an empty value", () => {
+    expect(() => parseAppEnv({ VITE_API_BASE_URL: "" })).toThrow(
+      /VITE_API_BASE_URL/
+    );
   });
 });

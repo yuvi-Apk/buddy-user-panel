@@ -1,8 +1,9 @@
-// Settings. Appearance is the one finished section of the foundation.
+// Settings: Appearance (theme and mode) and Install the app.
 import { Page, PageHeader, Section } from "@/components/layout/page";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLang } from "@/lang";
 import { AppearanceSettings } from "../components/appearance-settings";
+import { InstallAppSettings } from "../components/install-app-settings";
 
 export function SettingsPage() {
   const lang = useLang();
@@ -17,6 +18,7 @@ export function SettingsPage() {
           </CardContent>
         </Card>
       </Section>
+      <InstallAppSettings />
     </Page>
   );
 }

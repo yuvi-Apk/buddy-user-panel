@@ -29,5 +29,12 @@
 
     "noEmit": true
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "tests", "tooling"]
+  "include": [
+    "vite.config.ts",
+    "vitest.config.ts",
+    "security-headers.config.ts",
+    "pwa-assets.config.ts",
+    "tests",
+    "tooling"
+  ]
 }

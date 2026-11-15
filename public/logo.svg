@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Buddy">
+  <!-- Placeholder mark: an open book with a spark, in Indigo Ink (the primary token) on paper (the card token).
+       Its colors must match tokens.css: tests/guardrails/pwa.test.ts checks them.
+       After changing it, run `pnpm pwa:icons`. -->
+  <rect width="512" height="512" rx="112" fill="#4648d4"/>
+  <path d="M256 170c-38-27-89-37-140-31v216c51-6 102 4 140 31 38-27 89-37 140-31V139c-51-6-102 4-140 31z" fill="#fffefa"/>
+  <path d="M256 176v204" fill="none" stroke="#4648d4" stroke-width="14" stroke-linecap="round"/>
+  <path d="M398 70l9 21 21 9-21 9-9 21-9-21-21-9 21-9z" fill="#fffefa"/>
+</svg>
