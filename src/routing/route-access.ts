@@ -6,7 +6,7 @@
 import { homeFor, LOGIN_PATH } from "@/config/navigation";
 import type { UserRole } from "@/auth/roles";
 import type { SessionState } from "@/auth/session-store";
-import { safeRedirect } from "@/utils/safe-redirect";
+import { getSafeRedirectPath } from "@/utils/safe-redirect";
 
 export type RouteAccess = "public" | "guest" | readonly UserRole[];
 
@@ -22,7 +22,7 @@ export function getRedirectPathIfBlocked(
 
   if (access === "guest") {
     if (!role) return null;
-    return safeRedirect(url.searchParams.get("redirect"), homeFor(role));
+    return getSafeRedirectPath(url.searchParams.get("redirect"), homeFor(role));
   }
 
   if (!role) return buildLoginPathWithReturn(url);

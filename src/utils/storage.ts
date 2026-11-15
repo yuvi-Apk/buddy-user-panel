@@ -10,7 +10,7 @@ const KEYS = {
   language: "buddy.language",
   /**
    * "1" after signing out while offline: the next launch must not restore the session, and the
-   * server sign-out is retried once back online (src/auth/session-actions.ts). Only a flag.
+   * server sign-out is retried once back online (src/auth/session.ts). Only a flag.
    */
   signedOut: "buddy.signed-out",
 } as const;
@@ -19,7 +19,7 @@ export type StorageKey = keyof typeof KEYS;
 
 export const STORAGE_KEYS: Readonly<Record<StorageKey, string>> = KEYS;
 
-export function readStored(key: StorageKey): string | null {
+export function readFromStorage(key: StorageKey): string | null {
   try {
     return window.localStorage.getItem(KEYS[key]);
   } catch {
@@ -27,7 +27,7 @@ export function readStored(key: StorageKey): string | null {
   }
 }
 
-export function writeStored(key: StorageKey, value: string): void {
+export function writeToStorage(key: StorageKey, value: string): void {
   try {
     window.localStorage.setItem(KEYS[key], value);
   } catch {
@@ -35,7 +35,7 @@ export function writeStored(key: StorageKey, value: string): void {
   }
 }
 
-export function removeStored(key: StorageKey): void {
+export function removeFromStorage(key: StorageKey): void {
   try {
     window.localStorage.removeItem(KEYS[key]);
   } catch {

@@ -2,10 +2,10 @@
 // (tooling/security-headers.ts), and an index.html the CSP can serve.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { contentSecurityPolicy } from "../../tooling/security-headers";
+import { buildContentSecurityPolicy } from "../../tooling/security-headers";
 
 describe("Content-Security-Policy", () => {
-  const policy = contentSecurityPolicy({
+  const policy = buildContentSecurityPolicy({
     apiOrigin: "https://api.example.com",
   });
 

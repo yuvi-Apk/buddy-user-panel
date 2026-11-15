@@ -3,7 +3,7 @@ import {
   getTheme,
   setAccent,
   setMode,
-  subscribeTheme,
+  subscribeToTheme,
   type ThemeState,
 } from "./theme-store";
 
@@ -14,6 +14,6 @@ export interface UseThemeResult extends ThemeState {
 
 /** The current theme choice. The component re-renders when it changes. */
 export function useTheme(): UseThemeResult {
-  const state = useSyncExternalStore(subscribeTheme, getTheme, getTheme);
+  const state = useSyncExternalStore(subscribeToTheme, getTheme, getTheme);
   return { ...state, setMode, setAccent };
 }

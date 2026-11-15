@@ -16,7 +16,10 @@ import {
 } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { createPwaOptions } from "./tooling/pwa.ts";
-import { headersFile, securityHeaders } from "./tooling/security-headers.ts";
+import {
+  buildHeadersFile,
+  buildSecurityHeaders,
+} from "./tooling/security-headers.ts";
 
 const fromRoot = (folder: string) => path.resolve(import.meta.dirname, folder);
 
@@ -29,7 +32,7 @@ function headersFilePlugin(apiOrigin: string | undefined): Plugin {
       this.emitFile({
         type: "asset",
         fileName: "_headers",
-        source: headersFile({ apiOrigin }),
+        source: buildHeadersFile({ apiOrigin }),
       });
     },
   };
@@ -63,7 +66,7 @@ export function createViteConfig({ mode }: ConfigEnv): UserConfig {
       port: 4173,
       strictPort: true,
       proxy,
-      headers: securityHeaders({ apiOrigin, local: true }),
+      headers: buildSecurityHeaders({ apiOrigin, local: true }),
     },
     build: {
       // The browsers Tailwind CSS 4 supports (see README).

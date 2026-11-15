@@ -3,8 +3,8 @@
 // brand color before it is used.
 
 /** WCAG AA: 4.5 for normal text, 3 for large text, borders, icons and focus rings. */
-export const AA_TEXT = 4.5;
-export const AA_UI = 3;
+export const MIN_TEXT_CONTRAST = 4.5;
+export const MIN_UI_CONTRAST = 3;
 
 const HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 

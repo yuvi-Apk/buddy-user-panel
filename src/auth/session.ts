@@ -16,7 +16,11 @@ import { isApiError } from "@/api/api-error";
 import { sendHttpRequest } from "@/api/http-request";
 import { queryClient } from "@/api/query-client";
 import { logger } from "@/utils/logger";
-import { readStored, removeStored, writeStored } from "@/utils/storage";
+import {
+  readFromStorage,
+  removeFromStorage,
+  writeToStorage,
+} from "@/utils/storage";
 import { AUTH_API_PATHS, refreshAccessToken } from "./session-refresh";
 import {
   markSignedOut,
@@ -71,7 +75,7 @@ export function listenToOtherTabs(
 
 /** After a successful login or sign-up: keep the token in memory and tell the other tabs. */
 export function signIn(session: SessionResponse): void {
-  removeStored("signedOut");
+  removeFromStorage("signedOut");
   queryClient.clear();
   markSignedIn(session.accessToken, session.user);
   notifyOtherTabs("signed-in");
@@ -89,10 +93,10 @@ export async function signOut(): Promise<void> {
     await sendHttpRequest("POST", AUTH_API_PATHS.logout, z.unknown(), {
       accessToken,
     });
-    removeStored("signedOut");
+    removeFromStorage("signedOut");
   } catch (error) {
-    if (shouldRetrySignOutLater(error)) writeStored("signedOut", "1");
-    else removeStored("signedOut");
+    if (shouldRetrySignOutLater(error)) writeToStorage("signedOut", "1");
+    else removeFromStorage("signedOut");
   }
 }
 
@@ -106,7 +110,7 @@ export function endLocalSession({
 }
 
 export function hasPendingSignOut(): boolean {
-  return readStored("signedOut") === "1";
+  return readFromStorage("signedOut") === "1";
 }
 
 /** Finishes a sign-out that happened offline. Safe to call any time; does nothing otherwise. */
@@ -114,9 +118,9 @@ export async function finishPendingSignOut(): Promise<void> {
   if (!hasPendingSignOut()) return;
   try {
     await sendHttpRequest("POST", AUTH_API_PATHS.logout, z.unknown());
-    removeStored("signedOut");
+    removeFromStorage("signedOut");
   } catch (error) {
-    if (!shouldRetrySignOutLater(error)) removeStored("signedOut");
+    if (!shouldRetrySignOutLater(error)) removeFromStorage("signedOut");
   }
 }
 

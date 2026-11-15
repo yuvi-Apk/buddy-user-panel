@@ -12,9 +12,13 @@ export type LogDetails = Record<
   string | number | boolean | null | undefined
 >;
 
-type Level = "debug" | "info" | "warn" | "error";
+type LogLevel = "debug" | "info" | "warn" | "error";
 
-function write(level: Level, message: string, details?: LogDetails): void {
+function writeLog(
+  level: LogLevel,
+  message: string,
+  details?: LogDetails
+): void {
   if (!env.isDev || env.isTest) return;
   if (details) console[level](`[buddy] ${message}`, details);
   else console[level](`[buddy] ${message}`);
@@ -22,11 +26,11 @@ function write(level: Level, message: string, details?: LogDetails): void {
 
 export const logger = {
   debug: (message: string, details?: LogDetails) =>
-    write("debug", message, details),
+    writeLog("debug", message, details),
   info: (message: string, details?: LogDetails) =>
-    write("info", message, details),
+    writeLog("info", message, details),
   warn: (message: string, details?: LogDetails) =>
-    write("warn", message, details),
+    writeLog("warn", message, details),
   error: (message: string, details?: LogDetails) =>
-    write("error", message, details),
+    writeLog("error", message, details),
 };

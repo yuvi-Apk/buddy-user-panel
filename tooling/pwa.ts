@@ -7,7 +7,11 @@
 //   - Colors come from tokens.css and the name from en.json, so nothing is typed twice.
 import type { ManifestOptions, VitePWAOptions } from "vite-plugin-pwa";
 import en from "../src/lang/en.json" with { type: "json" };
-import { parseTokenRules, readTokensCss, tokensFor } from "./design-tokens.ts";
+import {
+  parseTokenRules,
+  readTokensCss,
+  resolveTokens,
+} from "./design-tokens.ts";
 
 /** The icons `pnpm pwa:icons` makes from public/logo.svg (pwa-assets.config.ts). */
 export const PWA_ICONS = [
@@ -26,8 +30,8 @@ export const PWA_ICONS = [
 export const PRECACHED_FILES = "**/*.{js,css,html,woff2,svg,png,ico}";
 
 /** Indigo Ink in light mode: the default theme, used before the app has started. */
-export function defaultThemeColors(): { primary: string; paper: string } {
-  const tokens = tokensFor(parseTokenRules(readTokensCss()), {});
+export function readDefaultThemeColors(): { primary: string; paper: string } {
+  const tokens = resolveTokens(parseTokenRules(readTokensCss()), {});
   const primary = tokens.get("--primary");
   const paper = tokens.get("--background");
   if (!primary || !paper)
@@ -36,7 +40,7 @@ export function defaultThemeColors(): { primary: string; paper: string } {
 }
 
 export function createManifest(): Partial<ManifestOptions> {
-  const { primary, paper } = defaultThemeColors();
+  const { primary, paper } = readDefaultThemeColors();
   return {
     id: "/",
     name: en.common.appName,

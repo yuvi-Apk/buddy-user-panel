@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { safeRedirect } from "@/utils/safe-redirect";
+import { getSafeRedirectPath } from "@/utils/safe-redirect";
 
-describe("safeRedirect", () => {
+describe("getSafeRedirectPath", () => {
   it.each([
     ["/plan", "/plan"],
     ["/plan?week=2#today", "/plan?week=2#today"],
     ["/organization/classes/abc", "/organization/classes/abc"],
   ])("keeps the same-site path %s", (value, expected) => {
-    expect(safeRedirect(value, "/today")).toBe(expected);
+    expect(getSafeRedirectPath(value, "/today")).toBe(expected);
   });
 
   it.each([
@@ -20,10 +20,10 @@ describe("safeRedirect", () => {
     "/plan\n",
     "",
   ])("sends %j to the fallback", (value) => {
-    expect(safeRedirect(value, "/today")).toBe("/today");
+    expect(getSafeRedirectPath(value, "/today")).toBe("/today");
   });
 
   it("uses the fallback when there is no value", () => {
-    expect(safeRedirect(null, "/today")).toBe("/today");
+    expect(getSafeRedirectPath(null, "/today")).toBe("/today");
   });
 });

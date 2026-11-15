@@ -3,7 +3,7 @@
 // It is applied to <html data-mode data-accent>, remembered through src/utils/storage.ts, and while
 // the mode is "system" it follows the phone's dark-mode setting live. public/theme-boot.js applies
 // the same saved choice before the first paint, so the page never flashes the wrong colors.
-import { readStored, writeStored } from "@/utils/storage";
+import { readFromStorage, writeToStorage } from "@/utils/storage";
 import {
   type Accent,
   DEFAULT_ACCENT,
@@ -21,16 +21,16 @@ export interface ThemeState {
   resolvedMode: ResolvedMode;
 }
 
-const DARK_QUERY = "(prefers-color-scheme: dark)";
+const DARK_MODE_QUERY = "(prefers-color-scheme: dark)";
 
-let state: ThemeState = initialState();
+let themeState: ThemeState = createInitialThemeState();
 const listeners = new Set<() => void>();
 
 export function getTheme(): ThemeState {
-  return state;
+  return themeState;
 }
 
-export function subscribeTheme(listener: () => void): () => void {
+export function subscribeToTheme(listener: () => void): () => void {
   listeners.add(listener);
   return () => {
     listeners.delete(listener);
@@ -38,25 +38,28 @@ export function subscribeTheme(listener: () => void): () => void {
 }
 
 export function setMode(mode: Mode): void {
-  commit({ ...state, mode, resolvedMode: resolve(mode) });
+  updateTheme({ ...themeState, mode, resolvedMode: resolveMode(mode) });
 }
 
 export function setAccent(accent: Accent): void {
-  commit({ ...state, accent });
+  updateTheme({ ...themeState, accent });
 }
 
 /**
  * Applies the saved choice to the page and follows the system dark-mode setting.
  * Call once when the app starts. Returns a function that stops following.
  */
-export function startThemeSync(): () => void {
-  applyToDocument(state);
+export function initializeTheme(): () => void {
+  applyThemeToDocument(themeState);
   if (typeof window.matchMedia !== "function") return () => {};
 
-  const query = window.matchMedia(DARK_QUERY);
+  const query = window.matchMedia(DARK_MODE_QUERY);
   const onChange = () => {
-    if (state.mode === "system") {
-      commit({ ...state, resolvedMode: resolve("system") }, { save: false });
+    if (themeState.mode === "system") {
+      updateTheme(
+        { ...themeState, resolvedMode: resolveMode("system") },
+        { save: false }
+      );
     }
   };
   query.addEventListener("change", onChange);
@@ -67,14 +70,14 @@ export function startThemeSync(): () => void {
 
 // --- internals --------------------------------------------------------------
 
-function initialState(): ThemeState {
-  const saved = readSaved();
-  return { ...saved, resolvedMode: resolve(saved.mode) };
+function createInitialThemeState(): ThemeState {
+  const saved = readSavedTheme();
+  return { ...saved, resolvedMode: resolveMode(saved.mode) };
 }
 
-function readSaved(): Pick<ThemeState, "mode" | "accent"> {
+function readSavedTheme(): Pick<ThemeState, "mode" | "accent"> {
   try {
-    const saved: unknown = JSON.parse(readStored("theme") ?? "null");
+    const saved: unknown = JSON.parse(readFromStorage("theme") ?? "null");
     if (typeof saved === "object" && saved !== null) {
       const { mode, accent } = saved as Record<string, unknown>;
       return {
@@ -88,27 +91,30 @@ function readSaved(): Pick<ThemeState, "mode" | "accent"> {
   return { mode: DEFAULT_MODE, accent: DEFAULT_ACCENT };
 }
 
-function resolve(mode: Mode): ResolvedMode {
+function resolveMode(mode: Mode): ResolvedMode {
   if (mode !== "system") return mode;
   const prefersDark =
     typeof window.matchMedia === "function" &&
-    window.matchMedia(DARK_QUERY).matches;
+    window.matchMedia(DARK_MODE_QUERY).matches;
   return prefersDark ? "dark" : "light";
 }
 
-function commit(next: ThemeState, { save = true } = {}): void {
-  state = next;
-  applyToDocument(next);
+function updateTheme(nextThemeState: ThemeState, { save = true } = {}): void {
+  themeState = nextThemeState;
+  applyThemeToDocument(nextThemeState);
   if (save) {
-    writeStored(
+    writeToStorage(
       "theme",
-      JSON.stringify({ mode: next.mode, accent: next.accent })
+      JSON.stringify({
+        mode: nextThemeState.mode,
+        accent: nextThemeState.accent,
+      })
     );
   }
   for (const listener of listeners) listener();
 }
 
-function applyToDocument({ resolvedMode, accent }: ThemeState): void {
+function applyThemeToDocument({ resolvedMode, accent }: ThemeState): void {
   const root = document.documentElement;
   root.dataset.mode = resolvedMode;
   root.dataset.accent = accent;

@@ -1,6 +1,11 @@
 // Token swatches with their live contrast, for the current theme and mode.
 import { Badge } from "@/components/ui/badge";
-import { AA_TEXT, AA_UI, contrastRatio, isHexColor } from "@/utils/contrast";
+import {
+  MIN_TEXT_CONTRAST,
+  MIN_UI_CONTRAST,
+  contrastRatio,
+  isHexColor,
+} from "@/utils/contrast";
 import { useTheme } from "@/theme";
 
 interface Pair {
@@ -15,85 +20,85 @@ const PAIRS: readonly Pair[] = [
     name: "Text on page",
     background: "background",
     foreground: "foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Muted text on card",
     background: "card",
     foreground: "muted-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Primary button",
     background: "primary",
     foreground: "primary-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Primary hover",
     background: "primary-hover",
     foreground: "primary-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Primary soft",
     background: "primary-soft",
     foreground: "primary-soft-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Link on card",
     background: "card",
     foreground: "primary",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Progress",
     background: "progress",
     foreground: "progress-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Progress soft",
     background: "progress-soft",
     foreground: "progress-soft-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Needs practice",
     background: "weak-soft",
     foreground: "weak-soft-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Needs-practice bar on track",
     background: "muted",
     foreground: "weak",
-    minimum: AA_UI,
+    minimum: MIN_UI_CONTRAST,
   },
   {
     name: "Error soft",
     background: "destructive-soft",
     foreground: "destructive-soft-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Error button",
     background: "destructive",
     foreground: "destructive-foreground",
-    minimum: AA_TEXT,
+    minimum: MIN_TEXT_CONTRAST,
   },
   {
     name: "Field border on card",
     background: "card",
     foreground: "input",
-    minimum: AA_UI,
+    minimum: MIN_UI_CONTRAST,
   },
   {
     name: "Focus ring on page",
     background: "background",
     foreground: "ring",
-    minimum: AA_UI,
+    minimum: MIN_UI_CONTRAST,
   },
 ];
 

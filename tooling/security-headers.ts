@@ -20,7 +20,7 @@ export interface SecurityHeaderOptions {
   local?: boolean;
 }
 
-export function contentSecurityPolicy({
+export function buildContentSecurityPolicy({
   apiOrigin,
   local = false,
 }: SecurityHeaderOptions = {}): string {
@@ -45,11 +45,11 @@ export function contentSecurityPolicy({
   return directives.map((parts) => parts.join(" ")).join("; ");
 }
 
-export function securityHeaders(
+export function buildSecurityHeaders(
   options: SecurityHeaderOptions = {}
 ): Record<string, string> {
   return {
-    "Content-Security-Policy": contentSecurityPolicy(options),
+    "Content-Security-Policy": buildContentSecurityPolicy(options),
     ...(options.local
       ? {}
       : { "Strict-Transport-Security": "max-age=63072000; includeSubDomains" }),
@@ -70,10 +70,10 @@ export function securityHeaders(
  * change, so they are cached for a year; the service worker and the HTML are always checked
  * again, so a new version is found at once.
  */
-export function headersFile(
+export function buildHeadersFile(
   options: Omit<SecurityHeaderOptions, "local"> = {}
 ): string {
-  const block = (path: string, headers: Record<string, string>) =>
+  const formatHeaderBlock = (path: string, headers: Record<string, string>) =>
     [
       path,
       ...Object.entries(headers).map(([name, value]) => `  ${name}: ${value}`),
@@ -81,13 +81,13 @@ export function headersFile(
 
   const noCache = { "Cache-Control": "no-cache" };
   return [
-    block("/*", securityHeaders(options)),
-    block("/assets/*", {
+    formatHeaderBlock("/*", buildSecurityHeaders(options)),
+    formatHeaderBlock("/assets/*", {
       "Cache-Control": "public, max-age=31536000, immutable",
     }),
-    block("/index.html", noCache),
-    block("/sw.js", noCache),
-    block("/manifest.webmanifest", noCache),
+    formatHeaderBlock("/index.html", noCache),
+    formatHeaderBlock("/sw.js", noCache),
+    formatHeaderBlock("/manifest.webmanifest", noCache),
     "",
   ].join("\n\n");
 }

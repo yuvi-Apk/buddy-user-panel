@@ -10,5 +10,5 @@ export {
   MODES,
   type ResolvedMode,
 } from "./themes";
-export { getTheme, startThemeSync, type ThemeState } from "./theme-store";
+export { getTheme, initializeTheme, type ThemeState } from "./theme-store";
 export { useTheme, type UseThemeResult } from "./use-theme";

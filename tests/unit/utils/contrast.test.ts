@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  AA_TEXT,
-  AA_UI,
+  MIN_TEXT_CONTRAST,
+  MIN_UI_CONTRAST,
   contrastRatio,
   isHexColor,
   relativeLuminance,
@@ -49,7 +49,7 @@ describe("isHexColor", () => {
 
 describe("AA thresholds", () => {
   it("are the WCAG 2 AA minimums", () => {
-    expect(AA_TEXT).toBe(4.5);
-    expect(AA_UI).toBe(3);
+    expect(MIN_TEXT_CONTRAST).toBe(4.5);
+    expect(MIN_UI_CONTRAST).toBe(3);
   });
 });

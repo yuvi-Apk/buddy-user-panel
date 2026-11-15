@@ -5,12 +5,17 @@
 // background, add that pair here.
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { AA_TEXT, AA_UI, contrastRatio, isHexColor } from "@/utils/contrast";
+import {
+  MIN_TEXT_CONTRAST,
+  MIN_UI_CONTRAST,
+  contrastRatio,
+  isHexColor,
+} from "@/utils/contrast";
 import { ACCENTS, type ResolvedMode } from "@/theme/themes";
 import {
   parseTokenRules,
   readTokensCss,
-  tokensFor,
+  resolveTokens,
 } from "../../tooling/design-tokens.ts";
 
 const rules = parseTokenRules(readTokensCss());
@@ -58,7 +63,7 @@ const UI_PAIRS: readonly Pair[] = [
 
 function failures(pairs: readonly Pair[], minimum: number): string[] {
   return THEMES.flatMap(({ mode, accent }) => {
-    const tokens = tokensFor(rules, {
+    const tokens = resolveTokens(rules, {
       "data-mode": mode,
       "data-accent": accent,
     });
@@ -81,12 +86,12 @@ function failures(pairs: readonly Pair[], minimum: number): string[] {
 }
 
 describe("color contrast in every theme × mode (WCAG AA)", () => {
-  it(`text is at least ${AA_TEXT}:1`, () => {
-    expect(failures(TEXT_PAIRS, AA_TEXT)).toEqual([]);
+  it(`text is at least ${MIN_TEXT_CONTRAST}:1`, () => {
+    expect(failures(TEXT_PAIRS, MIN_TEXT_CONTRAST)).toEqual([]);
   });
 
-  it(`borders, bars, icons and focus rings are at least ${AA_UI}:1`, () => {
-    expect(failures(UI_PAIRS, AA_UI)).toEqual([]);
+  it(`borders, bars, icons and focus rings are at least ${MIN_UI_CONTRAST}:1`, () => {
+    expect(failures(UI_PAIRS, MIN_UI_CONTRAST)).toEqual([]);
   });
 });
 
@@ -104,7 +109,7 @@ describe("tokens.css", () => {
     ];
 
     const missing = THEMES.flatMap(({ mode, accent }) => {
-      const tokens = tokensFor(rules, {
+      const tokens = resolveTokens(rules, {
         "data-mode": mode,
         "data-accent": accent,
       });

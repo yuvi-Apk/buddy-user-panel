@@ -6,9 +6,9 @@ import {
   defineConfig,
   minimal2023Preset,
 } from "@vite-pwa/assets-generator/config";
-import { defaultThemeColors } from "./tooling/pwa.ts";
+import { readDefaultThemeColors } from "./tooling/pwa.ts";
 
-const { primary } = defaultThemeColors();
+const { primary } = readDefaultThemeColors();
 
 export default defineConfig({
   headLinkOptions: { preset: "2023" },

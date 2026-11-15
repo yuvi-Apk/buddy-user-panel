@@ -62,8 +62,8 @@ describe("the theme store", () => {
   });
 
   it("applies the choice to <html> and saves it", async () => {
-    const { setAccent, setMode, startThemeSync } = await freshStore();
-    startThemeSync();
+    const { setAccent, setMode, initializeTheme } = await freshStore();
+    initializeTheme();
     expect(root.dataset).toMatchObject({ mode: "light", accent: "indigo-ink" });
 
     setMode("dark");
@@ -73,9 +73,9 @@ describe("the theme store", () => {
   });
 
   it("tells subscribers about every change until they unsubscribe", async () => {
-    const { setMode, subscribeTheme } = await freshStore();
+    const { setMode, subscribeToTheme } = await freshStore();
     const listener = vi.fn();
-    const unsubscribe = subscribeTheme(listener);
+    const unsubscribe = subscribeToTheme(listener);
 
     setMode("dark");
     expect(listener).toHaveBeenCalledOnce();
@@ -86,8 +86,8 @@ describe("the theme store", () => {
   });
 
   it('follows the device live while the mode is "system", without saving', async () => {
-    const { getTheme, startThemeSync } = await freshStore();
-    startThemeSync();
+    const { getTheme, initializeTheme } = await freshStore();
+    initializeTheme();
 
     setMediaQuery(DARK, true);
     expect(getTheme().resolvedMode).toBe("dark");
@@ -96,8 +96,8 @@ describe("the theme store", () => {
   });
 
   it("ignores the device once the person picks light or dark", async () => {
-    const { getTheme, setMode, startThemeSync } = await freshStore();
-    startThemeSync();
+    const { getTheme, setMode, initializeTheme } = await freshStore();
+    initializeTheme();
     setMode("light");
 
     setMediaQuery(DARK, true);
@@ -106,8 +106,8 @@ describe("the theme store", () => {
   });
 
   it("stops following the device when the returned function is called", async () => {
-    const { getTheme, startThemeSync } = await freshStore();
-    const stop = startThemeSync();
+    const { getTheme, initializeTheme } = await freshStore();
+    const stop = initializeTheme();
     stop();
 
     setMediaQuery(DARK, true);
@@ -121,8 +121,8 @@ describe("the theme store", () => {
       ':root { --background: #f7f6f2; } [data-mode="dark"] { --background: #12131c; }';
     document.head.append(style);
     try {
-      const { setMode, startThemeSync } = await freshStore();
-      startThemeSync();
+      const { setMode, initializeTheme } = await freshStore();
+      initializeTheme();
       expect(themeColor()).toBe("#f7f6f2");
 
       setMode("dark");

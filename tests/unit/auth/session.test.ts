@@ -1,7 +1,7 @@
 import { http } from "msw";
 import { describe, expect, it, vi } from "vitest";
 import { queryClient } from "@/api/query-client";
-import { readStored, writeStored } from "@/utils/storage";
+import { readFromStorage, writeToStorage } from "@/utils/storage";
 import {
   apiPath,
   errorResponse,
@@ -44,7 +44,7 @@ describe("restoring the session at start", () => {
   });
 
   it("never restores after a sign-out that happened offline, and finishes it", async () => {
-    writeStored("signedOut", "1");
+    writeToStorage("signedOut", "1");
     let refreshed = false;
     server.use(
       http.post(apiPath("/user/auth/refresh"), () => {
@@ -55,7 +55,7 @@ describe("restoring the session at start", () => {
     await restoreSessionFromCookie();
     expect(refreshed).toBe(false);
     expect(getCurrentSession().status).toBe("signed-out");
-    expect(readStored("signedOut")).toBeNull();
+    expect(readFromStorage("signedOut")).toBeNull();
   });
 });
 
@@ -73,7 +73,7 @@ describe("signing in and out", () => {
     expect(getCurrentSession().status).toBe("signed-out");
     expect(queryClient.getQueryData(["study-plan"])).toBeUndefined();
     await done;
-    expect(readStored("signedOut")).toBeNull();
+    expect(readFromStorage("signedOut")).toBeNull();
   });
 
   it("remembers to finish signing out when offline", async () => {
@@ -81,12 +81,12 @@ describe("signing in and out", () => {
     vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
     await signOut();
     expect(getCurrentSession().status).toBe("signed-out");
-    expect(readStored("signedOut")).toBe("1");
+    expect(readFromStorage("signedOut")).toBe("1");
   });
 
   it("clears the offline sign-out flag on the next sign-in", () => {
-    writeStored("signedOut", "1");
+    writeToStorage("signedOut", "1");
     signIn(session);
-    expect(readStored("signedOut")).toBeNull();
+    expect(readFromStorage("signedOut")).toBeNull();
   });
 });

@@ -17,15 +17,15 @@ export interface TokenRule {
 /** The attributes on <html>, for example { "data-mode": "dark", "data-accent": "lagoon" }. */
 export type HtmlAttributes = Readonly<Record<string, string>>;
 
-interface Compound {
+interface SelectorPart {
   root: boolean;
   attributes: readonly (readonly [name: string, value: string])[];
 }
 
-const RULE = /([^{}]+)\{([^{}]*)\}/g;
-const COMPOUND = /^(:root)?((?:\[[a-z-]+="[^"]*"\])*)$/;
-const ATTRIBUTE = /\[([a-z-]+)="([^"]*)"\]/g;
-const VAR = /var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*))?\)/;
+const RULE_PATTERN = /([^{}]+)\{([^{}]*)\}/g;
+const SELECTOR_PATTERN = /^(:root)?((?:\[[a-z-]+="[^"]*"\])*)$/;
+const ATTRIBUTE_PATTERN = /\[([a-z-]+)="([^"]*)"\]/g;
+const VAR_PATTERN = /var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*))?\)/;
 
 export function readTokensCss(): string {
   return readFileSync(TOKENS_FILE, "utf8");
@@ -36,38 +36,40 @@ export function parseTokenRules(css: string): TokenRule[] {
   if (source.includes("@")) {
     throw new Error("tokens.css may not use at-rules (@media, @supports, …).");
   }
-  const leftover = source.replace(RULE, "").trim();
+  const leftover = source.replace(RULE_PATTERN, "").trim();
   if (leftover) {
     throw new Error(
       `tokens.css has something this reader can't follow (nesting?): "${leftover.slice(0, 60)}"`
     );
   }
 
-  return [...source.matchAll(RULE)].map(([, selector = "", body = ""]) => {
-    parseSelector(selector); // throws for a selector the cascade below can't handle
-    const declarations = new Map<string, string>();
-    for (const part of body.split(";")) {
-      if (!part.trim()) continue;
-      const colon = part.indexOf(":");
-      if (colon === -1) {
-        throw new Error(`Not a declaration in tokens.css: "${part.trim()}"`);
+  return [...source.matchAll(RULE_PATTERN)].map(
+    ([, selector = "", body = ""]) => {
+      parseSelector(selector); // throws for a selector the cascade below can't handle
+      const declarations = new Map<string, string>();
+      for (const part of body.split(";")) {
+        if (!part.trim()) continue;
+        const colon = part.indexOf(":");
+        if (colon === -1) {
+          throw new Error(`Not a declaration in tokens.css: "${part.trim()}"`);
+        }
+        const name = part.slice(0, colon).trim();
+        const value = part
+          .slice(colon + 1)
+          .trim()
+          .replace(/\s+/g, " ");
+        declarations.set(name, value);
       }
-      const name = part.slice(0, colon).trim();
-      const value = part
-        .slice(colon + 1)
-        .trim()
-        .replace(/\s+/g, " ");
-      declarations.set(name, value);
+      return { selector: selector.trim().replace(/\s+/g, " "), declarations };
     }
-    return { selector: selector.trim().replace(/\s+/g, " "), declarations };
-  });
+  );
 }
 
 /**
  * Every token's value on <html> with these attributes: the matching rules applied from the
  * least to the most specific (then in file order), with var() references resolved.
  */
-export function tokensFor(
+export function resolveTokens(
   rules: readonly TokenRule[],
   attributes: HtmlAttributes
 ): Map<string, string> {
@@ -78,7 +80,9 @@ export function tokensFor(
       specificity: Math.max(
         -1,
         ...parseSelector(rule.selector)
-          .filter((compound) => matches(compound, attributes))
+          .filter((selectorPart) =>
+            selectorPartMatches(selectorPart, attributes)
+          )
           .map(specificityOf)
       ),
     }))
@@ -92,40 +96,43 @@ export function tokensFor(
 
   const resolved = new Map<string, string>();
   for (const name of declared.keys()) {
-    resolved.set(name, resolve(name, declared, []));
+    resolved.set(name, resolveTokenValue(name, declared, []));
   }
   return resolved;
 }
 
 // --- internals --------------------------------------------------------------
 
-function parseSelector(selector: string): Compound[] {
+function parseSelector(selector: string): SelectorPart[] {
   return selector.split(",").map((part) => {
-    const compound = part.trim();
-    const match = COMPOUND.exec(compound);
-    if (!compound || !match) {
+    const selectorPart = part.trim();
+    const match = SELECTOR_PATTERN.exec(selectorPart);
+    if (!selectorPart || !match) {
       throw new Error(
-        `tokens.css selectors are :root and [data-…="…"] only, not "${compound}".`
+        `tokens.css selectors are :root and [data-…="…"] only, not "${selectorPart}".`
       );
     }
-    const attributes = [...(match[2] ?? "").matchAll(ATTRIBUTE)].map(
+    const attributes = [...(match[2] ?? "").matchAll(ATTRIBUTE_PATTERN)].map(
       ([, name = "", value = ""]) => [name, value] as const
     );
     return { root: Boolean(match[1]), attributes };
   });
 }
 
-function matches(compound: Compound, attributes: HtmlAttributes): boolean {
-  return compound.attributes.every(
+function selectorPartMatches(
+  selectorPart: SelectorPart,
+  attributes: HtmlAttributes
+): boolean {
+  return selectorPart.attributes.every(
     ([name, value]) => attributes[name] === value
   );
 }
 
-function specificityOf(compound: Compound): number {
-  return (compound.root ? 1 : 0) + compound.attributes.length;
+function specificityOf(selectorPart: SelectorPart): number {
+  return (selectorPart.root ? 1 : 0) + selectorPart.attributes.length;
 }
 
-function resolve(
+function resolveTokenValue(
   name: string,
   declared: ReadonlyMap<string, string>,
   seen: readonly string[]
@@ -139,10 +146,14 @@ function resolve(
   if (value === undefined) {
     throw new Error(`tokens.css uses ${name}, but never defines it.`);
   }
-  for (let match = VAR.exec(value); match; match = VAR.exec(value)) {
+  for (
+    let match = VAR_PATTERN.exec(value);
+    match;
+    match = VAR_PATTERN.exec(value)
+  ) {
     const [whole, reference = "", fallback] = match;
     const replacement = declared.has(reference)
-      ? resolve(reference, declared, [...seen, name])
+      ? resolveTokenValue(reference, declared, [...seen, name])
       : fallback?.trim();
     if (replacement === undefined) {
       throw new Error(`tokens.css uses ${reference}, but never defines it.`);
