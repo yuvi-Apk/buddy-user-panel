@@ -16,7 +16,7 @@ export interface AvatarProps {
   className?: string;
 }
 
-function initialsOf(name: string): string {
+function getInitials(name: string): string {
   return name
     .trim()
     .split(/\s+/)
@@ -42,7 +42,7 @@ export function Avatar({ name, src, size = "md", className }: AvatarProps) {
         />
       ) : null}
       <AvatarPrimitive.Fallback>
-        <span aria-hidden>{initialsOf(name)}</span>
+        <span aria-hidden>{getInitials(name)}</span>
         <span className="sr-only">{name}</span>
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>

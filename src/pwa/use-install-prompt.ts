@@ -1,13 +1,13 @@
 // Installing Buddy on the home screen.
 //
 //   const install = useInstallPrompt();
-//   install.status === "available"   → <Button onClick={install.promptInstall}>…</Button>
+//   install.status === "available"   → <Button onClick={install.showInstallDialog}>…</Button>
 //   install.status === "ios"         → show the "Share, then Add to Home Screen" hint
 //   install.status === "installed"   → already running as an installed app
 //   install.status === "unavailable" → this browser can't install (show nothing)
 //
 // Chrome and Edge fire `beforeinstallprompt` once, often before React has started, so
-// startInstallPromptCapture() (in main.tsx) keeps it until a screen asks.
+// initializeInstallPrompt() (in main.tsx) keeps it until a screen asks.
 import { useSyncExternalStore } from "react";
 
 /** Chrome's install event. Not in TypeScript's DOM types because only Chromium has it. */
@@ -18,37 +18,37 @@ interface BeforeInstallPromptEvent extends Event {
 
 export type InstallStatus = "available" | "ios" | "installed" | "unavailable";
 
-let deferred: BeforeInstallPromptEvent | null = null;
-let installedNow = false;
+let savedInstallEvent: BeforeInstallPromptEvent | null = null;
+let wasJustInstalled = false;
 const listeners = new Set<() => void>();
 
-function emit(): void {
+function notifyInstallListeners(): void {
   for (const listener of listeners) listener();
 }
 
 /** Starts listening for the install events. Returns a function that stops (for tests). */
-export function startInstallPromptCapture(): () => void {
+export function initializeInstallPrompt(): () => void {
   const onBeforeInstall = (event: Event) => {
     event.preventDefault(); // We show our own button instead of the browser's mini-bar.
-    deferred = event as BeforeInstallPromptEvent;
-    emit();
+    savedInstallEvent = event as BeforeInstallPromptEvent;
+    notifyInstallListeners();
   };
   const onInstalled = () => {
-    deferred = null;
-    installedNow = true;
-    emit();
+    savedInstallEvent = null;
+    wasJustInstalled = true;
+    notifyInstallListeners();
   };
   window.addEventListener("beforeinstallprompt", onBeforeInstall);
   window.addEventListener("appinstalled", onInstalled);
   return () => {
     window.removeEventListener("beforeinstallprompt", onBeforeInstall);
     window.removeEventListener("appinstalled", onInstalled);
-    deferred = null;
-    installedNow = false;
+    savedInstallEvent = null;
+    wasJustInstalled = false;
   };
 }
 
-function isStandalone(): boolean {
+function isRunningAsInstalledApp(): boolean {
   const iosStandalone =
     (navigator as Navigator & { standalone?: boolean }).standalone === true;
   return (
@@ -66,13 +66,13 @@ function isAppleMobile(): boolean {
 }
 
 export function getInstallStatus(): InstallStatus {
-  if (installedNow || isStandalone()) return "installed";
-  if (deferred) return "available";
+  if (wasJustInstalled || isRunningAsInstalledApp()) return "installed";
+  if (savedInstallEvent) return "available";
   if (isAppleMobile()) return "ios";
   return "unavailable";
 }
 
-function subscribe(listener: () => void): () => void {
+function subscribeToInstallStatus(listener: () => void): () => void {
   listeners.add(listener);
   return () => {
     listeners.delete(listener);
@@ -80,11 +80,11 @@ function subscribe(listener: () => void): () => void {
 }
 
 /** Opens the browser's install dialog. True when the person accepted. */
-export async function promptInstall(): Promise<boolean> {
-  const event = deferred;
+export async function showInstallDialog(): Promise<boolean> {
+  const event = savedInstallEvent;
   if (!event) return false;
-  deferred = null; // The event can be used only once.
-  emit();
+  savedInstallEvent = null; // The event can be used only once.
+  notifyInstallListeners();
   await event.prompt();
   const { outcome } = await event.userChoice;
   return outcome === "accepted";
@@ -92,12 +92,12 @@ export async function promptInstall(): Promise<boolean> {
 
 export function useInstallPrompt(): {
   status: InstallStatus;
-  promptInstall: () => Promise<boolean>;
+  showInstallDialog: () => Promise<boolean>;
 } {
   const status = useSyncExternalStore(
-    subscribe,
+    subscribeToInstallStatus,
     getInstallStatus,
     () => "unavailable" as const
   );
-  return { status, promptInstall };
+  return { status, showInstallDialog };
 }

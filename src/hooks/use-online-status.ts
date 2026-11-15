@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-function subscribe(onChange: () => void): () => void {
+function subscribeToOnlineStatus(onChange: () => void): () => void {
   window.addEventListener("online", onChange);
   window.addEventListener("offline", onChange);
   return () => {
@@ -12,7 +12,7 @@ function subscribe(onChange: () => void): () => void {
 /** False while the device has no network. Re-renders when that changes. */
 export function useOnlineStatus(): boolean {
   return useSyncExternalStore(
-    subscribe,
+    subscribeToOnlineStatus,
     () => navigator.onLine,
     () => true
   );

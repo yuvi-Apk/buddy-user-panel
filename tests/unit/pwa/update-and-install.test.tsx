@@ -8,7 +8,7 @@ import { renderWithProviders } from "@tests/helpers/render";
 import { UpdatePrompt } from "@/pwa/update-prompt";
 import {
   getInstallStatus,
-  startInstallPromptCapture,
+  initializeInstallPrompt,
 } from "@/pwa/use-install-prompt";
 
 const lang = getLang();
@@ -53,7 +53,7 @@ describe("UpdatePrompt", () => {
 describe("installing the app", () => {
   let stop: () => void;
   beforeEach(() => {
-    stop = startInstallPromptCapture();
+    stop = initializeInstallPrompt();
   });
   afterEach(() => {
     stop();

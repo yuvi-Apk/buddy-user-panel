@@ -23,7 +23,7 @@ export interface BottomNavProps {
   className?: string;
 }
 
-function tabClasses(isActive: boolean): string {
+function getTabClasses(isActive: boolean): string {
   return cn(
     "flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-1 text-sm font-semibold transition-colors duration-150",
     isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
@@ -77,7 +77,7 @@ export function BottomNav({
           <li key={path} className="flex flex-1">
             <NavLink
               to={path}
-              className={({ isActive }) => tabClasses(isActive)}
+              className={({ isActive }) => getTabClasses(isActive)}
             >
               {({ isActive }) => (
                 <>
@@ -93,7 +93,7 @@ export function BottomNav({
         {navigation.more.length > 0 ? (
           <li className="flex flex-1">
             <ResponsiveDialog open={moreOpen} onOpenChange={setMoreOpen}>
-              <ResponsiveDialogTrigger className={tabClasses(moreActive)}>
+              <ResponsiveDialogTrigger className={getTabClasses(moreActive)}>
                 <TabIcon active={moreActive}>
                   <Ellipsis />
                 </TabIcon>

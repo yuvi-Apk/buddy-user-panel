@@ -26,7 +26,7 @@ let items: readonly ToastItem[] = [];
 let nextId = 1;
 const listeners = new Set<() => void>();
 
-function emit(): void {
+function notifyToastListeners(): void {
   for (const listener of listeners) listener();
 }
 
@@ -34,28 +34,28 @@ function emit(): void {
 export function toast(options: ToastOptions): number {
   const id = nextId++;
   items = [...items.slice(-(MAX_VISIBLE - 1)), { ...options, id, open: true }];
-  emit();
+  notifyToastListeners();
   return id;
 }
 
 /** Starts closing a toast (it animates out, then is removed). */
-export function dismissToast(id: number): void {
+export function closeToast(id: number): void {
   items = items.map((item) =>
     item.id === id ? { ...item, open: false } : item
   );
-  emit();
+  notifyToastListeners();
 }
 
-export function removeToast(id: number): void {
+export function removeClosedToast(id: number): void {
   items = items.filter((item) => item.id !== id);
-  emit();
+  notifyToastListeners();
 }
 
 export function getToasts(): readonly ToastItem[] {
   return items;
 }
 
-export function subscribeToasts(listener: () => void): () => void {
+export function subscribeToToasts(listener: () => void): () => void {
   listeners.add(listener);
   return () => {
     listeners.delete(listener);

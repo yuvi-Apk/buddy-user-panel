@@ -10,7 +10,7 @@ import { useInstallPrompt } from "@/pwa/use-install-prompt";
 
 export function InstallAppSettings() {
   const lang = useLang();
-  const { status, promptInstall } = useInstallPrompt();
+  const { status, showInstallDialog } = useInstallPrompt();
 
   if (status === "unavailable") return null;
 
@@ -21,7 +21,7 @@ export function InstallAppSettings() {
           {status === "available" ? (
             <Button
               onClick={() => {
-                void promptInstall();
+                void showInstallDialog();
               }}
             >
               <Download aria-hidden />

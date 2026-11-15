@@ -9,7 +9,7 @@ import type { SessionUser } from "@/auth/session-store";
 import { cn } from "@/utils/cn";
 import { AccountSummary } from "./account-summary";
 import { BrandMark } from "./brand-mark";
-import { listItemClasses } from "./nav-styles";
+import { getNavItemClasses } from "./nav-styles";
 
 export interface SideNavProps {
   navigation: RoleNavigation;
@@ -78,7 +78,7 @@ export function NavList({
           <NavLink
             to={path}
             onClick={onNavigate}
-            className={({ isActive }) => listItemClasses(isActive)}
+            className={({ isActive }) => getNavItemClasses(isActive)}
           >
             <Icon aria-hidden />
             {textAt(lang, labelKey)}

@@ -8,10 +8,10 @@ import { useLang } from "@/lang";
 import { cn } from "@/utils/cn";
 import { IconButton } from "./button";
 import {
-  dismissToast,
+  closeToast,
   getToasts,
-  removeToast,
-  subscribeToasts,
+  removeClosedToast,
+  subscribeToToasts,
 } from "./toast-store";
 
 const toastVariants = cva(
@@ -45,7 +45,7 @@ const CLOSE_ANIMATION_MS = 200;
 
 export function Toaster() {
   const lang = useLang();
-  const toasts = useSyncExternalStore(subscribeToasts, getToasts, getToasts);
+  const toasts = useSyncExternalStore(subscribeToToasts, getToasts, getToasts);
 
   return (
     // `label` on the provider is read before each toast; the viewport's names the region, and
@@ -61,8 +61,11 @@ export function Toaster() {
             duration={item.duration ?? 5000}
             onOpenChange={(open) => {
               if (open) return;
-              dismissToast(item.id);
-              window.setTimeout(() => removeToast(item.id), CLOSE_ANIMATION_MS);
+              closeToast(item.id);
+              window.setTimeout(
+                () => removeClosedToast(item.id),
+                CLOSE_ANIMATION_MS
+              );
             }}
             className={cn(toastVariants({ tone }))}
           >

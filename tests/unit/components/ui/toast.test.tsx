@@ -4,16 +4,16 @@ import { afterEach, describe, expect, it } from "vitest";
 import { getLang } from "@/lang";
 import { Toaster } from "@/components/ui/toast";
 import {
-  dismissToast,
+  closeToast,
   getToasts,
-  removeToast,
+  removeClosedToast,
   toast,
 } from "@/components/ui/toast-store";
 
 const { ui } = getLang();
 
 afterEach(() => {
-  for (const item of getToasts()) removeToast(item.id);
+  for (const item of getToasts()) removeClosedToast(item.id);
 });
 
 describe("the toast store", () => {
@@ -28,10 +28,10 @@ describe("the toast store", () => {
 
   it("closes a toast first, then removes it", () => {
     const id = toast({ title: "Saved" });
-    dismissToast(id);
+    closeToast(id);
     expect(getToasts()).toEqual([expect.objectContaining({ id, open: false })]);
 
-    removeToast(id);
+    removeClosedToast(id);
     expect(getToasts()).toEqual([]);
   });
 });
