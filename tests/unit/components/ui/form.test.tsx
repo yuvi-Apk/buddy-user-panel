@@ -4,9 +4,11 @@ import userEvent from "@testing-library/user-event";
 import { useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
+import { ApiError } from "@/api/api-error";
 import { Form, SubmitButton } from "@/components/ui/form";
 import { PasswordField } from "@/components/ui/password-field";
 import { EmailField } from "@/components/ui/text-field";
+import { getToasts } from "@/components/ui/toast-store";
 
 const schema = z.object({
   email: z.email({ error: "Enter your email" }),
@@ -86,5 +88,63 @@ describe("Form", () => {
       await sending;
     });
     expect(button).not.toHaveAttribute("aria-busy");
+  });
+
+  it("shows the backend's validation errors under their fields", async () => {
+    const onSubmit = vi.fn(() =>
+      Promise.reject(
+        new ApiError({
+          kind: "http",
+          status: 400,
+          message: "Validation failed",
+          fieldErrors: { email: "This email is already used" },
+        })
+      )
+    );
+    render(<LoginForm onSubmit={onSubmit} />);
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: "Email" }),
+      "asha@example.com"
+    );
+    await userEvent.type(screen.getByLabelText("Password"), "correct horse");
+    await userEvent.click(screen.getByRole("button", { name: "Log in" }));
+
+    const email = screen.getByRole("textbox", { name: "Email" });
+    await waitFor(() =>
+      expect(email).toHaveAccessibleDescription("This email is already used")
+    );
+    expect(email).toBeInvalid();
+    expect(email).toHaveFocus();
+    expect(screen.getByRole("button", { name: "Log in" })).not.toHaveAttribute(
+      "aria-busy"
+    );
+  });
+
+  it("shows a toast for a backend error on a field the form does not have", async () => {
+    const onSubmit = vi.fn(() =>
+      Promise.reject(
+        new ApiError({
+          kind: "http",
+          status: 400,
+          message: "Validation failed",
+          fieldErrors: { examDate: "Choose a date in the future" },
+        })
+      )
+    );
+    render(<LoginForm onSubmit={onSubmit} />);
+
+    await userEvent.type(
+      screen.getByRole("textbox", { name: "Email" }),
+      "asha@example.com"
+    );
+    await userEvent.type(screen.getByLabelText("Password"), "correct horse");
+    await userEvent.click(screen.getByRole("button", { name: "Log in" }));
+
+    await waitFor(() =>
+      expect(getToasts().map((item) => item.description)).toContain(
+        "Choose a date in the future"
+      )
+    );
   });
 });
