@@ -18,7 +18,8 @@ paths:
 | Browser    | `e2e/`                | `pnpm e2e` (Playwright)     | Whole screens on phone and laptop sizes, with axe        |
 
 `pnpm test src/lang/lang.test.ts` runs one file. Test globals are off: import `describe`, `it`,
-`expect` from `vitest`.
+`expect` from `vitest`. Always run tests through `pnpm test`: in Git Bash, `pnpm exec vitest`
+can load Vitest twice and fail with "Vitest failed to find the current suite".
 
 ## Writing tests
 
@@ -29,11 +30,25 @@ paths:
 - For an API hook: success, an error message, field errors, and a 401 that refreshes once.
 - For a screen: loading, empty, error and offline states (core-rules #15).
 - For a component: label, hint and error wiring, keyboard use, disabled and loading states.
+- Read app text from `getLang()` (`screen.getByRole("button", { name: lang.common.tryAgain })`), so
+  rewording a sentence never breaks a test.
+- `src/test/setup.ts` fills gaps in jsdom: a `matchMedia` you control with `setMediaQuery()` from
+  `src/test/media-query.ts`, a ResizeObserver and pointer capture for Radix. After each test it
+  clears localStorage, and every `vi.spyOn` is undone (`restoreMocks`).
 - Never delete or weaken a test to make a change pass. Moving or renaming one is fine.
 
 ## Guardrails
 
-`tests/guardrails/` holds tests that keep the rules true everywhere: `eslint-rules` (every lint ban
-still fires), `naming` (Organization in full, kebab-case files), `lang-keys` (language files match
-English), and later `colors`, `contrast`, `routes`, `env-files`. When you add a lint ban, add a case
-to `eslint-rules.test.ts`.
+`tests/guardrails/` holds tests that keep the rules true everywhere:
+
+- `eslint-rules`: every lint ban still fires. When you add a ban, add a case here.
+- `naming`: Organization in full, kebab-case files.
+- `lang-keys`: every language file has the same keys and placeholders as English.
+- `colors`: no color value or palette class outside `tokens.css`.
+- `contrast`: WCAG AA in every theme × mode, for the token pairs the components use. When a
+  component puts a token on a new background, add that pair.
+- `theme-boot`: `public/theme-boot.js` applies the same choice the theme store saves.
+- Later: `routes`, `env-files`.
+
+`tooling/design-tokens.ts` reads `tokens.css` and resolves each token per theme × mode; use it
+rather than parsing the file again.

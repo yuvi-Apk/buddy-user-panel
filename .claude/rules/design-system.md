@@ -13,16 +13,18 @@ means something. Full guide for people: `docs/04-design-system.md`.
 
 ## Color meaning (core-rules #2) — the same in every theme
 
-| Meaning                        | Token family  | Use it for                                                           |
-| ------------------------------ | ------------- | -------------------------------------------------------------------- |
-| Actions, links, focus          | `primary`     | Buttons, links, selected tabs, focus ring                            |
-| Progress, strong topics        | `progress`    | Progress bars, "Strong" topics, completed days                       |
-| Weak topics ("Needs practice") | `weak`        | Weak topics only. Never stars, streaks, reminders or warnings        |
-| Real errors only               | `destructive` | Failed actions, invalid input, lost connection, irreversible confirm |
-| Everything else                | neutrals      | Text, surfaces, borders                                              |
+| Meaning                        | Token family  | Use it for                                                    |
+| ------------------------------ | ------------- | ------------------------------------------------------------- |
+| Actions, links, focus          | `primary`     | Buttons, links, selected tabs, focus ring                     |
+| Progress, strong topics        | `progress`    | Progress bars, "Strong" topics, completed days                |
+| Weak topics ("Needs practice") | `weak`        | Weak topics only. Never stars, streaks, reminders or warnings |
+| Real errors only               | `destructive` | Failed actions, invalid input, irreversible confirm           |
+| Everything else                | neutrals      | Text, surfaces, borders                                       |
 
 - Never color alone: always an icon and a word too ("Needs practice", "Strong").
 - The label for weak topics is "Needs practice", not "Weak".
+- Being offline is not an error and not the person's fault: the offline banner is ink
+  (`bg-foreground text-background`), never red.
 
 ## Tokens (core-rules #1, #3)
 
@@ -39,7 +41,9 @@ means something. Full guide for people: `docs/04-design-system.md`.
 ## Themes and modes
 
 `<html data-mode="light|dark" data-accent="indigo-ink|lagoon|orchid|graphite">`, set before first
-paint by `public/theme-boot.js` and changed through `useTheme()`.
+paint by `public/theme-boot.js` and changed through `useTheme()`. `src/theme/theme-store.ts` saves
+the choice and, in System mode, follows the phone's setting live. An element can show another
+theme by carrying its own `data-accent` and `data-mode` (the theme previews do).
 
 | Theme                | Feeling                                           | Suits                           |
 | -------------------- | ------------------------------------------------- | ------------------------------- |
@@ -56,11 +60,20 @@ No green, orange, red or pink themes: they would clash with the meaning colors. 
 - Headings: Lexend (`font-display`). Text and UI: Atkinson Hyperlegible Next (`font-sans`). Both
   self-hosted; the stack ends in `system-ui` for scripts they don't cover.
 - UI text 16px (inputs below 16px make iOS zoom). Reading text (answers, explanations) 17px, line
-  height 1.65, at most 68 characters wide (`max-w-prose`). Nothing below 14px.
+  height 1.65, at most 68 characters wide (`text-reading max-w-reading`). Nothing below 14px.
 - Ink for text, `muted-foreground` for secondary text. Never pure black or white.
-- Radius: 10px controls, 16px cards, full for pills. Shadows only in light mode; dark mode uses borders.
-- Icons: lucide, stroke 1.75, 20px in controls and 24px in navigation, always with a text label or
-  an `aria-label`.
+- Tailwind's own scales are removed along with its palette, so `text-xs`, `rounded-md` and
+  `shadow-md` don't exist (ESLint reports them). Ours:
+
+  | Scale  | Classes                                                                                                           |
+  | ------ | ----------------------------------------------------------------------------------------------------------------- |
+  | Text   | `text-sm` 14px (the smallest), `text-base` 16px, `text-reading` 17px, `text-lg` … `text-4xl`                      |
+  | Radius | `rounded-sm` 6px (small parts), `rounded-control` 10px, `rounded-card` 16px, `rounded-sheet` 24px, `rounded-full` |
+  | Shadow | `shadow-card`, `shadow-overlay` (light mode only; dark mode uses borders)                                         |
+  | Width  | `max-w-reading` 68ch, `max-w-content` 70rem (about 1120px)                                                        |
+
+- Icons: lucide, stroke 1.75 (set once by `LucideProvider` at the app root), 20px in controls and
+  24px in navigation, always with a text label or an `aria-label`.
 
 ## Layout, motion, accessibility (core-rules #14)
 

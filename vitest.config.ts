@@ -8,6 +8,9 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      // Every vi.spyOn() and vi.stubGlobal() is undone after each test, so no test leaks into the next.
+      restoreMocks: true,
+      unstubGlobals: true,
       projects: [
         {
           extends: true,

@@ -12,15 +12,15 @@ blocks it. If something is missing, add it to `src/components/ui/` (skill: `add-
 
 ## The set
 
-| Group       | Components                                                                                                                                                                 |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Actions     | `Button` (primary, secondary, outline, ghost, destructive), `IconButton` (needs a `label`), `LinkButton`                                                                   |
-| Form fields | `TextField`, `EmailField`, `PasswordField`, `TextArea`, `SelectField`, `Checkbox`, `RadioGroup`, `Switch`, `SearchField`, `DateField`, `CodeField`, `Form`, `SubmitButton` |
-| Display     | `Card`, `Badge`, `TopicChip`, `ProgressBar`, `ProgressRing`, `Stat`, `Avatar`, `Divider`                                                                                   |
-| Feedback    | `Alert`, `Toast`, `Skeleton`, `Spinner` (inside buttons only), `EmptyState`, `ErrorState`, `OfflineBanner`, `ComingSoon`                                                   |
-| Overlays    | `ResponsiveDialog` (bottom sheet on phones, dialog on laptops), `ConfirmDialog`, `DropdownMenu`, `Popover`, `Tooltip`                                                      |
-| Navigation  | `Tabs`, `SegmentedControl`, `TopBar`, `BottomNav`, `SideNav`                                                                                                               |
-| Layout      | `Page`, `PageHeader`, `Section`, `Stack`, `Inline`, `Grid`                                                                                                                 |
+| Group       | Components                                                                                                                                                                                                           |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Actions     | `Button` (primary, secondary, outline, ghost, destructive), `IconButton` (needs a `label`), `LinkButton`                                                                                                             |
+| Form fields | `TextField`, `EmailField`, `PasswordField`, `TextArea`, `SelectField`, `Checkbox`, `RadioGroup`, `ChoiceCardGroup` (big options as cards), `Switch`, `SearchField`, `DateField`, `CodeField`, `Form`, `SubmitButton` |
+| Display     | `Card`, `Badge`, `TopicChip`, `ProgressBar`, `ProgressRing`, `Stat`, `Avatar`, `Divider`                                                                                                                             |
+| Feedback    | `Alert`, `toast()` (shown by `<Toaster />`, mounted once at the root), `Skeleton`, `LoadingState`, `Spinner` (inside buttons only), `EmptyState`, `ErrorState`, `OfflineBanner`, `ComingSoon`                        |
+| Overlays    | `ResponsiveDialog` (bottom sheet on phones, dialog on laptops), `ConfirmDialog`, `DropdownMenu`, `Popover`, `Tooltip`                                                                                                |
+| Navigation  | `Tabs`, `SegmentedControl`, `TopBar`, `BottomNav`, `SideNav`                                                                                                                                                         |
+| Layout      | `Page`, `PageHeader`, `Section`, `Stack`, `Inline`, `Grid`                                                                                                                                                           |
 
 ## Shared props
 
@@ -35,6 +35,12 @@ blocks it. If something is missing, add it to `src/components/ui/` (skill: `add-
 
 - Built on Radix primitives where behavior is tricky (dialogs, menus, tabs, switches). Behavior from
   Radix, look from our tokens.
+- A new Radix piece can start from the shadcn CLI (`pnpm dlx shadcn add <name>`, set up by
+  `components.json`). Its output is a draft: swap its classes for our tokens and scales (ESLint
+  reports the ones that don't exist), keep our prop names, and never keep color variables it adds
+  to `index.css` (the colors guardrail fails on them).
+- Nothing may write a `<style>` tag or inject CSS at runtime: the CSP blocks it. That is why toasts
+  are built on Radix Toast and not on a library that injects its own styles.
 - Variants with `class-variance-authority`, classes merged with `cn()` from `@/lib/cn`.
 - Tokens only (core-rules #1). Visible focus ring. Works with the keyboard and a screen reader.
   Touch target at least 44px. `ref` passes through.

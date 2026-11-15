@@ -1,0 +1,10 @@
+/*
+  Self-hosted fonts (core-rules #18): no Google CDN, so they work offline and need no CSP exception.
+  Each package splits its font by script (unicode-range), so a phone downloads only what it shows.
+
+  Lexend: headings. Built from reading-fluency research to reduce visual stress.
+  Atkinson Hyperlegible Next: text and UI, by the Braille Institute. Look-alike characters
+  (I l 1, O 0) are drawn so they can never be confused.
+*/
+@import "@fontsource-variable/lexend";
+@import "@fontsource-variable/atkinson-hyperlegible-next";

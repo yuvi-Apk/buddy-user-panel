@@ -1,0 +1,195 @@
+/*
+  "Paper & Ink": the only file with color values (core-rules #1).
+
+  <html data-mode="light|dark" data-accent="indigo-ink|lagoon|orchid|graphite">
+  :root is light mode with the Indigo Ink theme. Each block below overrides only what changes.
+
+  tests/guardrails/contrast.test.ts reads this file and checks every text and border pair for
+  WCAG AA in every theme × mode (core-rules #3). Keep it simple for that test: one declaration per
+  line, opaque hex colors for every color the test checks, no nesting, no @media.
+
+  Each color family has four tokens:
+    X                  the fill (buttons, bars, icons)
+    X-foreground       text on the fill
+    X-soft             a tinted background (chips, banners)
+    X-soft-foreground  text on the tint, and colored text on normal surfaces
+*/
+
+:root {
+  color-scheme: light;
+
+  /* Base: warm paper, ink text (about 15:1, without the glare of black on white) */
+  --background: #f7f6f2;
+  --foreground: #1d1e2c;
+  --card: #fffefa;
+  --card-foreground: #1d1e2c;
+  --popover: #fffefa;
+  --popover-foreground: #1d1e2c;
+  --muted: #efede7;
+  --muted-foreground: #5b5a66;
+  --hover: #e9e6de;
+  --border: #e3e0d8;
+  --input: #8a857b;
+
+  /* Meaning colors: the same in every theme (core-rules #2) */
+  --progress: #2d7a4b;
+  --progress-foreground: #ffffff;
+  --progress-soft: #e5f3eb;
+  --progress-soft-foreground: #155c3e;
+
+  --weak: #b47809;
+  --weak-foreground: #241601;
+  --weak-soft: #fff3dc;
+  --weak-soft-foreground: #7a4a00;
+
+  --destructive: #c8372d;
+  --destructive-hover: #a92c23;
+  --destructive-foreground: #ffffff;
+  --destructive-soft: #fcebe8;
+  --destructive-soft-foreground: #9b2219;
+
+  /* Theme: Indigo Ink (the default) */
+  --primary: #4648d4;
+  --primary-hover: #3a3cb8;
+  --primary-foreground: #ffffff;
+  --primary-soft: #ececfb;
+  --primary-soft-foreground: #2f3091;
+  --ring: #6c6ef0;
+
+  /* An Organization's brand color will replace these (later). Until then they follow the theme. */
+  --brand: var(--primary);
+  --brand-foreground: var(--primary-foreground);
+
+  /* Not checked by the contrast test: see-through layers and shadows */
+  --overlay: rgb(18 19 28 / 0.5);
+  --elevation-card:
+    0 1px 2px rgb(29 30 44 / 0.06), 0 2px 8px rgb(29 30 44 / 0.04);
+  --elevation-overlay:
+    0 12px 32px rgb(29 30 44 / 0.16), 0 2px 6px rgb(29 30 44 / 0.08);
+}
+
+[data-mode="dark"] {
+  color-scheme: dark;
+
+  /* Base: deep ink night, soft off-white text (never pure white) */
+  --background: #12131c;
+  --foreground: #e7e6ee;
+  --card: #1a1b27;
+  --card-foreground: #e7e6ee;
+  --popover: #1f2030;
+  --popover-foreground: #e7e6ee;
+  --muted: #232434;
+  --muted-foreground: #a3a2b3;
+  --hover: #2a2b3d;
+  --border: #2e3043;
+  --input: #6b6d85;
+
+  --progress: #6cc98a;
+  --progress-foreground: #0c2e21;
+  --progress-soft: #173328;
+  --progress-soft-foreground: #9bddb0;
+
+  --weak: #e5ae4c;
+  --weak-foreground: #241601;
+  --weak-soft: #3a2c12;
+  --weak-soft-foreground: #f0c878;
+
+  --destructive: #f07a70;
+  --destructive-hover: #f4958d;
+  --destructive-foreground: #3b0d09;
+  --destructive-soft: #3d1e1c;
+  --destructive-soft-foreground: #f6a69e;
+
+  /* Indigo Ink, night */
+  --primary: #8e90f2;
+  --primary-hover: #a3a5f5;
+  --primary-foreground: #151638;
+  --primary-soft: #262850;
+  --primary-soft-foreground: #c9cafb;
+  --ring: #8e90f2;
+
+  --overlay: rgb(0 0 0 / 0.6);
+  --elevation-card: none;
+  --elevation-overlay: 0 12px 32px rgb(0 0 0 / 0.45);
+}
+
+/*
+  Themes. Indigo Ink repeats the :root values so that an element can show a theme on its own:
+  <span data-accent="indigo-ink"> inside a Lagoon page still shows Indigo Ink (theme previews).
+*/
+
+/* Indigo Ink · Focus: deep blue-violet, calm for hours */
+[data-accent="indigo-ink"] {
+  --primary: #4648d4;
+  --primary-hover: #3a3cb8;
+  --primary-foreground: #ffffff;
+  --primary-soft: #ececfb;
+  --primary-soft-foreground: #2f3091;
+  --ring: #6c6ef0;
+}
+
+/* Lagoon · Calm: the blue-green of still water */
+[data-accent="lagoon"] {
+  --primary: #12708a;
+  --primary-hover: #0e5c72;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e3f1f4;
+  --primary-soft-foreground: #0b4f62;
+  --ring: #1c8fa8;
+}
+
+/* Orchid · Creative: violet, energy without aggression */
+[data-accent="orchid"] {
+  --primary: #7445d6;
+  --primary-hover: #6036bd;
+  --primary-foreground: #ffffff;
+  --primary-soft: #f1ebfc;
+  --primary-soft-foreground: #4f2a9e;
+  --ring: #8f6ce6;
+}
+
+/* Graphite · Minimal: no hue competes with the meaning colors */
+[data-accent="graphite"] {
+  --primary: #2b2d3a;
+  --primary-hover: #1d1e2c;
+  --primary-foreground: #ffffff;
+  --primary-soft: #ecebe8;
+  --primary-soft-foreground: #2b2d3a;
+  --ring: #5b5a66;
+}
+
+[data-mode="dark"][data-accent="indigo-ink"] {
+  --primary: #8e90f2;
+  --primary-hover: #a3a5f5;
+  --primary-foreground: #151638;
+  --primary-soft: #262850;
+  --primary-soft-foreground: #c9cafb;
+  --ring: #8e90f2;
+}
+
+[data-mode="dark"][data-accent="lagoon"] {
+  --primary: #56bcd3;
+  --primary-hover: #76cbde;
+  --primary-foreground: #082a34;
+  --primary-soft: #173640;
+  --primary-soft-foreground: #a8e1ec;
+  --ring: #56bcd3;
+}
+
+[data-mode="dark"][data-accent="orchid"] {
+  --primary: #b79bf5;
+  --primary-hover: #c8b3f7;
+  --primary-foreground: #24124a;
+  --primary-soft: #33244f;
+  --primary-soft-foreground: #dccdfb;
+  --ring: #b79bf5;
+}
+
+[data-mode="dark"][data-accent="graphite"] {
+  --primary: #dcdbe6;
+  --primary-hover: #eeedf4;
+  --primary-foreground: #1a1b27;
+  --primary-soft: #2a2b3a;
+  --primary-soft-foreground: #e7e6ee;
+  --ring: #dcdbe6;
+}

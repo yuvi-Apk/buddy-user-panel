@@ -1,8 +1,60 @@
 {
   "common": {
-    "appName": "Buddy"
+    "appName": "Buddy",
+    "cancel": "Cancel",
+    "close": "Close",
+    "loading": "Loading",
+    "tryAgain": "Try again"
   },
-  "app": {
-    "setupNotice": "Buddy is being set up. The screens arrive step by step."
+  "ui": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "notification": "Notification",
+    "notifications": "Notifications ({hotkey})",
+    "dismissNotification": "Dismiss",
+    "percent": "{value}%",
+    "topicStrong": "Strong",
+    "topicNeedsPractice": "Needs practice"
+  },
+  "feedback": {
+    "errorTitle": "Something went wrong",
+    "errorBody": "It's not you. Please try again in a moment.",
+    "errorReference": "Reference: {id}",
+    "offline": "You're offline. Some things won't work until you're back online.",
+    "comingSoonTitle": "Coming soon",
+    "comingSoonBody": "We're building this screen. Check back soon."
+  },
+  "theme": {
+    "title": "Appearance",
+    "description": "Pick the look that feels right for long study sessions.",
+    "modeLabel": "Mode",
+    "accentLabel": "Theme",
+    "modes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "accents": {
+      "indigoInk": {
+        "name": "Indigo Ink",
+        "mood": "Focus",
+        "description": "Deep blue-violet for concentration. Calm for hours."
+      },
+      "lagoon": {
+        "name": "Lagoon",
+        "mood": "Calm",
+        "description": "The blue-green of still water. Eases exam stress."
+      },
+      "orchid": {
+        "name": "Orchid",
+        "mood": "Creative",
+        "description": "Violet for imagination, with energy that never shouts."
+      },
+      "graphite": {
+        "name": "Graphite",
+        "mood": "Minimal",
+        "description": "Quiet and clean. Color appears only when it means something."
+      }
+    }
   }
 }

@@ -27,7 +27,7 @@ src/
   config/           env.ts (only reader of import.meta.env), navigation.ts (tabs per role), constants.ts
   lang/             en.json (all text), index.ts (useLang, getLang, fill, plural)
   styles/           tokens.css (the only colors), index.css (Tailwind + token mapping), fonts.css
-  theme/            the 4 themes, ThemeProvider, useTheme
+  theme/            the 4 themes, the theme store (saved choice, follows the phone), useTheme
   lib/              api/ (client, errors, query client), auth/ (session, refresh, roles), storage,
                     safe-url, safe-redirect, cn, logger, format (dates and numbers)
   components/       ui/ (the shared set), layout/ (shell, page, stack…), feedback/ (empty, error…)
@@ -36,6 +36,10 @@ src/
   test/             test setup, render helper, MSW mock of the backend
   features/<x>/     one folder per feature (see features.md)
 ```
+
+Outside `src/`: `public/` (files served as they are, such as `theme-boot.js`), `tests/guardrails/`
+(repo-wide rules), `tooling/` (Node helpers shared by config files and guardrails, such as the
+`tokens.css` reader), `eslint/` (our own lint rules), `e2e/` (browser tests).
 
 ## Who may import what
 

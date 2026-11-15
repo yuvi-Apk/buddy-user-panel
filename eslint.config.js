@@ -1,6 +1,7 @@
 // ESLint guardrails. Each ban enforces a rule in .claude/rules/core-rules.md, and its message names
 // the rule number. tests/guardrails/eslint-rules.test.ts proves every ban still fires.
 import { defineConfig, globalIgnores } from "eslint/config";
+import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 import i18next from "eslint-plugin-i18next";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -138,6 +139,21 @@ export default defineConfig(
         ...fetchProperties,
         ...storageProperties,
       ],
+    },
+  },
+
+  // Tailwind classes must exist in our design system (core-rules #1): Tailwind's own palette is
+  // removed in index.css, so `bg-indigo-600` or `text-xs` is reported as unknown, like a typo.
+  // Class order is left to the Prettier plugin.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    extends: [betterTailwindcss.configs["correctness-error"]],
+    settings: {
+      "better-tailwindcss": { entryPoint: "src/styles/index.css" },
+    },
+    rules: {
+      "better-tailwindcss/no-duplicate-classes": "error",
+      "better-tailwindcss/no-deprecated-classes": "error",
     },
   },
 

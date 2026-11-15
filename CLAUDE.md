@@ -71,8 +71,8 @@ reviews and commits, then tells you to continue.
 
 ## Setup status
 
-The foundation is built in five steps. Done: **1** (tooling, text system, rules). Still to come:
-**2** design tokens, themes and the shared components; **3** app skeleton (env, API client,
-session, router, shell, placeholder screens); **4** PWA and security headers; **5** browser tests,
-docs and skills. The rules describe the finished foundation, so a file they name may not exist
-until its step lands; until then that rule is enforced by review.
+The foundation is built in five steps. Done: **1** (tooling, text system, rules) and **2** (design
+tokens, 4 themes × light/dark, the shared components, the UI gallery). Still to come: **3** app
+skeleton (env, API client, session, router, shell, placeholder screens); **4** PWA and security
+headers; **5** browser tests, docs and skills. The rules describe the finished foundation, so a
+file they name may not exist until its step lands; until then that rule is enforced by review.

@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-const SCANNED = ["src", "tests", "eslint"];
+const SCANNED = ["src", "tests", "tooling", "eslint"];
 const SCANNED_FILES = [
   "index.html",
   "vite.config.ts",
