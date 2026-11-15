@@ -1,17 +1,17 @@
 // Tools for building the app, in dev builds only. The literal `import.meta.env.DEV` check lets
 // the bundler drop these pages from production entirely: they are not even downloaded.
-import { defineRoute } from "@/routing/define-route";
+import { createPageRoute } from "@/routing/page-route";
 
 export const devRoutes = import.meta.env.DEV
   ? [
-      defineRoute({
+      createPageRoute({
         path: "/dev/ui",
         access: "public",
         page: () =>
           import("./pages/ui-gallery-page").then((file) => file.UiGalleryPage),
         titleKey: "pages.devUi",
       }),
-      defineRoute({
+      createPageRoute({
         path: "/dev/session",
         access: "public",
         page: () =>

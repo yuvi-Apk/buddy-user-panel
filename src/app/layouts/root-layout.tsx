@@ -6,7 +6,7 @@ import { Outlet, useLocation } from "react-router";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { MAIN_CONTENT_ID } from "@/components/layout/skip-link";
 import { fill, textAt, useLang } from "@/lang";
-import { useRouteTitleKey } from "@/routing/define-route";
+import { useCurrentPageTitleKey } from "@/routing/page-route";
 
 export function RootLayout() {
   useDocumentTitle();
@@ -25,7 +25,7 @@ export function AppLoading() {
 
 function useDocumentTitle(): void {
   const lang = useLang();
-  const titleKey = useRouteTitleKey();
+  const titleKey = useCurrentPageTitleKey();
 
   useEffect(() => {
     const appName = lang.common.appName;

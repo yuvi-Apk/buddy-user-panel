@@ -9,8 +9,8 @@ import { MAX_TABS, NAVIGATION } from "@/config/navigation";
 import en from "@/lang/en.json";
 import { textAt } from "@/lang";
 import { USER_ROLES } from "@/auth/roles";
-import { canOpen } from "@/routing/route-access";
-import { isRouteHandle } from "@/routing/define-route";
+import { canRoleOpenRoute } from "@/routing/route-access";
+import { isPageRouteInfo } from "@/routing/page-route";
 
 /** Every route that matches a URL (has a path or is an index), with where it sits. */
 function pageRoutes(
@@ -30,9 +30,9 @@ const tree = buildRoutes();
 describe("routes", () => {
   it("every route that opens a page declares access and a title", () => {
     const missing = pageRoutes(tree)
-      .filter(({ route }) => !isRouteHandle(route.handle))
+      .filter(({ route }) => !isPageRouteInfo(route.handle))
       .map(({ where }) => where);
-    expect(missing, "Build these routes with defineRoute").toEqual([]);
+    expect(missing, "Build these routes with createPageRoute").toEqual([]);
   });
 
   it("no two pages share a path", () => {
@@ -82,7 +82,7 @@ describe("navigation", () => {
       ].flatMap((path) => {
         const route = byPath.get(path);
         if (!route) return [`${path}: no such route`];
-        return canOpen(route.access, role)
+        return canRoleOpenRoute(route.access, role)
           ? []
           : [`${path}: ${role} may not open it`];
       });

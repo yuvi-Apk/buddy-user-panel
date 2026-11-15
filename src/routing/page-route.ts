@@ -1,6 +1,6 @@
-// Every page of the app is registered with defineRoute:
+// Every page of the app is registered with createPageRoute:
 //
-//   defineRoute({
+//   createPageRoute({
 //     path: "/today",
 //     access: ["INDIVIDUAL", "STUDENT"],
 //     page: () => import("./pages/today-page").then((file) => file.TodayPage),
@@ -19,12 +19,12 @@ import {
 } from "react-router";
 import { waitForSession } from "@/auth/session-store";
 import type { LangKey } from "@/lang";
-import { accessRedirect, type RouteAccess } from "./route-access";
+import { getRedirectPathIfBlocked, type RouteAccess } from "./route-access";
 
 /** "shell": top bar, tabs and sidebar. "focus": a calm centered page (login, invite, 404). */
 export type RouteLayout = "shell" | "focus";
 
-export interface RouteOptions {
+export interface PageRouteOptions {
   path: string;
   access: RouteAccess;
   page: () => Promise<ComponentType>;
@@ -34,12 +34,12 @@ export interface RouteOptions {
   layout?: RouteLayout;
 }
 
-export interface RouteHandle {
+export interface PageRouteInfo {
   access: RouteAccess;
   titleKey: LangKey;
 }
 
-export interface AppRoute {
+export interface PageRoute {
   path: string;
   access: RouteAccess;
   titleKey: LangKey;
@@ -47,11 +47,11 @@ export interface AppRoute {
   route: RouteObject;
 }
 
-export function defineRoute(definition: RouteOptions): AppRoute {
-  const { path, access, page, titleKey } = definition;
+export function createPageRoute(options: PageRouteOptions): PageRoute {
+  const { path, access, page, titleKey } = options;
   const layout =
-    definition.layout ?? (typeof access === "string" ? "focus" : "shell");
-  const handle: RouteHandle = { access, titleKey };
+    options.layout ?? (typeof access === "string" ? "focus" : "shell");
+  const handle: PageRouteInfo = { access, titleKey };
 
   return {
     path,
@@ -61,23 +61,27 @@ export function defineRoute(definition: RouteOptions): AppRoute {
     route: {
       path,
       handle,
-      loader: accessLoader(access),
+      loader: createAccessCheckLoader(access),
       lazy: async () => ({ Component: await page() }),
     },
   };
 }
 
-/** The loader that guards a route. Exported for routes that are not pages (the "/" redirect). */
-export function accessLoader(access: RouteAccess) {
+/** The loader that runs before a page opens and redirects people who may not open it. */
+function createAccessCheckLoader(access: RouteAccess) {
   return async ({ request }: LoaderFunctionArgs) => {
     const session = await waitForSession();
-    const target = accessRedirect(access, session, new URL(request.url));
-    if (target) return redirect(target);
+    const redirectPath = getRedirectPathIfBlocked(
+      access,
+      session,
+      new URL(request.url)
+    );
+    if (redirectPath) return redirect(redirectPath);
     return null;
   };
 }
 
-export function isRouteHandle(value: unknown): value is RouteHandle {
+export function isPageRouteInfo(value: unknown): value is PageRouteInfo {
   return (
     typeof value === "object" &&
     value !== null &&
@@ -88,11 +92,11 @@ export function isRouteHandle(value: unknown): value is RouteHandle {
 }
 
 /** The title key of the deepest matching route, for the browser tab title. */
-export function useRouteTitleKey(): LangKey | undefined {
+export function useCurrentPageTitleKey(): LangKey | undefined {
   const matches = useMatches();
   for (let index = matches.length - 1; index >= 0; index--) {
     const handle = matches[index]?.handle;
-    if (isRouteHandle(handle)) return handle.titleKey;
+    if (isPageRouteInfo(handle)) return handle.titleKey;
   }
   return undefined;
 }

@@ -2,7 +2,7 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { getLang } from "@/lang";
-import { accessRedirect } from "@/routing/route-access";
+import { getRedirectPathIfBlocked } from "@/routing/route-access";
 import type { SessionState } from "@/auth/session-store";
 import { makeUser } from "@tests/helpers/mock-server/backend";
 import { renderRoute } from "@tests/helpers/render";
@@ -23,48 +23,56 @@ const signedInAs = (
 });
 const at = (path: string) => new URL(path, "http://localhost");
 
-describe("accessRedirect", () => {
+describe("getRedirectPathIfBlocked", () => {
   it("sends signed-out people to login, remembering where they were", () => {
-    expect(accessRedirect(["STUDENT"], signedOut, at("/plan?week=2"))).toBe(
-      "/login?redirect=%2Fplan%3Fweek%3D2"
-    );
+    expect(
+      getRedirectPathIfBlocked(["STUDENT"], signedOut, at("/plan?week=2"))
+    ).toBe("/login?redirect=%2Fplan%3Fweek%3D2");
   });
 
   it("sends a role that may not open the page to its own home", () => {
     expect(
-      accessRedirect(["ORGANIZATION_ADMIN"], signedInAs("TEACHER"), at("/x"))
+      getRedirectPathIfBlocked(
+        ["ORGANIZATION_ADMIN"],
+        signedInAs("TEACHER"),
+        at("/x")
+      )
     ).toBe("/organization/dashboard");
-    expect(accessRedirect(["TEACHER"], signedInAs("STUDENT"), at("/x"))).toBe(
-      "/today"
-    );
+    expect(
+      getRedirectPathIfBlocked(["TEACHER"], signedInAs("STUDENT"), at("/x"))
+    ).toBe("/today");
   });
 
   it("lets the right role in", () => {
     expect(
-      accessRedirect(["STUDENT"], signedInAs("STUDENT"), at("/today"))
+      getRedirectPathIfBlocked(["STUDENT"], signedInAs("STUDENT"), at("/today"))
     ).toBeNull();
   });
 
   it("sends signed-in people away from guest pages, to a safe redirect or home", () => {
     expect(
-      accessRedirect(
+      getRedirectPathIfBlocked(
         "guest",
         signedInAs("STUDENT"),
         at("/login?redirect=/plan")
       )
     ).toBe("/plan");
     expect(
-      accessRedirect(
+      getRedirectPathIfBlocked(
         "guest",
         signedInAs("STUDENT"),
         at("/login?redirect=https://evil.example")
       )
     ).toBe("/today");
-    expect(accessRedirect("guest", signedOut, at("/login"))).toBeNull();
+    expect(
+      getRedirectPathIfBlocked("guest", signedOut, at("/login"))
+    ).toBeNull();
   });
 
   it("lets anyone open public pages", () => {
-    expect(accessRedirect("public", signedOut, at("/verify-email"))).toBeNull();
+    expect(
+      getRedirectPathIfBlocked("public", signedOut, at("/verify-email"))
+    ).toBeNull();
   });
 });
 

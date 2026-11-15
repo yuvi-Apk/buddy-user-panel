@@ -1,27 +1,27 @@
 // Log in, sign up, email verification and password reset (email and password only).
-import { defineRoute } from "@/routing/define-route";
+import { createPageRoute } from "@/routing/page-route";
 
 export const authRoutes = [
-  defineRoute({
+  createPageRoute({
     path: "/login",
     access: "guest",
     page: () => import("./pages/login-page").then((file) => file.LoginPage),
     titleKey: "pages.login",
   }),
-  defineRoute({
+  createPageRoute({
     path: "/signup",
     access: "guest",
     page: () => import("./pages/signup-page").then((file) => file.SignupPage),
     titleKey: "pages.signup",
   }),
-  defineRoute({
+  createPageRoute({
     path: "/verify-email",
     access: "public",
     page: () =>
       import("./pages/verify-email-page").then((file) => file.VerifyEmailPage),
     titleKey: "pages.verifyEmail",
   }),
-  defineRoute({
+  createPageRoute({
     path: "/forgot-password",
     access: "guest",
     page: () =>
@@ -30,7 +30,7 @@ export const authRoutes = [
       ),
     titleKey: "pages.forgotPassword",
   }),
-  defineRoute({
+  createPageRoute({
     path: "/reset-password",
     access: "guest",
     page: () =>

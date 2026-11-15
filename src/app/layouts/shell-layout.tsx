@@ -1,4 +1,4 @@
-// The two frames routes render in (defineRoute picks one with `layout`).
+// The two frames routes render in (createPageRoute picks one with `layout`).
 import { Outlet, useNavigate } from "react-router";
 import { AppShell, FocusShell } from "@/components/layout/app-shell";
 import { LOGIN_PATH } from "@/config/navigation";

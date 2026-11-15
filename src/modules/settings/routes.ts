@@ -1,9 +1,9 @@
 // The person's settings. Every signed-in role may open them.
 import { USER_ROLES } from "@/auth/roles";
-import { defineRoute } from "@/routing/define-route";
+import { createPageRoute } from "@/routing/page-route";
 
 export const settingsRoutes = [
-  defineRoute({
+  createPageRoute({
     path: "/settings",
     access: USER_ROLES,
     page: () =>

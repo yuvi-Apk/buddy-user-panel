@@ -6,7 +6,7 @@
 //   ├─ focus        login, sign-up, invite links, dev tools
 //   └─ *            404
 //
-// Each module lists its own pages in its routes.ts with defineRoute.
+// Each module lists its own pages in its routes.ts with createPageRoute.
 // tests/project-rules/routes.test.ts checks them against src/config/navigation.ts.
 import { createBrowserRouter, redirect, type RouteObject } from "react-router";
 import { homeFor, LOGIN_PATH } from "@/config/navigation";
@@ -22,16 +22,16 @@ import { studyPlanRoutes } from "@/modules/study-plan";
 import { topicsRoutes } from "@/modules/topics";
 import { sessionStore, waitForSession } from "@/auth/session-store";
 import {
-  type AppRoute,
-  defineRoute,
-  type RouteHandle,
-} from "@/routing/define-route";
+  type PageRoute,
+  createPageRoute,
+  type PageRouteInfo,
+} from "@/routing/page-route";
 import { NotFoundPage } from "./errors/not-found-page";
 import { RootError, RouteError } from "./errors/route-error-page";
 import { AppLoading, RootLayout } from "./layouts/root-layout";
 import { FocusLayout, ShellLayout } from "./layouts/shell-layout";
 
-const notFoundRoute = defineRoute({
+const notFoundRoute = createPageRoute({
   path: "*",
   access: "public",
   // Small and already part of the error page, so it is not a separate chunk.
@@ -40,7 +40,7 @@ const notFoundRoute = defineRoute({
 });
 
 /** Every page of the app. The dev tools are an empty list in production builds. */
-export const appRoutes: readonly AppRoute[] = [
+export const appRoutes: readonly PageRoute[] = [
   ...authRoutes,
   ...onboardingRoutes,
   ...studyPlanRoutes,
@@ -53,7 +53,7 @@ export const appRoutes: readonly AppRoute[] = [
   ...devRoutes,
 ];
 
-const homeHandle: RouteHandle = {
+const homeHandle: PageRouteInfo = {
   access: "public",
   titleKey: "common.appName",
 };
@@ -65,9 +65,9 @@ async function homeRedirect(): Promise<Response> {
 }
 
 export function buildRoutes(
-  routes: readonly AppRoute[] = appRoutes
+  routes: readonly PageRoute[] = appRoutes
 ): RouteObject[] {
-  const inLayout = (layout: AppRoute["layout"]) =>
+  const inLayout = (layout: PageRoute["layout"]) =>
     routes
       .filter((route) => route.layout === layout)
       .map((route) => route.route);

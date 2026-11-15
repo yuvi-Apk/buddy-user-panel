@@ -1,9 +1,9 @@
 // The person's own profile.
 import { USER_ROLES } from "@/auth/roles";
-import { defineRoute } from "@/routing/define-route";
+import { createPageRoute } from "@/routing/page-route";
 
 export const profileRoutes = [
-  defineRoute({
+  createPageRoute({
     path: "/profile",
     access: USER_ROLES,
     page: () => import("./pages/profile-page").then((file) => file.ProfilePage),
