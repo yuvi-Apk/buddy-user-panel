@@ -1,6 +1,6 @@
 // The two frames routes render in (createPageRoute picks one with `layout`).
 import { Outlet, useNavigate } from "react-router";
-import { AppShell, FocusShell } from "@/components/layout/app-shell";
+import { AppShell, FocusShell } from "@/components/layout";
 import { LOGIN_PATH } from "@/config/navigation";
 import { signOut } from "@/auth/session";
 import { useSession } from "@/auth/session-store";

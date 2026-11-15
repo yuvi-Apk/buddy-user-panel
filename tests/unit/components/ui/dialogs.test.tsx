@@ -4,13 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { getLang } from "@/lang";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
+  Button,
+  ConfirmDialog,
   ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogTrigger,
-} from "@/components/ui/responsive-dialog";
+} from "@/components/ui";
 
 const { common } = getLang();
 

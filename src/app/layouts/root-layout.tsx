@@ -3,8 +3,8 @@
 //. Also the loading screen while the session is restored at start.
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { MAIN_CONTENT_ID } from "@/components/layout/skip-link";
+import { LoadingState } from "@/components/states";
+import { MAIN_CONTENT_ID } from "@/components/layout";
 import { fill, textAt, useLang } from "@/lang";
 import { useCurrentPageTitleKey } from "@/routing/page-route";
 

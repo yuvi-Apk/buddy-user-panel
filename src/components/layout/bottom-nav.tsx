@@ -3,12 +3,12 @@
 import { Ellipsis, LogOut } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { NavLink, useLocation } from "react-router";
-import { Button } from "@/components/ui/button";
 import {
+  Button,
   ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogTrigger,
-} from "@/components/ui/responsive-dialog";
+} from "@/components/ui";
 import type { RoleNavigation } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
 import type { SessionUser } from "@/auth/session-store";

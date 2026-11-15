@@ -2,9 +2,8 @@
 // Screen" hint on iPhone and iPad, a note once installed, and nothing where installing isn't
 // possible.
 import { CircleCheck, Download, Share } from "lucide-react";
-import { Section } from "@/components/layout/page";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Section } from "@/components/layout";
+import { Button, Card, CardContent } from "@/components/ui";
 import { useLang } from "@/lang";
 import { useInstallPrompt } from "@/pwa/use-install-prompt";
 

@@ -1,8 +1,7 @@
 // The sidebar on laptops (lg and up): every menu item of the role, then who is signed in.
 import { LogOut } from "lucide-react";
 import { NavLink } from "react-router";
-import { Button } from "@/components/ui/button";
-import { Divider } from "@/components/ui/divider";
+import { Button, Divider } from "@/components/ui";
 import type { NavItem, RoleNavigation } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
 import type { SessionUser } from "@/auth/session-store";

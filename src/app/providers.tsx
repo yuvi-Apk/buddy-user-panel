@@ -3,8 +3,7 @@
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LucideProvider } from "lucide-react";
 import type { ReactNode } from "react";
-import { Toaster } from "@/components/ui/toast";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster, TooltipProvider } from "@/components/ui";
 
 // Icons are drawn with a 1.75 stroke, a little softer than lucide's default 2.
 // An icon can still pass its own `strokeWidth`.

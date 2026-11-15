@@ -1,31 +1,33 @@
 // Cards, badges, topic chips, progress, stats and avatars; then the feedback states.
 import { BookOpen, CircleCheck, Flame, Sprout } from "lucide-react";
 import { useState } from "react";
-import { ComingSoon } from "@/components/feedback/coming-soon";
-import { EmptyState } from "@/components/feedback/empty-state";
-import { ErrorState } from "@/components/feedback/error-state";
-import { LoadingState } from "@/components/feedback/loading-state";
-import { OfflineBanner } from "@/components/feedback/offline-banner";
-import { Grid, Inline, Stack } from "@/components/layout/stack";
-import { Alert } from "@/components/ui/alert";
-import { Avatar } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
+  ComingSoon,
+  EmptyState,
+  ErrorState,
+  LoadingState,
+  OfflineBanner,
+} from "@/components/states";
+import { Grid, Inline, Stack } from "@/components/layout";
+import {
+  Alert,
+  Avatar,
+  Badge,
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Divider } from "@/components/ui/divider";
-import { ProgressBar } from "@/components/ui/progress-bar";
-import { ProgressRing } from "@/components/ui/progress-ring";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Stat } from "@/components/ui/stat";
-import { toast } from "@/components/ui/toast-store";
-import { TopicChip } from "@/components/ui/topic-chip";
+  Divider,
+  ProgressBar,
+  ProgressRing,
+  Skeleton,
+  Stat,
+  toast,
+  TopicChip,
+} from "@/components/ui";
 
 export function GalleryDisplay() {
   return (

@@ -1,6 +1,6 @@
 // Settings: Appearance (theme and mode) and Install the app.
-import { Page, PageHeader, Section } from "@/components/layout/page";
-import { Card, CardContent } from "@/components/ui/card";
+import { Page, PageHeader, Section } from "@/components/layout";
+import { Card, CardContent } from "@/components/ui";
 import { useLang } from "@/lang";
 import { AppearanceSettings } from "../components/appearance-settings";
 import { InstallAppSettings } from "../components/install-app-settings";

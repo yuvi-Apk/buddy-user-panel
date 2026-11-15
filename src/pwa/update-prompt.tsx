@@ -4,8 +4,7 @@
 import { RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast-store";
+import { Button, toast } from "@/components/ui";
 import { useLang } from "@/lang";
 import { logger } from "@/utils/logger";
 

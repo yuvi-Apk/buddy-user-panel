@@ -3,10 +3,12 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup } from "@/components/ui/radio-group";
-import { SegmentedControl } from "@/components/ui/segmented-control";
-import { Switch } from "@/components/ui/switch";
+import {
+  Checkbox,
+  RadioGroup,
+  SegmentedControl,
+  Switch,
+} from "@/components/ui";
 
 describe("Checkbox", () => {
   it("is named by its label and described by its description", () => {

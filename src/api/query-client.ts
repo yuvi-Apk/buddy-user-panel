@@ -4,7 +4,7 @@
 //   - requests wait while offline (networkMode "online") and run once the connection is back
 //   - a failed mutation shows a toast, unless the form shows field errors or `meta.toast` is false
 import { MutationCache, QueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/toast-store";
+import { toast } from "@/components/ui";
 import { getLang } from "@/lang";
 import { getErrorMessage, isApiError } from "./api-error";
 

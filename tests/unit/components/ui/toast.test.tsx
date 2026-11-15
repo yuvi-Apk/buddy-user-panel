@@ -2,13 +2,13 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 import { getLang } from "@/lang";
-import { Toaster } from "@/components/ui/toast";
 import {
+  Toaster,
   closeToast,
   getToasts,
   removeClosedToast,
   toast,
-} from "@/components/ui/toast-store";
+} from "@/components/ui";
 
 const { ui } = getLang();
 

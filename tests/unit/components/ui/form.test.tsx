@@ -5,10 +5,7 @@ import { useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { ApiError } from "@/api/api-error";
-import { Form, SubmitButton } from "@/components/ui/form";
-import { PasswordField } from "@/components/ui/password-field";
-import { EmailField } from "@/components/ui/text-field";
-import { getToasts } from "@/components/ui/toast-store";
+import { Form, Input, SubmitButton, getToasts } from "@/components/ui";
 
 const schema = z.object({
   email: z.email({ error: "Enter your email" }),
@@ -29,12 +26,14 @@ function LoginForm({
 
   return (
     <Form form={form} onSubmit={onSubmit}>
-      <EmailField
+      <Input
+        type="email"
         label="Email"
         error={errors.email?.message}
         {...form.register("email")}
       />
-      <PasswordField
+      <Input
+        type="password"
         label="Password"
         error={errors.password?.message}
         {...form.register("password")}

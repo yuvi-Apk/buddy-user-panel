@@ -1,8 +1,8 @@
 // The UI gallery (/dev/ui): every shared component in every variant, with a theme switcher and the live
 // contrast of each color pair. Dev builds only.
 // Use it to review a new component or variant in all 4 themes × light and dark.
-import { Page, PageHeader, Section } from "@/components/layout/page";
-import { Card, CardContent } from "@/components/ui/card";
+import { Page, PageHeader, Section } from "@/components/layout";
+import { Card, CardContent } from "@/components/ui";
 import { AppearanceSettings } from "@/modules/settings";
 import { GalleryColors } from "../components/gallery-colors";
 import {

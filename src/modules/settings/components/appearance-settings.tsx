@@ -1,9 +1,8 @@
 // Settings → Appearance: light, dark or system, and one of the 4 themes. Each theme card shows
 // a live swatch of that theme (its primary, progress and needs-practice colors) in the current mode.
 import { Monitor, Moon, Sun } from "lucide-react";
-import { Stack } from "@/components/layout/stack";
-import { ChoiceCardGroup } from "@/components/ui/choice-card-group";
-import { SegmentedControl } from "@/components/ui/segmented-control";
+import { Stack } from "@/components/layout";
+import { ChoiceCardGroup, SegmentedControl } from "@/components/ui";
 import { useLang } from "@/lang";
 import {
   type Accent,

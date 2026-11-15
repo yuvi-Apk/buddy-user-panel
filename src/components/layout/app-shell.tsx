@@ -6,7 +6,7 @@
 // FocusShell is the calm frame for everything else (login, invite links, 404): the name of the
 // app and the content, nothing to wander off to.
 import type { ReactNode } from "react";
-import { OfflineBanner } from "@/components/feedback/offline-banner";
+import { OfflineBanner } from "@/components/states";
 import { NAVIGATION_BY_ROLE } from "@/config/navigation";
 import type { SessionUser } from "@/auth/session-store";
 import { BottomNav } from "./bottom-nav";

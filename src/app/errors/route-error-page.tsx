@@ -4,9 +4,8 @@
 // The most common cause is a page chunk that no longer exists after a new version was deployed,
 // so the action reloads the page.
 import { isRouteErrorResponse, useRouteError } from "react-router";
-import { ErrorState } from "@/components/feedback/error-state";
-import { FocusShell } from "@/components/layout/app-shell";
-import { Page } from "@/components/layout/page";
+import { ErrorState } from "@/components/states";
+import { FocusShell, Page } from "@/components/layout";
 import { useLang } from "@/lang";
 import { isApiError } from "@/api/api-error";
 import { logger } from "@/utils/logger";

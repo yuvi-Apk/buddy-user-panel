@@ -3,8 +3,7 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { fill, getLang } from "@/lang";
-import { ErrorState } from "@/components/feedback/error-state";
-import { OfflineBanner } from "@/components/feedback/offline-banner";
+import { ErrorState, OfflineBanner } from "@/components/states";
 
 const { common, feedback } = getLang();
 

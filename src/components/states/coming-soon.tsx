@@ -3,7 +3,7 @@
 //   <ComingSoonPage title={lang.nav.today} />       a whole placeholder screen
 import { Hammer } from "lucide-react";
 import type { ReactNode } from "react";
-import { Page, PageHeader } from "@/components/layout/page";
+import { Page, PageHeader } from "@/components/layout";
 import { useLang } from "@/lang";
 import { EmptyState } from "./empty-state";
 

@@ -2,7 +2,7 @@
 // shows the request's reference so support can find it in the logs.
 import { RotateCw, TriangleAlert } from "lucide-react";
 import type { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 import { fill, useLang } from "@/lang";
 import { EmptyState } from "./empty-state";
 

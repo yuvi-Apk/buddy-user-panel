@@ -35,7 +35,7 @@ const defaultExportBan = {
 const rawElementBan = {
   selector: "JSXOpeningElement[name.name=/^(button|input|select|textarea)$/]",
   message:
-    "Use the shared components from @/components/ui (Button, TextField, ...) instead of raw form elements.",
+    "Use the shared components from @/components/ui (Button, Input, ...) instead of raw form elements.",
 };
 
 // --- global bans (no-restricted-globals / no-restricted-properties) ---------

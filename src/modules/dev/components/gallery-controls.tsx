@@ -4,25 +4,22 @@ import { ArrowRight, Plus, Settings, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Inline, Stack } from "@/components/layout/stack";
-import { Button, IconButton } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ChoiceCardGroup } from "@/components/ui/choice-card-group";
-import { Form, SubmitButton } from "@/components/ui/form";
-import { PasswordField } from "@/components/ui/password-field";
-import { RadioGroup } from "@/components/ui/radio-group";
-import { SegmentedControl } from "@/components/ui/segmented-control";
-import { SelectField } from "@/components/ui/select-field";
-import { Switch } from "@/components/ui/switch";
-import { TextArea } from "@/components/ui/text-area";
+import { Inline, Stack } from "@/components/layout";
 import {
-  CodeField,
-  DateField,
-  EmailField,
-  SearchField,
-  TextField,
-} from "@/components/ui/text-field";
-import { toast } from "@/components/ui/toast-store";
+  Button,
+  IconButton,
+  Checkbox,
+  ChoiceCardGroup,
+  Form,
+  SubmitButton,
+  RadioGroup,
+  SegmentedControl,
+  SelectField,
+  Switch,
+  TextArea,
+  Input,
+  toast,
+} from "@/components/ui";
 
 const VARIANTS = [
   "primary",
@@ -69,26 +66,23 @@ export function GalleryButtons() {
 export function GalleryFields() {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <TextField
-        label="Your name"
-        placeholder="Asha Verma"
-        autoComplete="name"
-      />
-      <TextField
-        label="With a hint"
-        hint="This is how teachers will see you."
-      />
-      <TextField
+      <Input label="Your name" placeholder="Asha Verma" autoComplete="name" />
+      <Input label="With a hint" hint="This is how teachers will see you." />
+      <Input
         label="Required, with an error"
-        required
+        isRequired
         error="Write at least 2 letters."
       />
-      <TextField label="Disabled" disabled defaultValue="Can't change this" />
-      <EmailField label="Email" placeholder="asha@example.com" />
-      <PasswordField label="Password" hint="At least 8 characters." />
-      <SearchField label="Search topics" placeholder="Algebra, Optics…" />
-      <DateField label="Exam date" />
-      <CodeField label="Organization code" placeholder="AB12CD" />
+      <Input label="Disabled" disabled defaultValue="Can't change this" />
+      <Input type="email" label="Email" placeholder="asha@example.com" />
+      <Input type="password" label="Password" hint="At least 8 characters." />
+      <Input
+        type="search"
+        label="Search topics"
+        placeholder="Algebra, Optics…"
+      />
+      <Input type="date" label="Exam date" />
+      <Input label="Organization code" placeholder="AB12CD" />
       <SelectField
         label="Exam"
         placeholder="Choose your exam"
@@ -201,22 +195,24 @@ export function GalleryForm() {
 
   return (
     <Form form={form} onSubmit={submit} className="max-w-md">
-      <TextField
+      <Input
         label="Your name"
-        required
+        isRequired
         autoComplete="name"
         {...form.register("name")}
         error={errors.name?.message}
       />
-      <EmailField
+      <Input
+        type="email"
         label="Email"
-        required
+        isRequired
         {...form.register("email")}
         error={errors.email?.message}
       />
-      <PasswordField
+      <Input
+        type="password"
         label="Password"
-        required
+        isRequired
         autoComplete="new-password"
         hint="At least 8 characters."
         {...form.register("password")}

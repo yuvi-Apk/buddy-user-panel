@@ -2,8 +2,7 @@
 // which is the easiest to use with a thumb and with a screen reader.
 import { ChevronDown } from "lucide-react";
 import type { ComponentProps } from "react";
-import { cn } from "@/utils/cn";
-import { Field, type FieldTextProps } from "./field";
+import { Field, FieldFrame, FieldLabel, type FieldTextProps } from "./field";
 import { useFieldIds } from "./use-field-ids";
 
 export interface SelectOption {
@@ -12,7 +11,9 @@ export interface SelectOption {
 }
 
 export interface SelectFieldProps
-  extends FieldTextProps, Omit<ComponentProps<"select">, "children"> {
+  extends
+    FieldTextProps,
+    Omit<ComponentProps<"select">, "children" | "required"> {
   options: readonly SelectOption[];
   /** Shown first, until something is chosen ("Choose your exam"). */
   placeholder?: string;
@@ -22,37 +23,36 @@ export function SelectField({
   label,
   hint,
   error,
-  required,
+  isRequired,
   id,
   className,
   options,
   placeholder,
+  disabled,
   ...props
 }: SelectFieldProps) {
   const ids = useFieldIds(id, { hint, error });
 
   return (
     <Field
-      label={label}
       hint={hint}
       error={error}
-      required={required}
-      controlId={ids.controlId}
       hintId={ids.hintId}
       errorId={ids.errorId}
       className={className}
     >
-      <div className="relative">
+      <FieldFrame
+        isInvalid={ids.invalid}
+        isDisabled={disabled}
+        className="h-11"
+      >
         <select
           id={ids.controlId}
           aria-describedby={ids.describedBy}
           aria-invalid={ids.invalid || undefined}
-          required={required}
-          className={cn(
-            "h-11 w-full appearance-none rounded-control border bg-card ps-3 pe-10 text-base text-foreground",
-            "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring disabled:opacity-50",
-            ids.invalid ? "border-destructive" : "border-input"
-          )}
+          required={isRequired}
+          disabled={disabled}
+          className="h-full w-full appearance-none bg-card ps-3 pe-10 text-base text-foreground outline-none disabled:cursor-not-allowed"
           {...props}
         >
           {placeholder ? (
@@ -66,11 +66,18 @@ export function SelectField({
             </option>
           ))}
         </select>
+        {/* A select always shows a choice, so its label stays on the border. */}
+        <FieldLabel
+          controlId={ids.controlId}
+          label={label}
+          isRequired={isRequired}
+          isAlwaysRaised
+        />
         <ChevronDown
           aria-hidden
           className="pointer-events-none absolute end-3 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
         />
-      </div>
+      </FieldFrame>
     </Field>
   );
 }

@@ -1,32 +1,32 @@
 // Dialogs, menus, popovers, tooltips and tabs.
 import { Ellipsis, Info, LogOut, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Inline } from "@/components/layout/stack";
-import { Button, IconButton } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Inline } from "@/components/layout";
 import {
+  Button,
+  IconButton,
+  ConfirmDialog,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   ResponsiveDialog,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
   ResponsiveDialogTrigger,
-} from "@/components/ui/responsive-dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TextField } from "@/components/ui/text-field";
-import { toast } from "@/components/ui/toast-store";
-import { Tooltip } from "@/components/ui/tooltip";
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Input,
+  toast,
+  Tooltip,
+} from "@/components/ui";
 
 export function GalleryOverlays() {
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -49,7 +49,7 @@ export function GalleryOverlays() {
             </>
           }
         >
-          <TextField label="Organization code" placeholder="AB12CD" />
+          <Input label="Organization code" placeholder="AB12CD" />
         </ResponsiveDialogContent>
       </ResponsiveDialog>
 

@@ -2,7 +2,7 @@
 // announcement for screen readers.
 //   <LoadingState><Skeleton className="h-24" /><Skeleton className="h-24" /></LoadingState>
 import type { ReactNode } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui";
 import { useLang } from "@/lang";
 import { cn } from "@/utils/cn";
 

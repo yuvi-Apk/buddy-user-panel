@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { X } from "lucide-react";
 import { describe, expect, it, vi } from "vitest";
-import { Button, IconButton } from "@/components/ui/button";
+import { Button, IconButton } from "@/components/ui";
 
 describe("Button", () => {
   it("is a plain button by default, so it never submits a form by accident", () => {

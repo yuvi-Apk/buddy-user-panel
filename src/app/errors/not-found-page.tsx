@@ -1,9 +1,9 @@
 // The page for an address that matches no route.
 import { House, SearchX } from "lucide-react";
 import { Link } from "react-router";
-import { EmptyState } from "@/components/feedback/empty-state";
-import { Page, PageHeader } from "@/components/layout/page";
-import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/states";
+import { Page, PageHeader } from "@/components/layout";
+import { Button } from "@/components/ui";
 import { useLang } from "@/lang";
 
 export function NotFoundPage() {

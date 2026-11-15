@@ -1,5 +1,5 @@
 // Token swatches with their live contrast, for the current theme and mode.
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui";
 import {
   MIN_TEXT_CONTRAST,
   MIN_UI_CONTRAST,

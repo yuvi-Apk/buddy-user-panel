@@ -1,5 +1,5 @@
 // Who is signed in: picture or initials, name, and role. Shown in the sidebar and the "More" sheet.
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui";
 import { ROLE_LABEL_KEYS } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
 import type { SessionUser } from "@/auth/session-store";

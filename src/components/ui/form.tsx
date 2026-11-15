@@ -2,7 +2,7 @@
 //
 //   const form = useForm<Values>({ resolver: zodResolver(schema) });
 //   <Form form={form} onSubmit={save}>
-//     <EmailField label={lang.auth.email} {...form.register("email")}
+//     <Input type="email" label={lang.auth.email} {...form.register("email")}
 //                 error={form.formState.errors.email?.message} />
 //     <SubmitButton>{lang.auth.logIn}</SubmitButton>
 //   </Form>

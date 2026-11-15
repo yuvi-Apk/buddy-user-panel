@@ -3,10 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Check } from "lucide-react";
 import { describe, expect, it } from "vitest";
 import { fill, getLang } from "@/lang";
-import { Alert } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { ProgressBar } from "@/components/ui/progress-bar";
-import { TopicChip } from "@/components/ui/topic-chip";
+import { Alert, Badge, ProgressBar, TopicChip } from "@/components/ui";
 
 const { ui } = getLang();
 

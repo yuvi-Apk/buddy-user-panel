@@ -3,11 +3,8 @@
 // screens that call the API will get a 401 and sign the fake session out.
 import { LogOut, UserRound } from "lucide-react";
 import { useNavigate } from "react-router";
-import { Page, PageHeader, Section } from "@/components/layout/page";
-import { Inline, Stack } from "@/components/layout/stack";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Page, PageHeader, Section, Inline, Stack } from "@/components/layout";
+import { Alert, Button, Card, CardContent } from "@/components/ui";
 import { getHomePathForRole, ROLE_LABEL_KEYS } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
 import { USER_ROLES, type UserRole } from "@/auth/roles";
