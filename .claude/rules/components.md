@@ -17,10 +17,10 @@ blocks it. If something is missing, add it to `src/components/ui/` (skill: `add-
 | Actions     | `Button` (primary, secondary, outline, ghost, destructive), `IconButton` (needs a `label`), `LinkButton`                                                                                                             |
 | Form fields | `TextField`, `EmailField`, `PasswordField`, `TextArea`, `SelectField`, `Checkbox`, `RadioGroup`, `ChoiceCardGroup` (big options as cards), `Switch`, `SearchField`, `DateField`, `CodeField`, `Form`, `SubmitButton` |
 | Display     | `Card`, `Badge`, `TopicChip`, `ProgressBar`, `ProgressRing`, `Stat`, `Avatar`, `Divider`                                                                                                                             |
-| Feedback    | `Alert`, `toast()` (shown by `<Toaster />`, mounted once at the root), `Skeleton`, `LoadingState`, `Spinner` (inside buttons only), `EmptyState`, `ErrorState`, `OfflineBanner`, `ComingSoon`                        |
+| Feedback    | `Alert`, `toast()` (shown by `<Toaster />`, mounted once at the root), `Skeleton`, `LoadingState`, `Spinner` (inside buttons only), `EmptyState`, `ErrorState`, `OfflineBanner`, `ComingSoon`, `ComingSoonPage`      |
 | Overlays    | `ResponsiveDialog` (bottom sheet on phones, dialog on laptops), `ConfirmDialog`, `DropdownMenu`, `Popover`, `Tooltip`                                                                                                |
 | Navigation  | `Tabs`, `SegmentedControl`, `TopBar`, `BottomNav`, `SideNav`                                                                                                                                                         |
-| Layout      | `Page`, `PageHeader`, `Section`, `Stack`, `Inline`, `Grid`                                                                                                                                                           |
+| Layout      | `Page`, `PageHeader`, `Section`, `Stack`, `Inline`, `Grid`; the frames `AppShell` and `FocusShell` (used by `src/app/layouts/`, never by a page)                                                                     |
 
 ## Shared props
 

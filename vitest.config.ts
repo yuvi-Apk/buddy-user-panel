@@ -2,11 +2,10 @@
 //   app         src/**/*.test.ts(x), in a browser-like DOM (jsdom)
 //   guardrails  tests/**/*.test.ts, in Node: repo-wide rules (lint bans, naming, text files, ...)
 import { defineConfig, mergeConfig } from "vitest/config";
-import viteConfig from "./vite.config.ts";
+import { createViteConfig } from "./vite.config.ts";
 
-export default mergeConfig(
-  viteConfig,
-  defineConfig({
+export default defineConfig((configEnv) =>
+  mergeConfig(createViteConfig(configEnv), {
     test: {
       // Every vi.spyOn() and vi.stubGlobal() is undone after each test, so no test leaks into the next.
       restoreMocks: true,

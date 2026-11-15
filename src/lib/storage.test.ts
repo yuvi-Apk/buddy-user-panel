@@ -8,6 +8,7 @@ describe("storage", () => {
     expect(STORAGE_KEYS).toEqual({
       theme: "buddy.theme",
       language: "buddy.language",
+      signedOut: "buddy.signed-out",
     });
   });
 

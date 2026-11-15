@@ -25,16 +25,23 @@ can load Vitest twice and fail with "Vitest failed to find the current suite".
 
 - Test what a person sees and does: find elements by role and label (`getByRole("button", { name })`),
   click with `userEvent`. Never by class name or test ID when a role works.
-- Render with the helper in `src/test/render.tsx` (it adds the router, query client and theme).
-- Mock the backend with MSW handlers in `src/test/msw/`, never by mocking `fetch` or a hook.
+- Render with the helpers in `src/test/render.tsx`: `renderWithProviders(<X />)` for a component,
+  `renderRoute("/today", { as: "STUDENT" })` for a screen in the real route tree (signed out when
+  `as` is left out).
+- Mock the backend with MSW, never by mocking `fetch` or a hook. `src/test/msw/handlers.ts` is the
+  default backend (nobody signed in); a test adds its own with
+  `server.use(http.get(apiPath("/user/x"), () => ok(data)))`, using `ok`, `fail`,
+  `validationFailed` and `makeUser` from `src/test/msw/backend.ts`. A request without a handler
+  fails the test.
 - For an API hook: success, an error message, field errors, and a 401 that refreshes once.
 - For a screen: loading, empty, error and offline states (core-rules #15).
 - For a component: label, hint and error wiring, keyboard use, disabled and loading states.
 - Read app text from `getLang()` (`screen.getByRole("button", { name: lang.common.tryAgain })`), so
   rewording a sentence never breaks a test.
 - `src/test/setup.ts` fills gaps in jsdom: a `matchMedia` you control with `setMediaQuery()` from
-  `src/test/media-query.ts`, a ResizeObserver and pointer capture for Radix. After each test it
-  clears localStorage, and every `vi.spyOn` is undone (`restoreMocks`).
+  `src/test/media-query.ts`, a ResizeObserver and pointer capture for Radix. It starts the MSW
+  server. After each test it clears localStorage, the MSW handlers a test added, the session (back
+  to "restoring") and the query cache, and every `vi.spyOn` is undone (`restoreMocks`).
 - Never delete or weaken a test to make a change pass. Moving or renaming one is fine.
 
 ## Guardrails
@@ -48,7 +55,9 @@ can load Vitest twice and fail with "Vitest failed to find the current suite".
 - `contrast`: WCAG AA in every theme × mode, for the token pairs the components use. When a
   component puts a token on a new background, add that pair.
 - `theme-boot`: `public/theme-boot.js` applies the same choice the theme store saves.
-- Later: `routes`, `env-files`.
+- `routes`: every route has access and a title; every menu item opens a route its role may open;
+  at most 4 tabs. It loads the real route tree, so it runs in jsdom (`// @vitest-environment jsdom`).
+- `env-files`: `.env.sample` and `.env.test` list exactly the schemas' variables, with valid values.
 
 `tooling/design-tokens.ts` reads `tokens.css` and resolves each token per theme × mode; use it
 rather than parsing the file again.

@@ -1,8 +1,19 @@
 // Runs before every test file in src/ (the "app" project, jsdom).
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterAll, afterEach, beforeAll } from "vitest";
+import { queryClient } from "@/lib/api/query-client";
+import { resetSession } from "@/lib/auth/session-store";
 import { installMatchMedia, resetMediaQueries } from "./media-query";
+import { server } from "./msw/server";
+
+// The mock backend. A request without a handler fails the test.
+beforeAll(() => {
+  server.listen({ onUnhandledFrame: "error" });
+});
+afterAll(() => {
+  server.close();
+});
 
 // jsdom has no ResizeObserver. Radix measures some parts with it (checkbox, switch, popovers);
 // in tests nothing is ever resized, so observing can do nothing.
@@ -30,4 +41,8 @@ afterEach(() => {
   cleanup();
   resetMediaQueries();
   window.localStorage.clear();
+  server.resetHandlers();
+  // Each test starts as the app does: session unknown ("restoring"), nothing cached.
+  resetSession();
+  queryClient.clear();
 });

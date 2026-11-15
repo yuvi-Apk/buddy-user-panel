@@ -16,7 +16,8 @@ Many people using Buddy are minors, often on shared phones and school computers.
 - Access token: in memory only (`session-store.ts`). Refresh token: an httpOnly, SameSite=Strict
   cookie on `/api/v1/user/auth`, never readable by page scripts.
 - `src/lib/storage.ts` is the only door to localStorage. It allows a short list of keys (theme,
-  language, dismissed hints). Never a token, an email, a name, an answer or any study data.
+  language, the "signed out while offline" flag, later dismissed hints). Never a token, an email,
+  a name, an answer or any study data.
 - Logout clears the memory token and the query cache, and tells the other tabs. Logging out while
   offline marks the person signed out locally, so the next launch does not restore the session,
   and retries the server logout when back online.

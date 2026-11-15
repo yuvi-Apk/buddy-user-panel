@@ -1,20 +1,13 @@
-// The app's root component. Until the router arrives (setup step 3), it shows the UI gallery.
-import { LucideProvider } from "lucide-react";
-import { Toaster } from "@/components/ui/toast";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { UiGalleryPage } from "@/features/dev";
+// The app's root component: the shared providers around the router.
+import { RouterProvider } from "react-router/dom";
+import { queryClient } from "@/lib/api/query-client";
+import { Providers } from "./providers";
+import type { AppRouter } from "./router";
 
-// Icons are drawn with a 1.75 stroke, a little softer than lucide's default 2 (design-system.md).
-// An icon can still pass its own `strokeWidth`.
-const ICON_STROKE = 1.75;
-
-export function App() {
+export function App({ router }: { router: AppRouter }) {
   return (
-    <LucideProvider strokeWidth={ICON_STROKE}>
-      <TooltipProvider>
-        <UiGalleryPage />
-        <Toaster />
-      </TooltipProvider>
-    </LucideProvider>
+    <Providers queryClient={queryClient}>
+      <RouterProvider router={router} />
+    </Providers>
   );
 }

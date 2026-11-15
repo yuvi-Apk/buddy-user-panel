@@ -1,0 +1,44 @@
+// Who may open a route (core-rules #6). This only picks the screen; the server enforces access
+// (core-rules #7).
+//
+//   "public"               anyone (an email link, the 404 page)
+//   "guest"                signed-out people only (login, sign-up); signed-in people go home
+//   ["TEACHER", ...]       these roles only: signed out → /login?redirect=…, wrong role → home
+import { homeFor, LOGIN_PATH } from "@/config/navigation";
+import type { UserRole } from "@/lib/auth/roles";
+import type { SessionState } from "@/lib/auth/session-store";
+import { safeRedirect } from "@/lib/safe-redirect";
+
+export type RouteAccess = "public" | "guest" | readonly UserRole[];
+
+/** Where to send the person instead, or null when they may open the page. */
+export function accessRedirect(
+  access: RouteAccess,
+  session: SessionState,
+  url: URL
+): string | null {
+  if (access === "public") return null;
+
+  const role = session.status === "signed-in" ? session.user?.role : undefined;
+
+  if (access === "guest") {
+    if (!role) return null;
+    return safeRedirect(url.searchParams.get("redirect"), homeFor(role));
+  }
+
+  if (!role) return loginPathFor(url);
+  return access.includes(role) ? null : homeFor(role);
+}
+
+/** "/login?redirect=%2Fplan%3Fweek%3D2", so login brings the person back where they were. */
+export function loginPathFor(url: URL): string {
+  const back = `${url.pathname}${url.search}${url.hash}`;
+  if (back === "/" || back.startsWith(LOGIN_PATH)) return LOGIN_PATH;
+  return `${LOGIN_PATH}?${new URLSearchParams({ redirect: back }).toString()}`;
+}
+
+export function canOpen(access: RouteAccess, role: UserRole): boolean {
+  if (access === "public") return true;
+  if (access === "guest") return false;
+  return access.includes(role);
+}

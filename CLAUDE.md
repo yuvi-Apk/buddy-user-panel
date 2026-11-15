@@ -4,8 +4,8 @@ The app people study with: Individual users, and the admins, teachers and studen
 Organization (a school, college, coaching centre or training institute). Super Admins never use it;
 they have their own admin panel. One mobile-first PWA whose screens change with the person's role.
 
-Vite 8, React 19, TypeScript 6 (strict), Tailwind CSS 4 on our own design tokens, React Router 7,
-TanStack Query 5, Zustand, Zod 4, Vitest, Playwright. Node 22, pnpm 11.
+Vite 8, React 19, TypeScript 6 (strict), Tailwind CSS 4 on our own design tokens, React Router 8
+(data mode), TanStack Query 5, Zustand, Zod 4, Vitest + MSW, Playwright. Node 22, pnpm 11.
 
 Rules live in `.claude/rules/`. `core-rules.md` is always loaded; the others load when you work on
 matching files. The backend is `../backend` and follows its own `CLAUDE.md`.
@@ -71,8 +71,8 @@ reviews and commits, then tells you to continue.
 
 ## Setup status
 
-The foundation is built in five steps. Done: **1** (tooling, text system, rules) and **2** (design
-tokens, 4 themes × light/dark, the shared components, the UI gallery). Still to come: **3** app
-skeleton (env, API client, session, router, shell, placeholder screens); **4** PWA and security
-headers; **5** browser tests, docs and skills. The rules describe the finished foundation, so a
+The foundation is built in five steps. Done: **1** (tooling, text system, rules), **2** (design
+tokens, 4 themes × light/dark, the shared components, the UI gallery) and **3** (env, API client,
+session, router with role access, app shell, placeholder screens, the dev session switcher at
+`/dev/session`). Still to come: **4** PWA and security headers; **5** browser tests, docs and skills. The rules describe the finished foundation, so a
 file they name may not exist until its step lands; until then that rule is enforced by review.

@@ -1,2 +1,3 @@
-// Public entry of the settings feature. Its routes arrive with the router (setup step 3).
+// Public entry of the settings feature (features.md).
 export { AppearanceSettings } from "./components/appearance-settings";
+export { settingsRoutes } from "./routes";

@@ -14,12 +14,21 @@ paths:
 - Everything in a `VITE_*` variable ends up in the browser bundle, where anyone can read it. Never
   put a secret there (core-rules #12). The user app has no secrets.
 - App code reads env only through `env` from `src/config/env.ts`, which checks every value with Zod
-  and refuses to start on a bad one.
-- `vite.config.ts` reads the dev-server-only variables (like `API_PROXY_TARGET`) with `loadEnv`.
+  and refuses to start on a bad one (the error names the variable, never its value).
+- The one exception is `import.meta.env.DEV`, a build flag: code behind a literal
+  `import.meta.env.DEV` check is left out of production builds (the `/dev` routes use it).
+- `vite.config.ts` reads the dev-server-only variables (like `API_PROXY_TARGET`) with `loadEnv`,
+  through the schema in `tooling/dev-server-env.ts`. They never reach the browser.
+
+| Variable            | Read by    | Default / test value    |
+| ------------------- | ---------- | ----------------------- |
+| `VITE_API_BASE_URL` | the app    | `/api/v1`               |
+| `API_PROXY_TARGET`  | dev server | `http://localhost:4000` |
 
 ## Adding a variable
 
-1. Add it to the Zod schema in `src/config/env.ts` (or the dev-server schema in `vite.config.ts`).
+1. Add it to the Zod schema in `src/config/env.ts` (or `tooling/dev-server-env.ts` for the dev
+   server).
 2. Add it to `.env.sample` (with a comment) and `.env.test` (with a test value).
 3. Tell the user the name and what to put in their `.env.local`.
 

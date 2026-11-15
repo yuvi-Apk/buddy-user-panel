@@ -9,13 +9,14 @@ paths:
 
 ```
 URL
-  → src/app/router.tsx       every route, built with defineRoute({ path, access, page, titleKey })
+  → src/app/routes.ts        the route tree: every feature's routes.ts (built with defineRoute)
   → access loader            waits for the session; signed out → /login, wrong role → the role's home
-  → layout                   app shell: top bar + bottom tabs (phone) or sidebar (laptop)
+  → layout                   shell (top bar + bottom tabs on phones, sidebar on laptops) or focus
   → feature page             composes shared components; gets data from its feature's api/ hooks
   → feature api/ hook        TanStack Query; the only caller of the API client
-  → src/lib/api/client.ts    the only fetch: token, response envelope, errors, one refresh on 401
-  → backend /api/v1/...
+  → src/lib/api/client.ts    token, one shared refresh + retry on 401
+  → src/lib/api/transport.ts the only fetch: timeout, response envelope, Zod check, ApiError
+  → backend /api/v1/...      (in development through the Vite proxy to localhost:4000)
 ```
 
 ## Folder map
@@ -23,14 +24,17 @@ URL
 ```
 src/
   main.tsx          starts the app
-  app/              providers, router, define-route, layouts, error and 404 pages
-  config/           env.ts (only reader of import.meta.env), navigation.ts (tabs per role), constants.ts
+  app/              app.tsx, providers, routes.ts (the tree), router.tsx, layouts/, errors/ (404, crash)
+  config/           env.ts (only reader of import.meta.env), navigation.ts (menus and home per role)
   lang/             en.json (all text), index.ts (useLang, getLang, fill, plural)
   styles/           tokens.css (the only colors), index.css (Tailwind + token mapping), fonts.css
   theme/            the 4 themes, the theme store (saved choice, follows the phone), useTheme
-  lib/              api/ (client, errors, query client), auth/ (session, refresh, roles), storage,
-                    safe-url, safe-redirect, cn, logger, format (dates and numbers)
-  components/       ui/ (the shared set), layout/ (shell, page, stack…), feedback/ (empty, error…)
+  lib/              api/ (client, transport, errors, envelope, query client),
+                    auth/ (roles, session store, refresh, sync across tabs, sign-in/out, start-up),
+                    routing/ (defineRoute, access rules), storage, safe-url, safe-redirect, cn,
+                    logger, format (dates and numbers)
+  components/       ui/ (the shared set), layout/ (app shell, nav, page, stack…), feedback/ (empty,
+                    error, loading, offline, coming soon)
   hooks/            shared hooks (use-media-query, use-online-status)
   pwa/              update prompt, install prompt
   test/             test setup, render helper, MSW mock of the backend

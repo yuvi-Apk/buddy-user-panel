@@ -193,6 +193,22 @@ describe("core-rules #12: env only through src/config/env.ts", () => {
       "no-restricted-syntax"
     );
   });
+
+  it("allows only the DEV build flag elsewhere, so dev-only code is left out of production", async () => {
+    const devFlag = "export const routes = import.meta.env.DEV ? [1] : [];\n";
+    expect(await ruleIdsFor("src/app/routes.ts", devFlag)).not.toContain(
+      "no-restricted-syntax"
+    );
+
+    const whole = "export const all = import.meta.env;\n";
+    const mode = "export const mode = import.meta.env.MODE;\n";
+    expect(await ruleIdsFor("src/app/routes.ts", whole)).toContain(
+      "no-restricted-syntax"
+    );
+    expect(await ruleIdsFor("src/app/routes.ts", mode)).toContain(
+      "no-restricted-syntax"
+    );
+  });
 });
 
 describe("core-rules #19: code hygiene", () => {

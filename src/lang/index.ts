@@ -26,6 +26,25 @@ export interface PluralText {
 
 export type TextValues = Record<string, string | number>;
 
+/** The dotted path of one sentence in en.json: "nav.today", "theme.accents.lagoon.name". */
+export type LangKey = KeysOf<Lang>;
+
+type KeysOf<T> = {
+  [K in keyof T & string]: T[K] extends string ? K : `${K}.${KeysOf<T[K]>}`;
+}[keyof T & string];
+
+/**
+ * The sentence at a dotted key, for config that names its text (route titles, nav labels).
+ * In components, prefer `lang.nav.today`: Ctrl+click then opens the exact line in en.json.
+ */
+export function textAt(lang: Lang, key: LangKey): string {
+  let value: unknown = lang;
+  for (const part of key.split(".")) {
+    value = (value as Record<string, unknown>)[part];
+  }
+  return typeof value === "string" ? value : key;
+}
+
 /** Every language the app can show. Adding one is described in .claude/rules/lang.md. */
 export const LANGUAGES = ["en"] as const;
 export type LanguageCode = (typeof LANGUAGES)[number];

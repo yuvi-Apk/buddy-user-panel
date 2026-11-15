@@ -8,6 +8,11 @@ const KEYS = {
   theme: "buddy.theme",
   /** The language code chosen in Settings. */
   language: "buddy.language",
+  /**
+   * "1" after signing out while offline: the next launch must not restore the session, and the
+   * server sign-out is retried once back online (src/lib/auth/session-actions.ts). Only a flag.
+   */
+  signedOut: "buddy.signed-out",
 } as const;
 
 export type StorageKey = keyof typeof KEYS;

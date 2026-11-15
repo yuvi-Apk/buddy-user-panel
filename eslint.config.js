@@ -1,5 +1,6 @@
 // ESLint guardrails. Each ban enforces a rule in .claude/rules/core-rules.md, and its message names
 // the rule number. tests/guardrails/eslint-rules.test.ts proves every ban still fires.
+import tanstackQuery from "@tanstack/eslint-plugin-query";
 import { defineConfig, globalIgnores } from "eslint/config";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 import i18next from "eslint-plugin-i18next";
@@ -13,10 +14,13 @@ const buddy = { rules: { "import-boundaries": importBoundaries } };
 
 // --- syntax bans (no-restricted-syntax) -------------------------------------
 
+// `import.meta.env.DEV` alone is allowed: it is a build flag, not configuration, and only a literal
+// check lets the bundler leave dev-only code (the /dev routes) out of production.
 const envBan = {
-  selector: "MemberExpression[object.type='MetaProperty'][property.name='env']",
+  selector:
+    "MemberExpression[object.type='MetaProperty'][property.name='env']:not(MemberExpression[property.name='DEV'] > MemberExpression.object)",
   message:
-    "Read env only through `env` from src/config/env.ts (core-rules #12).",
+    "Read env only through `env` from src/config/env.ts (core-rules #12). Only `import.meta.env.DEV` may be used elsewhere.",
 };
 
 const innerHtmlBan = {
@@ -128,6 +132,8 @@ export default defineConfig(
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
       jsxA11y.flatConfigs.recommended,
+      // Query keys list every value the query uses; no unstable query clients (data-and-api.md).
+      tanstackQuery.configs["flat/recommended-strict"],
     ],
     plugins: { buddy },
     rules: {
