@@ -3,7 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "@/app/app";
 import { createAppRouter } from "@/app/router";
-import { startSession } from "@/auth/session";
+import { initializeSession } from "@/auth/session";
 import { startInstallPromptCapture } from "@/pwa/use-install-prompt";
 import { startThemeSync } from "@/theme";
 
@@ -12,7 +12,7 @@ if (!container) throw new Error("index.html has no #root element.");
 
 startThemeSync();
 // Restores the session with one silent refresh; route loaders wait for the answer.
-startSession();
+initializeSession();
 // Chrome's install offer can arrive before React starts; keep it for Settings → Install the app.
 startInstallPromptCapture();
 

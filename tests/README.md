@@ -14,7 +14,7 @@ folder or file.
 Same path, under `tests/unit/`:
 
 ```
-src/api/client.ts                 →  tests/unit/api/client.test.ts
+src/api/api-client.ts                 →  tests/unit/api/api-client.test.ts
 src/components/ui/button.tsx      →  tests/unit/components/ui/button.test.tsx
 src/modules/settings/components/  →  tests/unit/modules/settings/components/
 ```

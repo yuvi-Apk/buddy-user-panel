@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { homeFor, ROLE_LABEL_KEYS } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
 import { USER_ROLES, type UserRole } from "@/auth/roles";
-import { endSession, signIn } from "@/auth/session";
+import { endLocalSession, signIn } from "@/auth/session";
 import type { SessionUser } from "@/auth/session-store";
 import { useSession } from "@/auth/session-store";
 
@@ -116,7 +116,7 @@ export function DevSessionPage() {
         <Button
           variant="ghost"
           onClick={() => {
-            endSession();
+            endLocalSession();
             void navigate("/login");
           }}
         >

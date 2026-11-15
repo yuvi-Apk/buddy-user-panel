@@ -19,7 +19,10 @@ declare module "@tanstack/react-query" {
 
 const MAX_RETRIES = 2;
 
-export function shouldRetry(failureCount: number, error: unknown): boolean {
+export function shouldRetryQuery(
+  failureCount: number,
+  error: unknown
+): boolean {
   if (failureCount >= MAX_RETRIES) return false;
   if (!isApiError(error)) return false;
   if (error.kind === "http") return error.status >= 500;
@@ -31,7 +34,7 @@ export function createQueryClient(): QueryClient {
     defaultOptions: {
       queries: {
         staleTime: 30_000,
-        retry: shouldRetry,
+        retry: shouldRetryQuery,
         refetchOnWindowFocus: true,
         networkMode: "online",
       },

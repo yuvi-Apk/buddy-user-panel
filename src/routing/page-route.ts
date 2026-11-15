@@ -17,7 +17,7 @@ import {
   type RouteObject,
   useMatches,
 } from "react-router";
-import { waitForSession } from "@/auth/session-store";
+import { waitUntilSessionIsKnown } from "@/auth/session-store";
 import type { LangKey } from "@/lang";
 import { getRedirectPathIfBlocked, type RouteAccess } from "./route-access";
 
@@ -70,7 +70,7 @@ export function createPageRoute(options: PageRouteOptions): PageRoute {
 /** The loader that runs before a page opens and redirects people who may not open it. */
 function createAccessCheckLoader(access: RouteAccess) {
   return async ({ request }: LoaderFunctionArgs) => {
-    const session = await waitForSession();
+    const session = await waitUntilSessionIsKnown();
     const redirectPath = getRedirectPathIfBlocked(
       access,
       session,

@@ -1,25 +1,25 @@
 // One HTTP request to the backend, without any session logic: fetch, timeout, the response
 // envelope, the Zod check, and errors as ApiError. The session code (src/auth/session-refresh.ts) uses
-// it directly for the refresh call; everything else goes through `api` in client.ts.
+// it directly for the refresh call; everything else goes through `api` in api-client.ts.
 import type { z } from "zod";
 import { env } from "@/config/env";
 import { logger } from "@/utils/logger";
 import { ApiError } from "./api-error";
 import {
-  errorEnvelopeSchema,
-  successEnvelopeSchema,
-  toFieldErrors,
+  errorResponseSchema,
+  successResponseSchema,
+  toFieldErrorMap,
 } from "./response-schemas";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-export type QueryValue = string | number | boolean | null | undefined;
+export type QueryParamValue = string | number | boolean | null | undefined;
 
 export interface HttpRequestOptions {
   /** Sent as JSON. */
   body?: unknown;
   /** Added to the URL; null and undefined values are left out. */
-  query?: Record<string, QueryValue>;
+  query?: Record<string, QueryParamValue>;
   /** From TanStack Query, so a cancelled query also cancels its request. */
   signal?: AbortSignal;
   /** The access token, sent as `Authorization: Bearer …`. */
@@ -28,12 +28,12 @@ export interface HttpRequestOptions {
   timeoutMs?: number;
 }
 
-export const DEFAULT_TIMEOUT_MS = 15_000;
+export const DEFAULT_REQUEST_TIMEOUT_MS = 15_000;
 
 /** "/user/auth/me" + query → "/api/v1/user/auth/me?x=1" (or the full API URL). */
-export function apiUrl(
+export function buildApiUrl(
   path: string,
-  query?: Record<string, QueryValue>
+  query?: Record<string, QueryParamValue>
 ): string {
   if (!path.startsWith("/") || path.startsWith("//")) {
     throw new Error(`API paths start with one "/": got "${path}".`);
@@ -46,7 +46,7 @@ export function apiUrl(
   return `${env.apiBaseUrl}${path}${search}`;
 }
 
-export async function sendRequest<Schema extends z.ZodType>(
+export async function sendHttpRequest<Schema extends z.ZodType>(
   method: HttpMethod,
   path: string,
   schema: Schema,
@@ -56,7 +56,7 @@ export async function sendRequest<Schema extends z.ZodType>(
     throw new ApiError({ kind: "offline" });
   }
 
-  const { signal, cancel, timedOut } = withTimeout(
+  const { signal, cancel, timedOut } = createTimeoutSignal(
     options.signal,
     options.timeoutMs
   );
@@ -69,7 +69,7 @@ export async function sendRequest<Schema extends z.ZodType>(
   let response: Response;
   try {
     // Resolved against the page, so a path base ("/api/v1") also works outside a browser (tests).
-    const url = new URL(apiUrl(path, options.query), window.location.href);
+    const url = new URL(buildApiUrl(path, options.query), window.location.href);
     response = await fetch(url, {
       method,
       headers,
@@ -88,7 +88,7 @@ export async function sendRequest<Schema extends z.ZodType>(
   }
 
   try {
-    return await readResponse(response, schema, path);
+    return await parseApiResponse(response, schema, path);
   } catch (error) {
     if (options.signal?.aborted) throw error;
     if (timedOut()) throw new ApiError({ kind: "timeout" });
@@ -98,21 +98,21 @@ export async function sendRequest<Schema extends z.ZodType>(
   }
 }
 
-async function readResponse<Schema extends z.ZodType>(
+async function parseApiResponse<Schema extends z.ZodType>(
   response: Response,
   schema: Schema,
   path: string
 ): Promise<z.output<Schema>> {
   const requestId = response.headers.get("x-request-id") ?? undefined;
-  const body = await readJson(response);
+  const body = await readJsonBody(response);
 
   if (!response.ok) {
-    const parsed = errorEnvelopeSchema.safeParse(body);
+    const parsed = errorResponseSchema.safeParse(body);
     throw new ApiError({
       kind: "http",
       status: response.status,
       message: parsed.success ? parsed.data.message : undefined,
-      fieldErrors: parsed.success ? toFieldErrors(parsed.data.errors) : {},
+      fieldErrors: parsed.success ? toFieldErrorMap(parsed.data.errors) : {},
       requestId,
     });
   }
@@ -120,7 +120,7 @@ async function readResponse<Schema extends z.ZodType>(
   // 204 No Content: there is no envelope, so the schema checks `undefined` (use z.undefined()).
   let data: unknown = undefined;
   if (response.status !== 204) {
-    const envelope = successEnvelopeSchema.safeParse(body);
+    const envelope = successResponseSchema.safeParse(body);
     if (!envelope.success) {
       logger.warn("The response is not the backend's envelope", {
         path,
@@ -154,7 +154,7 @@ async function readResponse<Schema extends z.ZodType>(
   return result.data;
 }
 
-async function readJson(response: Response): Promise<unknown> {
+async function readJsonBody(response: Response): Promise<unknown> {
   const text = await response.text();
   if (text === "") return undefined;
   try {
@@ -165,9 +165,9 @@ async function readJson(response: Response): Promise<unknown> {
 }
 
 /** The caller's signal plus a timeout. AbortSignal.any is too new for the browsers we support. */
-function withTimeout(
-  outer: AbortSignal | undefined,
-  timeoutMs = DEFAULT_TIMEOUT_MS
+function createTimeoutSignal(
+  callerSignal: AbortSignal | undefined,
+  timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS
 ) {
   const controller = new AbortController();
   let didTimeOut = false;
@@ -175,18 +175,18 @@ function withTimeout(
     didTimeOut = true;
     controller.abort();
   }, timeoutMs);
-  const onOuterAbort = () => {
-    controller.abort(outer?.reason);
+  const onCallerAbort = () => {
+    controller.abort(callerSignal?.reason);
   };
-  if (outer?.aborted) controller.abort(outer.reason);
-  else outer?.addEventListener("abort", onOuterAbort, { once: true });
+  if (callerSignal?.aborted) controller.abort(callerSignal.reason);
+  else callerSignal?.addEventListener("abort", onCallerAbort, { once: true });
 
   return {
     signal: controller.signal,
     timedOut: () => didTimeOut,
     cancel: () => {
       clearTimeout(timer);
-      outer?.removeEventListener("abort", onOuterAbort);
+      callerSignal?.removeEventListener("abort", onCallerAbort);
     },
   };
 }

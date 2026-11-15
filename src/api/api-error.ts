@@ -27,7 +27,7 @@ export class ApiError extends Error {
 
   constructor(options: ApiErrorOptions) {
     const status = options.status ?? 0;
-    super(friendlyMessage(options.kind, status, options.message));
+    super(buildFriendlyMessage(options.kind, status, options.message));
     this.status = status;
     this.kind = options.kind;
     this.fieldErrors = options.fieldErrors ?? {};
@@ -59,7 +59,7 @@ export function getErrorMessage(error: unknown): string {
  * expired"). Everything else gets our own calm sentence, so a stack trace or "Internal server
  * error" never reaches the screen.
  */
-function friendlyMessage(
+function buildFriendlyMessage(
   kind: ApiErrorKind,
   status: number,
   serverMessage?: string

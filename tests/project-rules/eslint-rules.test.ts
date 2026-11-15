@@ -96,7 +96,7 @@ describe("only src/api calls fetch", () => {
   });
 
   it("allows it in src/api", async () => {
-    const ids = await ruleIdsFor("src/api/client.ts", code);
+    const ids = await ruleIdsFor("src/api/api-client.ts", code);
     expect(ids).not.toContain("no-restricted-globals");
     expect(ids).not.toContain("no-restricted-properties");
   });
@@ -130,7 +130,7 @@ export const y = x;
   it("blocks shared code from importing a module or app/", async () => {
     for (const [file, path] of [
       ["src/components/ui/demo.tsx", "@/modules/auth"],
-      ["src/api/client.ts", "@/app/router"],
+      ["src/api/api-client.ts", "@/app/router"],
     ] as const) {
       expect(
         await ruleIdsFor(file, importing(path)),

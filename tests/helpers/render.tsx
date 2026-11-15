@@ -12,7 +12,7 @@ import { buildRoutes } from "@/app/router";
 import { queryClient } from "@/api/query-client";
 import type { UserRole } from "@/auth/roles";
 import type { SessionUser } from "@/auth/session-store";
-import { clearSession, setSession } from "@/auth/session-store";
+import { markSignedOut, markSignedIn } from "@/auth/session-store";
 import { makeUser } from "./mock-server/backend";
 
 export function renderWithProviders(ui: ReactNode): RenderResult {
@@ -28,12 +28,12 @@ export interface RenderRouteOptions {
 
 export function renderRoute(path: string, options: RenderRouteOptions = {}) {
   if (options.as) {
-    setSession(
+    markSignedIn(
       "test-access-token",
       makeUser({ role: options.as, ...options.user })
     );
   } else {
-    clearSession();
+    markSignedOut();
   }
   const router = createMemoryRouter(buildRoutes(), { initialEntries: [path] });
   const result = render(

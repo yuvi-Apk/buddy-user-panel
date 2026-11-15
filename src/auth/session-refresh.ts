@@ -4,10 +4,10 @@
 // The backend rotates the refresh cookie on every refresh, and reusing an old one revokes the
 // whole session, so two refreshes at the same time would sign the person out.
 import { isApiError } from "@/api/api-error";
-import { sendRequest } from "@/api/http-request";
-import { sessionResponseSchema, setSession } from "./session-store";
+import { sendHttpRequest } from "@/api/http-request";
+import { sessionResponseSchema, markSignedIn } from "./session-store";
 
-export const AUTH_PATHS = {
+export const AUTH_API_PATHS = {
   refresh: "/user/auth/refresh",
   logout: "/user/auth/logout",
 } as const;
@@ -21,21 +21,23 @@ let refreshInProgress: Promise<boolean> | null = null;
  * (the session is over). Network trouble throws an ApiError instead: nothing is known yet.
  * Calls made while a refresh is running share it.
  */
-export function refreshSession(): Promise<boolean> {
-  refreshInProgress ??= withLock(requestNewToken).finally(() => {
-    refreshInProgress = null;
-  });
+export function refreshAccessToken(): Promise<boolean> {
+  refreshInProgress ??= runWithCrossTabLock(requestNewAccessToken).finally(
+    () => {
+      refreshInProgress = null;
+    }
+  );
   return refreshInProgress;
 }
 
-async function requestNewToken(): Promise<boolean> {
+async function requestNewAccessToken(): Promise<boolean> {
   try {
-    const session = await sendRequest(
+    const session = await sendHttpRequest(
       "POST",
-      AUTH_PATHS.refresh,
+      AUTH_API_PATHS.refresh,
       sessionResponseSchema
     );
-    setSession(session.accessToken, session.user);
+    markSignedIn(session.accessToken, session.user);
     return true;
   } catch (error) {
     if (isApiError(error) && error.isClientError) return false;
@@ -44,7 +46,7 @@ async function requestNewToken(): Promise<boolean> {
 }
 
 /** Runs `task` while holding the cross-tab lock (Web Locks). Older browsers just run it. */
-function withLock<T>(task: () => Promise<T>): Promise<T> {
+function runWithCrossTabLock<T>(task: () => Promise<T>): Promise<T> {
   const locks = typeof navigator === "undefined" ? undefined : navigator.locks;
   if (!locks) return task();
   return locks.request(LOCK_NAME, task);

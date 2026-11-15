@@ -3,7 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll } from "vitest";
 import { queryClient } from "@/api/query-client";
-import { resetSession } from "@/auth/session-store";
+import { resetSessionForTests } from "@/auth/session-store";
 import { installMatchMedia, resetMediaQueries } from "./media-query";
 import { server } from "./mock-server/server";
 
@@ -43,6 +43,6 @@ afterEach(() => {
   window.localStorage.clear();
   server.resetHandlers();
   // Each test starts as the app does: session unknown ("restoring"), nothing cached.
-  resetSession();
+  resetSessionForTests();
   queryClient.clear();
 });

@@ -10,8 +10,12 @@ import {
 } from "@tests/helpers/mock-server/backend";
 import { server } from "@tests/helpers/mock-server/server";
 import { signIn, signOut } from "@/auth/session";
-import { getSession, setSession, waitForSession } from "@/auth/session-store";
-import { restoreSession } from "@/auth/session";
+import {
+  getCurrentSession,
+  markSignedIn,
+  waitUntilSessionIsKnown,
+} from "@/auth/session-store";
+import { restoreSessionFromCookie } from "@/auth/session";
 
 const session = { accessToken: "token-1", user: makeUser({ role: "STUDENT" }) };
 
@@ -20,23 +24,23 @@ describe("restoring the session at start", () => {
     server.use(
       http.post(apiPath("/user/auth/refresh"), () => successResponse(session))
     );
-    const waiting = waitForSession();
-    await restoreSession();
+    const waiting = waitUntilSessionIsKnown();
+    await restoreSessionFromCookie();
     expect((await waiting).status).toBe("signed-in");
-    expect(getSession().user?.role).toBe("STUDENT");
+    expect(getCurrentSession().user?.role).toBe("STUDENT");
   });
 
   it("is signed out when the server refuses", async () => {
-    await restoreSession();
-    expect(getSession().status).toBe("signed-out");
+    await restoreSessionFromCookie();
+    expect(getCurrentSession().status).toBe("signed-out");
   });
 
   it("is signed out when the server can't be reached", async () => {
     server.use(
       http.post(apiPath("/user/auth/refresh"), () => errorResponse(503, "Down"))
     );
-    await restoreSession();
-    expect(getSession().status).toBe("signed-out");
+    await restoreSessionFromCookie();
+    expect(getCurrentSession().status).toBe("signed-out");
   });
 
   it("never restores after a sign-out that happened offline, and finishes it", async () => {
@@ -48,9 +52,9 @@ describe("restoring the session at start", () => {
         return successResponse(session);
       })
     );
-    await restoreSession();
+    await restoreSessionFromCookie();
     expect(refreshed).toBe(false);
-    expect(getSession().status).toBe("signed-out");
+    expect(getCurrentSession().status).toBe("signed-out");
     expect(readStored("signedOut")).toBeNull();
   });
 });
@@ -58,25 +62,25 @@ describe("restoring the session at start", () => {
 describe("signing in and out", () => {
   it("keeps the token in memory only", () => {
     signIn(session);
-    expect(getSession().accessToken).toBe("token-1");
+    expect(getCurrentSession().accessToken).toBe("token-1");
     expect(JSON.stringify({ ...window.localStorage })).not.toContain("token-1");
   });
 
   it("forgets the session and the cached data at once", async () => {
-    setSession("token-1", makeUser());
+    markSignedIn("token-1", makeUser());
     queryClient.setQueryData(["study-plan"], { secret: true });
     const done = signOut();
-    expect(getSession().status).toBe("signed-out");
+    expect(getCurrentSession().status).toBe("signed-out");
     expect(queryClient.getQueryData(["study-plan"])).toBeUndefined();
     await done;
     expect(readStored("signedOut")).toBeNull();
   });
 
   it("remembers to finish signing out when offline", async () => {
-    setSession("token-1", makeUser());
+    markSignedIn("token-1", makeUser());
     vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
     await signOut();
-    expect(getSession().status).toBe("signed-out");
+    expect(getCurrentSession().status).toBe("signed-out");
     expect(readStored("signedOut")).toBe("1");
   });
 

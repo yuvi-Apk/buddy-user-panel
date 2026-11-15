@@ -20,7 +20,7 @@ import { profileRoutes } from "@/modules/profile";
 import { settingsRoutes } from "@/modules/settings";
 import { studyPlanRoutes } from "@/modules/study-plan";
 import { topicsRoutes } from "@/modules/topics";
-import { sessionStore, waitForSession } from "@/auth/session-store";
+import { sessionStore, waitUntilSessionIsKnown } from "@/auth/session-store";
 import {
   type PageRoute,
   createPageRoute,
@@ -59,7 +59,7 @@ const homeHandle: PageRouteInfo = {
 };
 
 async function homeRedirect(): Promise<Response> {
-  const session = await waitForSession();
+  const session = await waitUntilSessionIsKnown();
   const role = session.status === "signed-in" ? session.user?.role : undefined;
   return redirect(role ? homeFor(role) : LOGIN_PATH);
 }

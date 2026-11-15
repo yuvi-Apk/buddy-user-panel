@@ -5,7 +5,7 @@
 //   getAccessToken()                                             in the API client
 //
 // status: "restoring" while the app starts and asks the server, then "signed-in" or "signed-out".
-// Route loaders wait for it with waitForSession().
+// Route loaders wait for it with waitUntilSessionIsKnown().
 //
 // The schemas describe what the backend sends about the signed-in person:
 //   POST /user/auth/login, POST /user/auth/refresh → { accessToken, user }
@@ -71,7 +71,7 @@ export function useSession<T>(selector: (session: SessionState) => T): T {
   return useStore(sessionStore, selector);
 }
 
-export function getSession(): SessionState {
+export function getCurrentSession(): SessionState {
   return sessionStore.getState();
 }
 
@@ -79,24 +79,24 @@ export function getAccessToken(): string | null {
   return sessionStore.getState().accessToken;
 }
 
-export function setSession(accessToken: string, user: SessionUser): void {
+export function markSignedIn(accessToken: string, user: SessionUser): void {
   sessionStore.setState({ status: "signed-in", accessToken, user }, true);
 }
 
-/** Forgets the person in this tab. Use signOut() (sign-out.ts) to end the session everywhere. */
-export function clearSession(): void {
+/** Forgets the person in this tab. Use signOut() (session.ts) to end the session everywhere. */
+export function markSignedOut(): void {
   sessionStore.setState(SIGNED_OUT, true);
 }
 
 /** Back to the state at app start. For tests. */
-export function resetSession(): void {
+export function resetSessionForTests(): void {
   sessionStore.setState(RESTORING, true);
 }
 
 /** Resolves once the session is known (not "restoring" any more). */
-export function waitForSession(): Promise<SessionState> {
-  const current = sessionStore.getState();
-  if (current.status !== "restoring") return Promise.resolve(current);
+export function waitUntilSessionIsKnown(): Promise<SessionState> {
+  const session = sessionStore.getState();
+  if (session.status !== "restoring") return Promise.resolve(session);
 
   return new Promise((resolve) => {
     const unsubscribe = sessionStore.subscribe((state) => {

@@ -2,7 +2,11 @@ import { delay, http } from "msw";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { getLang } from "@/lang";
-import { getAccessToken, getSession, setSession } from "@/auth/session-store";
+import {
+  getAccessToken,
+  getCurrentSession,
+  markSignedIn,
+} from "@/auth/session-store";
 import {
   apiPath,
   errorResponse,
@@ -12,8 +16,8 @@ import {
 } from "@tests/helpers/mock-server/backend";
 import { server } from "@tests/helpers/mock-server/server";
 import { ApiError } from "@/api/api-error";
-import { api } from "@/api/client";
-import { pageSchema } from "@/api/response-schemas";
+import { api } from "@/api/api-client";
+import { paginatedListSchema } from "@/api/response-schemas";
 
 const lang = getLang();
 const topicSchema = z.object({ id: z.string(), name: z.string() });
@@ -52,9 +56,13 @@ describe("api client: responses", () => {
         });
       })
     );
-    const page = await api.get("/user/topics", pageSchema(topicSchema), {
-      query: { page: 2, limit: 20, filter: undefined },
-    });
+    const page = await api.get(
+      "/user/topics",
+      paginatedListSchema(topicSchema),
+      {
+        query: { page: 2, limit: 20, filter: undefined },
+      }
+    );
     expect(search).toBe("?page=2&limit=20");
     expect(page.meta.page).toBe(2);
   });
@@ -133,7 +141,7 @@ describe("api client: responses", () => {
 
 describe("api client: the session", () => {
   it("sends the access token from memory", async () => {
-    setSession("token-1", makeUser());
+    markSignedIn("token-1", makeUser());
     let authorization: string | null = null;
     server.use(
       http.get(apiPath("/me"), ({ request }) => {
@@ -145,8 +153,8 @@ describe("api client: the session", () => {
     expect(authorization).toBe("Bearer token-1");
   });
 
-  it("sends no token for calls made while signed out (auth: false)", async () => {
-    setSession("token-1", makeUser());
+  it("sends no token for calls made while signed out (requiresAuth: false)", async () => {
+    markSignedIn("token-1", makeUser());
     let authorization: string | null = "unset";
     server.use(
       http.post(apiPath("/user/auth/login"), ({ request }) => {
@@ -155,7 +163,7 @@ describe("api client: the session", () => {
       })
     );
     const error = await caught(
-      api.post("/user/auth/login", z.unknown(), {}, { auth: false })
+      api.post("/user/auth/login", z.unknown(), {}, { requiresAuth: false })
     );
     expect(authorization).toBeNull();
     expect(error.status).toBe(401);
@@ -164,7 +172,7 @@ describe("api client: the session", () => {
   });
 
   it("refreshes once on a 401 and tries again, shared by every request at that moment", async () => {
-    setSession("old-token", makeUser());
+    markSignedIn("old-token", makeUser());
     let refreshes = 0;
     server.use(
       http.post(apiPath("/user/auth/refresh"), async () => {
@@ -189,7 +197,7 @@ describe("api client: the session", () => {
   });
 
   it("signs out when the refresh is refused, and keeps the 401", async () => {
-    setSession("old-token", makeUser());
+    markSignedIn("old-token", makeUser());
     server.use(
       http.get(apiPath("/user/topics"), () =>
         errorResponse(401, "Token expired")
@@ -199,7 +207,7 @@ describe("api client: the session", () => {
     const error = await caught(api.get("/user/topics", z.unknown()));
 
     expect(error.status).toBe(401);
-    expect(getSession()).toEqual({
+    expect(getCurrentSession()).toEqual({
       status: "signed-out",
       user: null,
       accessToken: null,
@@ -207,7 +215,7 @@ describe("api client: the session", () => {
   });
 
   it("does not loop when the retry gets a 401 too", async () => {
-    setSession("old-token", makeUser());
+    markSignedIn("old-token", makeUser());
     let calls = 0;
     server.use(
       http.post(apiPath("/user/auth/refresh"), () =>
