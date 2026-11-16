@@ -1,4 +1,4 @@
-// Cards, badges, topic chips, progress, stats and avatars; then the feedback states.
+// Cards, badges, topic chips, progress rings and avatars; then the feedback states.
 import { BookOpen, CircleCheck, Flame, Sprout } from "lucide-react";
 import { useState } from "react";
 import {
@@ -21,10 +21,8 @@ import {
   CardHeader,
   CardTitle,
   Divider,
-  ProgressBar,
   ProgressRing,
   Skeleton,
-  Stat,
   toast,
   TopicChip,
 } from "@/components/ui";
@@ -41,7 +39,7 @@ export function GalleryDisplay() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ProgressBar label="Today's tasks" value={3} max={5} />
+            <ProgressRing label="Today's tasks" value={3} max={5} size="sm" />
           </CardContent>
           <CardFooter>
             <Button size="sm">Continue</Button>
@@ -53,27 +51,23 @@ export function GalleryDisplay() {
         <Card>
           <CardContent className="flex items-center gap-4">
             <ProgressRing label="Syllabus covered" value={68} size="lg" />
-            <Stat
-              label="Days to your exam"
-              value="42"
-              trend={{ direction: "up", text: "+12% practice this week" }}
-            />
+            <p className="text-sm text-muted-foreground">Syllabus covered</p>
           </CardContent>
         </Card>
       </Grid>
 
       <Inline gap={2}>
         <Badge>Neutral</Badge>
-        <Badge tone="primary" icon={<BookOpen />}>
+        <Badge variant="primary" icon={<BookOpen />}>
           Primary
         </Badge>
-        <Badge tone="progress" icon={<CircleCheck />}>
+        <Badge variant="progress" icon={<CircleCheck />}>
           Done
         </Badge>
-        <Badge tone="weak" icon={<Sprout />}>
+        <Badge variant="weak" icon={<Sprout />}>
           Needs practice
         </Badge>
-        <Badge tone="destructive">Failed to send</Badge>
+        <Badge variant="destructive">Failed to send</Badge>
       </Inline>
 
       <Inline gap={2}>
@@ -83,35 +77,11 @@ export function GalleryDisplay() {
         <TopicChip name="Grammar" strength="strong" />
       </Inline>
 
-      <Grid columns={{ base: 1, md: 2 }}>
-        <ProgressBar label="Primary" value={40} tone="primary" />
-        <ProgressBar label="Progress" value={72} />
-        <ProgressBar
-          label="Needs practice (weak topics only)"
-          value={30}
-          tone="weak"
-        />
-        <ProgressBar
-          label="Error (failed upload)"
-          value={55}
-          tone="destructive"
-        />
-      </Grid>
-
       <Inline gap={6} align="end">
         <ProgressRing label="Small" value={25} size="sm" />
-        <ProgressRing label="Medium" value={50} tone="primary" />
+        <ProgressRing label="Medium" value={50} variant="primary" />
         <ProgressRing label="Large" value={90} size="lg" />
-        <Stat
-          label="Streak"
-          value="12 days"
-          trend={{ direction: "flat", text: "Same as last week" }}
-        />
-        <Stat
-          label="Mock test score"
-          value="64%"
-          trend={{ direction: "down", text: "−3% from last test" }}
-        />
+        <ProgressRing label="Needs practice" value={30} variant="weak" />
       </Inline>
 
       <Inline gap={3}>
@@ -137,14 +107,14 @@ export function GalleryFeedback() {
         <Alert title="Your plan is ready">
           We built 42 days of study around your exam date.
         </Alert>
-        <Alert tone="success" title="Great week!">
+        <Alert variant="success" title="Great week!">
           You finished every task for 5 days.
         </Alert>
-        <Alert tone="weak" title="3 topics need practice">
+        <Alert variant="weak" title="3 topics need practice">
           Optics, Modern history and Ratios.
         </Alert>
         <Alert
-          tone="destructive"
+          variant="destructive"
           title="Couldn't save your answers"
           action={
             <Button size="sm" variant="outline">
@@ -166,7 +136,7 @@ export function GalleryFeedback() {
             toast({
               title: "Plan updated",
               description: "Tomorrow starts with Optics.",
-              tone: "success",
+              variant: "success",
             })
           }
         >
@@ -178,7 +148,7 @@ export function GalleryFeedback() {
             toast({
               title: "Couldn't send",
               description: "Please try again.",
-              tone: "destructive",
+              variant: "destructive",
             })
           }
         >

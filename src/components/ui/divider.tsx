@@ -15,6 +15,7 @@ export function Divider({
 }: DividerProps) {
   return (
     <SeparatorPrimitive.Root
+      data-slot="divider"
       orientation={orientation}
       decorative={decorative}
       className={cn(

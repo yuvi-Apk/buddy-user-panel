@@ -25,7 +25,10 @@ export function Checkbox({
   const descriptionId = description ? `${controlId}-description` : undefined;
 
   return (
-    <div className={cn("flex min-h-11 items-start gap-3 py-2.5", className)}>
+    <div
+      data-slot="checkbox"
+      className={cn("flex min-h-11 items-start gap-3 py-2.5", className)}
+    >
       <CheckboxPrimitive.Root
         id={controlId}
         aria-describedby={descriptionId}

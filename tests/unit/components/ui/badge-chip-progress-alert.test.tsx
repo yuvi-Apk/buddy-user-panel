@@ -1,16 +1,16 @@
-// Badge, TopicChip, ProgressBar and Alert: never color alone.
+// Badge, TopicChip, ProgressRing and Alert: never color alone.
 import { render, screen } from "@testing-library/react";
 import { Check } from "lucide-react";
 import { describe, expect, it } from "vitest";
 import { fill, getLang } from "@/lang";
-import { Alert, Badge, ProgressBar, TopicChip } from "@/components/ui";
+import { Alert, Badge, ProgressRing, TopicChip } from "@/components/ui";
 
 const { ui } = getLang();
 
 describe("Badge", () => {
   it("shows its word, with the icon hidden from screen readers", () => {
     const { container } = render(
-      <Badge tone="progress" icon={<Check />}>
+      <Badge variant="progress" icon={<Check />}>
         Done
       </Badge>
     );
@@ -38,9 +38,9 @@ describe("TopicChip", () => {
   });
 });
 
-describe("ProgressBar", () => {
-  it("is a progress bar named by its label, with the percentage as text", () => {
-    render(<ProgressBar label="This week" value={4} max={7} />);
+describe("ProgressRing", () => {
+  it("is a progress indicator named by its label, with the percentage as text", () => {
+    render(<ProgressRing label="This week" value={4} max={7} />);
     const bar = screen.getByRole("progressbar", { name: "This week" });
     expect(bar).toHaveAttribute("aria-valuenow", "4");
     expect(bar).toHaveAttribute("aria-valuemax", "7");
@@ -52,9 +52,9 @@ describe("ProgressBar", () => {
   it("keeps the value between 0 and max", () => {
     render(
       <>
-        <ProgressBar label="Too much" value={12} max={10} />
-        <ProgressBar label="Too little" value={-3} max={10} />
-        <ProgressBar label="Nothing planned" value={0} max={0} />
+        <ProgressRing label="Too much" value={12} max={10} />
+        <ProgressRing label="Too little" value={-3} max={10} />
+        <ProgressRing label="Nothing planned" value={0} max={0} />
       </>
     );
     expect(
@@ -71,8 +71,8 @@ describe("Alert", () => {
   it("announces an error at once, and other messages politely", () => {
     render(
       <>
-        <Alert tone="destructive" title="Couldn't save" />
-        <Alert tone="success" title="Saved" />
+        <Alert variant="destructive" title="Couldn't save" />
+        <Alert variant="success" title="Saved" />
       </>
     );
     expect(screen.getByRole("alert")).toHaveTextContent("Couldn't save");

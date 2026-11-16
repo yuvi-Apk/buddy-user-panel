@@ -33,7 +33,10 @@ export function ChoiceCardGroup({
   const labelId = useId();
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div
+      data-slot="choice-card-group"
+      className={cn("flex flex-col gap-2", className)}
+    >
       <p id={labelId} className="text-sm font-semibold text-foreground">
         {label}
       </p>

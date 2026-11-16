@@ -28,7 +28,10 @@ export function SegmentedControl({
   const labelId = useId();
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div
+      data-slot="segmented-control"
+      className={cn("flex flex-col gap-2", className)}
+    >
       <p id={labelId} className="text-sm font-semibold text-foreground">
         {label}
       </p>

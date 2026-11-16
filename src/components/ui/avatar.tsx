@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 
 const sizes = {
   sm: "size-8 text-sm",
-  md: "size-11 text-base",
+  default: "size-11 text-base",
   lg: "size-16 text-xl",
 } as const;
 
@@ -25,9 +25,15 @@ function getInitials(name: string): string {
     .join("");
 }
 
-export function Avatar({ name, src, size = "md", className }: AvatarProps) {
+export function Avatar({
+  name,
+  src,
+  size = "default",
+  className,
+}: AvatarProps) {
   return (
     <AvatarPrimitive.Root
+      data-slot="avatar"
       className={cn(
         "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-soft font-semibold text-primary-soft-foreground select-none",
         sizes[size],

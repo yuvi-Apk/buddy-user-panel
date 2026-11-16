@@ -43,7 +43,7 @@ describe("Toaster", () => {
       toast({
         title: "Saved",
         description: "Your plan is up to date.",
-        tone: "success",
+        variant: "success",
       });
     });
 

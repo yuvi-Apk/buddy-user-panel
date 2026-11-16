@@ -39,7 +39,10 @@ export function Field({
 }: FieldProps) {
   return (
     // The top padding leaves room for the raised label, which sticks out above the frame.
-    <div className={cn("flex flex-col gap-1.5 pt-2.5", className)}>
+    <div
+      data-slot="field"
+      className={cn("flex flex-col gap-1.5 pt-2.5", className)}
+    >
       {children}
       {hint ? (
         <p id={hintId} className="text-sm text-muted-foreground">
@@ -71,6 +74,7 @@ export function FieldFrame({
 }: FieldFrameProps) {
   return (
     <div
+      data-slot="field-frame"
       className={cn(
         "relative flex w-full rounded-control border-2 bg-card text-foreground transition-[border-color,box-shadow] duration-150",
         isInvalid
@@ -108,6 +112,7 @@ export function FieldLabel({
 }: FieldLabelProps) {
   return (
     <label
+      data-slot="field-label"
       htmlFor={controlId}
       data-raised={isAlwaysRaised ? "" : undefined}
       className={cn(
@@ -137,6 +142,7 @@ export function FieldError({
 }) {
   return (
     <p
+      data-slot="field-error"
       id={id}
       className="flex items-start gap-1.5 text-sm font-semibold text-destructive-soft-foreground"
     >

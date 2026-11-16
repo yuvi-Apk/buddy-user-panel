@@ -36,7 +36,10 @@ export function RadioGroup({
   const errorId = error ? `${id}-error` : undefined;
 
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div
+      data-slot="radio-group"
+      className={cn("flex flex-col gap-1.5", className)}
+    >
       <p id={labelId} className="text-sm font-semibold text-foreground">
         {label}
       </p>

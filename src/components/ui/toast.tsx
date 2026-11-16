@@ -23,8 +23,8 @@ const toastVariants = cva(
   ],
   {
     variants: {
-      tone: {
-        neutral: "border-border bg-popover text-popover-foreground",
+      variant: {
+        default: "border-border bg-popover text-popover-foreground",
         success:
           "border-progress/30 bg-progress-soft text-progress-soft-foreground",
         destructive:
@@ -35,7 +35,7 @@ const toastVariants = cva(
 );
 
 const icons = {
-  neutral: Info,
+  default: Info,
   success: CircleCheck,
   destructive: CircleAlert,
 } as const;
@@ -52,8 +52,8 @@ export function Toaster() {
     // Radix puts the shortcut (F8) where `{hotkey}` is.
     <ToastPrimitive.Provider swipeDirection="down" label={lang.ui.notification}>
       {toasts.map((item) => {
-        const tone = item.tone ?? "neutral";
-        const Icon = icons[tone];
+        const variant = item.variant ?? "default";
+        const Icon = icons[variant];
         return (
           <ToastPrimitive.Root
             key={item.id}
@@ -67,7 +67,8 @@ export function Toaster() {
                 CLOSE_ANIMATION_MS
               );
             }}
-            className={cn(toastVariants({ tone }))}
+            data-slot="toast"
+            className={cn(toastVariants({ variant }))}
           >
             <Icon aria-hidden className="mt-0.5 size-5 shrink-0" />
             <div className="flex flex-1 flex-col gap-0.5">

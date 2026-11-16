@@ -26,7 +26,7 @@ export function ErrorState({
 
   return (
     <EmptyState
-      tone="destructive"
+      variant="destructive"
       icon={<TriangleAlert />}
       title={title ?? lang.feedback.errorTitle}
       description={description ?? lang.feedback.errorBody}

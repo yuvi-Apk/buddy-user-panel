@@ -22,13 +22,13 @@ import {
 } from "@/components/ui";
 
 const VARIANTS = [
-  "primary",
+  "default",
   "secondary",
   "outline",
   "ghost",
   "destructive",
 ] as const;
-const SIZES = ["sm", "md", "lg"] as const;
+const SIZES = ["sm", "default", "lg"] as const;
 
 export function GalleryButtons() {
   return (
@@ -189,7 +189,7 @@ export function GalleryForm() {
 
   async function submit(values: SignUpValues) {
     await new Promise((resolve) => setTimeout(resolve, 800));
-    toast({ title: `Welcome, ${values.name}!`, tone: "success" });
+    toast({ title: `Welcome, ${values.name}!`, variant: "success" });
     form.reset();
   }
 

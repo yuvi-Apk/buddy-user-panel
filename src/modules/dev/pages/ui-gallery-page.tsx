@@ -12,7 +12,7 @@ import {
   GalleryForm,
 } from "../components/gallery-controls";
 import { GalleryDisplay, GalleryFeedback } from "../components/gallery-display";
-import { GalleryOverlays, GalleryTabs } from "../components/gallery-overlays";
+import { GalleryOverlays } from "../components/gallery-overlays";
 
 export function UiGalleryPage() {
   return (
@@ -79,9 +79,6 @@ export function UiGalleryPage() {
       </Section>
       <Section title="Overlays">
         <GalleryOverlays />
-      </Section>
-      <Section title="Tabs">
-        <GalleryTabs />
       </Section>
     </Page>
   );

@@ -33,7 +33,7 @@ export function StudyPreview() {
             label={preview.progress}
             value={60}
             size="sm"
-            tone="progress"
+            variant="progress"
           />
         </div>
 
@@ -43,7 +43,7 @@ export function StudyPreview() {
             <span className="flex-1 text-muted-foreground line-through">
               {preview.doneTopic}
             </span>
-            <Badge tone="progress">{preview.done}</Badge>
+            <Badge variant="progress">{preview.done}</Badge>
           </li>
           <li className="flex items-center gap-3 rounded-control border border-primary/30 bg-primary-soft px-3 py-3 text-primary-soft-foreground">
             <CircleDot className="size-5 shrink-0" />

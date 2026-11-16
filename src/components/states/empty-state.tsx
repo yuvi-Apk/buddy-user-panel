@@ -9,7 +9,7 @@ export interface EmptyStateProps {
   /** Usually one Button: the next step. */
   action?: ReactNode;
   /** `destructive` only for ErrorState. */
-  tone?: "primary" | "destructive";
+  variant?: "default" | "destructive";
   className?: string;
 }
 
@@ -18,7 +18,7 @@ export function EmptyState({
   title,
   description,
   action,
-  tone = "primary",
+  variant = "default",
   className,
 }: EmptyStateProps) {
   return (
@@ -33,7 +33,7 @@ export function EmptyState({
           aria-hidden
           className={cn(
             "flex size-14 items-center justify-center rounded-full [&_svg]:size-7",
-            tone === "destructive"
+            variant === "destructive"
               ? "bg-destructive-soft text-destructive-soft-foreground"
               : "bg-primary-soft text-primary-soft-foreground"
           )}

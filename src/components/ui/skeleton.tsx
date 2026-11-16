@@ -7,6 +7,7 @@ import { cn } from "@/utils/cn";
 export function Skeleton({ className }: { className?: string }) {
   return (
     <div
+      data-slot="skeleton"
       aria-hidden
       className={cn("animate-pulse rounded-control bg-muted", className)}
     />

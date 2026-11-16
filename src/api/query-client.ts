@@ -47,7 +47,7 @@ export function createQueryClient(): QueryClient {
         toast({
           title: getLang().errors.toastTitle,
           description: getErrorMessage(error),
-          tone: "destructive",
+          variant: "destructive",
         });
       },
     }),

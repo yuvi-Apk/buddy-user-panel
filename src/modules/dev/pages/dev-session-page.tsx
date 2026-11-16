@@ -77,7 +77,7 @@ export function DevSessionPage() {
         title="Dev sessions"
         description="Sign in as any role with a fake session in memory. Dev builds only."
       />
-      <Alert tone="info" title="Nothing reaches the server">
+      <Alert variant="default" title="Nothing reaches the server">
         Screens that call the API will get a 401 and sign this fake session out.
       </Alert>
       <Section title="Sign in as">
@@ -96,7 +96,7 @@ export function DevSessionPage() {
                     </span>
                   </Stack>
                   <Button
-                    variant={user?.role === role ? "primary" : "outline"}
+                    variant={user?.role === role ? "default" : "outline"}
                     onClick={() => {
                       signInAs(role);
                     }}

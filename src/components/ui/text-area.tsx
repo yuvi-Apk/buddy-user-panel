@@ -31,6 +31,7 @@ export function TextArea({
     >
       <FieldFrame isInvalid={ids.invalid} isDisabled={disabled}>
         <textarea
+          data-slot="textarea"
           id={ids.controlId}
           rows={rows}
           aria-describedby={ids.describedBy}

@@ -43,8 +43,12 @@ export function ResponsiveDialogContent({
 
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className={overlayClasses} />
+      <DialogPrimitive.Overlay
+        data-slot="dialog-overlay"
+        className={overlayClasses}
+      />
       <DialogPrimitive.Content
+        data-slot="dialog-content"
         className={cn(sheetClasses, className)}
         {...(description ? {} : { "aria-describedby": undefined })}
         {...props}

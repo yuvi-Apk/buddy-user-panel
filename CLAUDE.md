@@ -25,6 +25,9 @@ matching files. Guides for people are in `docs/`.
 
 - New module folder: `new-module` skill. New screen in a module: `add-page`.
 - Talking to the backend: `add-api-hook`. A new shared component: `add-ui-component`.
+- Shared components follow the shadcn/ui pattern in our own Paper & Ink look: Radix behaviour,
+  `cva` with `variant` / `size` (`default` is the base), `cn` for classes, `data-slot` on parts.
+  Add to `src/components/ui` only what a screen needs; form fields (`Input` on `field.tsx`) are ours.
 - A product illustration or animated demo (onboarding, empty state, feature card): `stageshow`.
   Build it from `@/components` and `tokens.css`, not its `kit/` or `stageshow.css`; no new package.
 - Tests for code that already exists, or "is this tested?": `write-tests`.

@@ -1,15 +1,15 @@
 // Small notifications at the bottom of the screen ("Saved", "Couldn't send").
 //
-//   toast({ title: lang.profile.saved, tone: "success" });
-//   toast({ title: lang.common.error, description: message, tone: "destructive" });
+//   toast({ title: lang.profile.saved, variant: "success" });
+//   toast({ title: lang.common.error, description: message, variant: "destructive" });
 //
 // <Toaster /> (toast.tsx) shows them; it is mounted once at the app root.
-export type ToastTone = "neutral" | "success" | "destructive";
+export type ToastVariant = "default" | "success" | "destructive";
 
 export interface ToastOptions {
   title: string;
   description?: string;
-  tone?: ToastTone;
+  variant?: ToastVariant;
   /** How long it stays, in milliseconds. 5 seconds by default. */
   duration?: number;
 }

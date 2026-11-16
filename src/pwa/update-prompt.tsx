@@ -22,7 +22,7 @@ export function UpdatePrompt() {
 
   useEffect(() => {
     if (!offlineReady) return;
-    toast({ title: lang.pwa.offlineReady, tone: "success" });
+    toast({ title: lang.pwa.offlineReady, variant: "success" });
     setOfflineReady(false);
   }, [offlineReady, setOfflineReady, lang]);
 

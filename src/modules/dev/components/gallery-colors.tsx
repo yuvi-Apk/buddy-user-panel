@@ -141,7 +141,7 @@ export function GalleryColors() {
               <span className="text-muted-foreground">
                 {pair.foreground} on {pair.background}
               </span>
-              <Badge tone={passes ? "progress" : "destructive"}>
+              <Badge variant={passes ? "progress" : "destructive"}>
                 {ratio.toFixed(2)}:1 {passes ? "AA" : "fails"}
               </Badge>
             </div>

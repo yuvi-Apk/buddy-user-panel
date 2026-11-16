@@ -10,7 +10,8 @@ paths:
 # Design system, components and text
 
 The look is "Paper & Ink": warm paper backgrounds, ink text, calm accents, sharp corners and
-strong borders. It must not look like stock shadcn.
+strong borders. Components follow the shadcn/ui pattern (code we own, Radix for behaviour, `cva`
+variants, `cn`, `data-slot`), but the look is ours: it must not look like stock shadcn.
 
 ## Colors
 
@@ -38,7 +39,7 @@ strong borders. It must not look like stock shadcn.
 
 - Corners: `rounded-sm` (2px), `rounded-control` (4px), `rounded-card` (6px), `rounded-sheet`
   (12px), `rounded-full` for pills. No other radius.
-- Controls: `sm` 36px (44px on touch screens), `md` 44px (default), `lg` 52px.
+- Controls: `sm` 36px (44px on touch screens), `default` 44px, `lg` 52px.
 - Fonts: Lexend for headings, Atkinson Hyperlegible Next for text, both self-hosted. Text is 16px,
   never under 14px. Long reading text sits in `<Page width="reading">`.
 - Motion is 150–250ms and stops under `prefers-reduced-motion`.
@@ -50,6 +51,12 @@ strong borders. It must not look like stock shadcn.
   variants, and show it in `/dev/ui`.
 - A new look is a new variant inside the component (class-variance-authority), never a one-off
   override from a module.
+- shadcn naming: the look prop is `variant` (never `tone`), the base value is `default`
+  (`variant="default"`, `size="default"`), sizes are `sm` / `default` / `lg`. Every rendered part
+  has `data-slot="<component>-<part>"`. Merge classes with `cn` from `@/utils/cn`.
+- A shadcn component may be copied in as a start, then restyled with our tokens and corners and
+  its text moved to `en.json`. Keep only what a screen uses now; no unused parts or variants.
+- Form fields are ours, not shadcn's: `Input`, `TextArea`, `SelectField` on `field.tsx`.
 - One `Input` for every text input; `type` decides the behaviour (`email`, `password` with a
   show/hide button, `search`, `date`). `TextArea` and `SelectField` share its frame.
 - Field layout (`src/components/ui/field.tsx`): the label sits inside the empty control and moves

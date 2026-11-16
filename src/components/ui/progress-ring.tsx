@@ -1,15 +1,17 @@
 // A round progress indicator with the percentage in the middle (dashboards, today's plan).
 import { fill, useLang } from "@/lang";
 import { cn } from "@/utils/cn";
-import type { ProgressTone } from "./progress-bar";
+
+export type ProgressRingVariant =
+  "primary" | "progress" | "weak" | "destructive";
 
 const sizes = {
   sm: { box: 48, stroke: 5, text: "text-sm" },
-  md: { box: 72, stroke: 7, text: "text-base" },
+  default: { box: 72, stroke: 7, text: "text-base" },
   lg: { box: 104, stroke: 9, text: "text-xl" },
 } as const;
 
-const strokeTone: Record<ProgressTone, string> = {
+const strokeVariant: Record<ProgressRingVariant, string> = {
   primary: "stroke-primary",
   progress: "stroke-progress",
   weak: "stroke-weak",
@@ -20,7 +22,7 @@ export interface ProgressRingProps {
   label: string;
   value: number;
   max?: number;
-  tone?: ProgressTone;
+  variant?: ProgressRingVariant;
   size?: keyof typeof sizes;
   className?: string;
 }
@@ -29,8 +31,8 @@ export function ProgressRing({
   label,
   value,
   max = 100,
-  tone = "progress",
-  size = "md",
+  variant = "progress",
+  size = "default",
   className,
 }: ProgressRingProps) {
   const lang = useLang();
@@ -42,6 +44,7 @@ export function ProgressRing({
 
   return (
     <div
+      data-slot="progress-ring"
       role="progressbar"
       aria-label={label}
       aria-valuemin={0}
@@ -79,7 +82,7 @@ export function ProgressRing({
           strokeDashoffset={circumference * (1 - percent / 100)}
           className={cn(
             "transition-[stroke-dashoffset] duration-500 ease-out",
-            strokeTone[tone]
+            strokeVariant[variant]
           )}
         />
       </svg>

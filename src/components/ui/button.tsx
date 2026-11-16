@@ -21,7 +21,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        default: "bg-primary text-primary-foreground hover:bg-primary-hover",
         secondary: "bg-muted text-foreground hover:bg-hover",
         outline: "border-2 border-input bg-card text-foreground hover:bg-hover",
         ghost: "text-foreground hover:bg-hover",
@@ -31,12 +31,12 @@ const buttonVariants = cva(
       // sm grows to the 44px touch size on touch screens.
       size: {
         sm: "h-9 px-3 text-sm pointer-coarse:h-11",
-        md: "h-11 px-4 text-base",
+        default: "h-11 px-4 text-base",
         lg: "h-13 px-6 text-base",
       },
       fullWidth: { true: "w-full" },
     },
-    defaultVariants: { variant: "primary", size: "md" },
+    defaultVariants: { variant: "default", size: "default" },
   }
 );
 
@@ -64,7 +64,7 @@ export function Button({
 
   if (asChild) {
     return (
-      <Slot.Root className={classes} {...props}>
+      <Slot.Root data-slot="button" className={classes} {...props}>
         {children}
       </Slot.Root>
     );
@@ -72,6 +72,7 @@ export function Button({
 
   return (
     <button
+      data-slot="button"
       type={type}
       className={classes}
       aria-busy={loading || undefined}
@@ -87,7 +88,7 @@ export function Button({
 
 const iconButtonSizes = {
   sm: "w-9 px-0 pointer-coarse:w-11",
-  md: "w-11 px-0",
+  default: "w-11 px-0",
   lg: "w-13 px-0",
 } as const;
 
@@ -108,7 +109,7 @@ export function IconButton({
   className,
   ...props
 }: IconButtonProps) {
-  const iconSize = size ?? "md";
+  const iconSize = size ?? "default";
   return (
     <Button
       aria-label={label}

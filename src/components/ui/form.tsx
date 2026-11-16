@@ -45,6 +45,7 @@ export function Form<Values extends FieldValues>({
   return (
     <FormProvider {...form}>
       <form
+        data-slot="form"
         noValidate
         className={cn("flex flex-col gap-4", className)}
         onSubmit={(event) => {
@@ -99,7 +100,7 @@ function showBackendFieldErrors<Values extends FieldValues>(
     toast({
       title: getLang().errors.toastTitle,
       description: messagesWithoutField.join(" "),
-      tone: "destructive",
+      variant: "destructive",
     });
   }
   return true;

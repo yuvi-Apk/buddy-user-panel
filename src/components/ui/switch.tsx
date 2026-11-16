@@ -25,6 +25,7 @@ export function Switch({
 
   return (
     <div
+      data-slot="switch"
       className={cn(
         "flex min-h-11 items-center justify-between gap-4 py-2",
         className

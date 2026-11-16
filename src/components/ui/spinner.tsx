@@ -5,6 +5,7 @@ import { cn } from "@/utils/cn";
 export function Spinner({ className }: { className?: string }) {
   return (
     <LoaderCircle
+      data-slot="spinner"
       aria-hidden
       className={cn("size-5 shrink-0 animate-spin", className)}
     />

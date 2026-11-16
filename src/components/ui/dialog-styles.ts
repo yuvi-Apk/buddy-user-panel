@@ -1,4 +1,4 @@
-// Shared classes for ResponsiveDialog and ConfirmDialog: a bottom sheet on phones, a centered
+// Shared classes for ResponsiveDialog: a bottom sheet on phones, a centered
 // dialog from the lg breakpoint (1024px) up.
 export const overlayClasses = [
   "fixed inset-0 z-50 bg-overlay",

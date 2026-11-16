@@ -47,6 +47,7 @@ export function SelectField({
         className="h-11"
       >
         <select
+          data-slot="select"
           id={ids.controlId}
           aria-describedby={ids.describedBy}
           aria-invalid={ids.invalid || undefined}

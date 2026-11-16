@@ -28,12 +28,12 @@ export interface InputProps
   extends FieldTextProps, Omit<ComponentProps<"input">, "size" | "required"> {
   /** An icon at the start, inside the input. */
   startIcon?: ReactNode;
-  size?: "md" | "lg";
+  size?: "default" | "lg";
   /** Extra classes for the whole field (label, input, hint and error together). */
   wrapperClassName?: string;
 }
 
-const frameSize = { md: "h-11", lg: "h-13" } as const;
+const frameSize = { default: "h-11", lg: "h-13" } as const;
 
 /** What a type sets by itself. Props given to <Input> win over these. */
 const propsByType: Record<string, ComponentProps<"input">> = {
@@ -63,7 +63,7 @@ export function Input({
   className,
   wrapperClassName,
   startIcon,
-  size = "md",
+  size = "default",
   disabled,
   placeholder,
   ...inputProps
@@ -99,6 +99,7 @@ export function Input({
           </span>
         ) : null}
         <input
+          data-slot="input"
           id={ids.controlId}
           type={isPassword && isPasswordVisible ? "text" : type}
           aria-describedby={ids.describedBy}

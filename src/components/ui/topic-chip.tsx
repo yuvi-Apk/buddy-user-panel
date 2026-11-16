@@ -20,6 +20,7 @@ export function TopicChip({ name, strength, className }: TopicChipProps) {
 
   return (
     <span
+      data-slot="topic-chip"
       className={cn(
         "inline-flex min-h-9 items-center gap-2 rounded-full border px-3 py-1 text-sm",
         strong

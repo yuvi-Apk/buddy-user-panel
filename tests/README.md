@@ -24,7 +24,7 @@ A few small components share one test file, named after what they are:
 | Test file                                          | Covers                                              |
 | -------------------------------------------------- | --------------------------------------------------- |
 | `components/ui/choice-controls.test.tsx`           | checkbox, radio group, switch, select, choice cards |
-| `components/ui/dialogs.test.tsx`                   | dialogs, confirm dialog, dropdown menu, popover     |
+| `components/ui/dialogs.test.tsx`                   | the responsive dialog                               |
 | `components/ui/badge-chip-progress-alert.test.tsx` | badge, topic chip, progress bar, alert              |
 | `components/states/states.test.tsx`                | empty, error, loading and offline states            |
 | `pwa/update-and-install.test.tsx`                  | the update prompt and "Install the app"             |

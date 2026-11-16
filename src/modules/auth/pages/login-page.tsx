@@ -41,7 +41,7 @@ export function LoginPage() {
             </Alert>
           ) : null}
           {signInError === "google-failed" ? (
-            <Alert tone="destructive" title={lang.auth.googleFailedTitle}>
+            <Alert variant="destructive" title={lang.auth.googleFailedTitle}>
               {lang.auth.googleFailedBody}
             </Alert>
           ) : null}

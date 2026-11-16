@@ -15,12 +15,16 @@ Rules: `.claude/rules/design-and-components.md`. Guide for people: `docs/03-desi
    empty / error / loading states. One file, kebab-case, named exports.
 3. **Build**:
    - Start the file with a short comment: what it is for and one usage example.
-   - Behaviour that is hard to get right (dialogs, menus, tabs, tooltips) comes from `radix-ui`;
-     the look is ours.
+   - Follow the shadcn/ui pattern: copy the shadcn component as a start if one exists, then make
+     it ours. Behaviour that is hard to get right (dialogs, menus, tabs, tooltips) comes from
+     `radix-ui`; the look is ours.
    - Token utilities only (`bg-card`, `border-input`, `text-muted-foreground`). No color value,
      no Tailwind palette class, no radius outside `rounded-sm | control | card | sheet | full`.
    - Sharp corners and strong borders: it must not look like stock shadcn.
-   - Variants with `cva`; merge classes with `cn`. Sizes `sm` / `md` / `lg` match the other controls.
+   - Variants with `cva` under the prop `variant` (base value `default`, never `tone`); merge
+     classes with `cn` from `@/utils/cn`. Sizes `sm` / `default` / `lg` match the other controls.
+   - Put `data-slot="<component>"` on the root and `data-slot="<component>-<part>"` on each part.
+   - Keep only the parts and variants a screen needs now; delete what shadcn ships that we do not use.
    - A form control uses `Field`, `FieldFrame` and `FieldLabel` from `field.tsx` and
      `useFieldIds`, and takes `label`, `hint`, `error`, `isRequired`.
    - Text comes in through props, or from `useLang()` for the component's own words.
@@ -33,6 +37,7 @@ Rules: `.claude/rules/design-and-components.md`. Guide for people: `docs/03-desi
 ## Checklist before you hand over
 
 - [ ] No existing component could do it with a variant
+- [ ] shadcn naming: `variant`, `default`, `data-slot`, `cn`
 - [ ] Only tokens; `pnpm test tests/project-rules` passes (colors and contrast)
 - [ ] Works in all four themes, light and dark; looked at in `/dev/ui`
 - [ ] Meaning is never shown by color alone

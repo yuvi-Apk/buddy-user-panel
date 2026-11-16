@@ -49,7 +49,7 @@ each in light, dark or "follow my phone". A theme changes only the `primary` fam
 | Thing    | Values                                                                                            |
 | -------- | ------------------------------------------------------------------------------------------------- |
 | Corners  | `rounded-sm` 2px, `rounded-control` 4px, `rounded-card` 6px, `rounded-sheet` 12px, `rounded-full` |
-| Controls | `sm` 36px (44px on touch screens), `md` 44px, `lg` 52px                                           |
+| Controls | `sm` 36px (44px on touch screens), `default` 44px, `lg` 52px                                      |
 | Fonts    | Lexend for headings, Atkinson Hyperlegible Next for text, both served by the app                  |
 | Text     | 16px; never smaller than 14px                                                                     |
 | Layout   | Under 1024px: top bar and bottom tabs. From 1024px: sidebar                                       |
@@ -67,6 +67,25 @@ import { EmptyState, ErrorState, LoadingState } from "@/components/states";
 A raw `<button>`, `<input>`, `<select>` or `<textarea>` in a module is a lint error. If something
 is missing, add it to `src/components` and show it in the gallery (`src/modules/dev`). A new look
 is a new variant inside the component, not a one-off class from a screen.
+
+### The shadcn pattern, our look
+
+Components follow the shadcn/ui pattern. They live in our repo and we own them; they are not a
+package. The look is our own Paper & Ink style, not stock shadcn.
+
+- Behaviour comes from `radix-ui` (dialogs, toasts, radio groups, switches). The look comes from
+  Tailwind token classes.
+- Variants use `cva`. The prop is `variant` (`default`, `secondary`, `outline`, `ghost`,
+  `destructive`, plus our meaning colors `success`, `progress`, `weak`). Sizes are `sm`,
+  `default`, `lg`.
+- Classes are merged with `cn` (`src/utils/cn.ts`). A screen may pass `className` for layout (margin,
+  width) only.
+- Each part has a `data-slot` attribute (`data-slot="card-header"`), and `asChild` (Radix `Slot`)
+  lets a link look like a button.
+- Copying a component from shadcn is fine as a starting point. Restyle it with our tokens,
+  corners and sizes, and add its text through `en.json`. Add only what a screen needs now.
+- Form fields are already ours: one `Input` (also `TextArea`, `SelectField`) with the floating label
+  from `field.tsx`. Never replace them with shadcn's input.
 
 ### Inputs and forms
 

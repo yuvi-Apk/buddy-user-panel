@@ -1,12 +1,10 @@
-// ResponsiveDialog and ConfirmDialog.
-import { act, render, screen, waitFor } from "@testing-library/react";
+// ResponsiveDialog.
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { getLang } from "@/lang";
 import {
   Button,
-  ConfirmDialog,
   ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogTrigger,
@@ -61,77 +59,5 @@ describe("ResponsiveDialog", () => {
 
     expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-describedby");
     expect(warn).not.toHaveBeenCalled();
-  });
-});
-
-function RemoveStudentDialog({
-  onConfirm,
-}: {
-  onConfirm: () => void | Promise<void>;
-}) {
-  const [open, setOpen] = useState(true);
-  return (
-    <ConfirmDialog
-      open={open}
-      onOpenChange={setOpen}
-      tone="destructive"
-      title="Remove Asha from the class?"
-      description="She can be added again later."
-      confirmLabel="Remove"
-      onConfirm={onConfirm}
-    />
-  );
-}
-
-describe("ConfirmDialog", () => {
-  it("starts on Cancel, so an accidental Enter never confirms", async () => {
-    const onConfirm = vi.fn();
-    render(<RemoveStudentDialog onConfirm={onConfirm} />);
-
-    const dialog = screen.getByRole("alertdialog", {
-      name: "Remove Asha from the class?",
-    });
-    expect(dialog).toHaveAccessibleDescription("She can be added again later.");
-    expect(screen.getByRole("button", { name: common.cancel })).toHaveFocus();
-
-    await userEvent.keyboard("{Enter}");
-    expect(onConfirm).not.toHaveBeenCalled();
-    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
-  });
-
-  it("is busy while onConfirm runs, then closes", async () => {
-    let finish = () => {};
-    const removing = new Promise<void>((resolve) => {
-      finish = resolve;
-    });
-    const onConfirm = vi.fn(() => removing);
-    render(<RemoveStudentDialog onConfirm={onConfirm} />);
-
-    const remove = screen.getByRole("button", { name: "Remove" });
-    await userEvent.click(remove);
-    expect(onConfirm).toHaveBeenCalledOnce();
-    expect(remove).toHaveAttribute("aria-busy", "true");
-
-    await userEvent.click(remove);
-    expect(onConfirm).toHaveBeenCalledOnce();
-
-    await act(async () => {
-      finish();
-      await removing;
-    });
-    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
-  });
-
-  it("stays open when onConfirm fails, so the person can try again", async () => {
-    const onConfirm = vi.fn(() => Promise.reject(new Error("No internet")));
-    render(<RemoveStudentDialog onConfirm={onConfirm} />);
-
-    await userEvent.click(screen.getByRole("button", { name: "Remove" }));
-    await waitFor(() =>
-      expect(
-        screen.getByRole("button", { name: "Remove" })
-      ).not.toHaveAttribute("aria-busy")
-    );
-    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
   });
 });
