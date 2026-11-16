@@ -80,7 +80,10 @@ describe("the route tree", () => {
   it("sends a signed-out person from a page to login", async () => {
     const { router } = renderRoute("/plan");
     expect(
-      await screen.findByRole("heading", { level: 1, name: lang.pages.login })
+      await screen.findByRole("heading", {
+        level: 1,
+        name: lang.auth.loginTitle,
+      })
     ).toBeVisible();
     expect(router.state.location.search).toBe("?redirect=%2Fplan");
   });
@@ -137,7 +140,10 @@ describe("the route tree", () => {
     await user.click(signOut);
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: lang.pages.login })
+      await screen.findByRole("heading", {
+        level: 1,
+        name: lang.auth.loginTitle,
+      })
     ).toBeVisible();
     await waitFor(() => {
       expect(router.state.location.pathname).toBe("/login");

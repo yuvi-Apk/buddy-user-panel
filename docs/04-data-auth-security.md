@@ -75,7 +75,10 @@ leaves as `{ success: false, message, errors: [{ field, message }] }`.
 
 ## Session
 
-- People log in with email and password.
+- People log in with Google only, through the backend (no Google script in the app). The button
+  links to `GET /user/auth/google?redirect=…`; the backend sets the refresh cookie and sends the
+  person back to `/login?redirect=…`, or to `/login?error=google-cancelled|google-failed`.
+  Details in `src/modules/auth/google-sign-in.ts`.
 - The **access token** is kept in memory only. It is gone when the tab closes.
 - The **refresh token** is an httpOnly cookie. JavaScript cannot read it.
 - At start, one silent refresh restores the session. Route checks wait for it.

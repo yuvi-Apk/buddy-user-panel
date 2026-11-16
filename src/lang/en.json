@@ -94,6 +94,32 @@
     "devUi": "UI gallery",
     "devSession": "Dev sessions"
   },
+  "auth": {
+    "loginTitle": "Welcome to Buddy",
+    "loginIntro": "Log in or create your account in one step.",
+    "benefitsLabel": "What you get",
+    "benefitPlan": "A study plan for every day",
+    "benefitPractice": "Practice for the topics that need it",
+    "benefitDoubts": "Answers to your doubts, any time",
+    "panelTitle": "Study a little every day. Buddy keeps track of the rest.",
+    "preview": {
+      "today": "Today",
+      "progress": "Today's progress",
+      "doneTopic": "Linear equations",
+      "done": "Done",
+      "nextTopic": "Photosynthesis",
+      "upNext": "Up next",
+      "practiceTopic": "Fractions",
+      "addedToPlan": "Added to your plan"
+    },
+    "continueWithGoogle": "Continue with Google",
+    "newHere": "New here? Continuing with Google creates your account.",
+    "offlineHint": "You're offline. Connect to the internet to log in.",
+    "googleCancelledTitle": "Google sign-in was closed",
+    "googleCancelledBody": "No problem. Continue with Google when you're ready.",
+    "googleFailedTitle": "We couldn't log you in",
+    "googleFailedBody": "Something went wrong with Google sign-in. Please try again."
+  },
   "roles": {
     "individual": "Individual",
     "student": "Student",

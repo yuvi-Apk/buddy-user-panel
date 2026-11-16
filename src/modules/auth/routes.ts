@@ -1,4 +1,4 @@
-// Log in, sign up, email verification and password reset (email and password only).
+// Log in (with Google only), plus the sign-up, email verification and password reset placeholders.
 import { createPageRoute } from "@/routing/page-route";
 
 export const authRoutes = [
