@@ -9,6 +9,8 @@
 // motion or when the browser can't tell us the panel is in view. Decorative only (hidden from
 // screen readers; the toy is pointer-only and says nothing the page doesn't); built from the
 // shared components so it follows the theme and mode.
+// On the login page, pointing at a benefit (`data-benefit` inside a `group/login` parent) lifts the
+// part of the picture that shows it: the plan, the practice card or the doubt note.
 //   <StudyPreview />
 import {
   Circle,
@@ -37,11 +39,30 @@ const RING_TO = 60;
 const RING_PER_TICK = 6;
 const RING_MS = 700;
 /** Widths of the grey lines in the rows nobody needs to read. */
-const PLACEHOLDER_WIDTHS = ["w-40", "w-28", "w-36", "w-24", "w-32", "w-20"];
+const PLACEHOLDER_WIDTHS = [
+  "w-40",
+  "w-28",
+  "w-36",
+  "w-24",
+  "w-32",
+  "w-20",
+  "w-44",
+  "w-30",
+  "w-16",
+];
 
 /** A small card on the brand panel: tilted at rest, it straightens and lifts under the pointer. */
 const stickerClasses =
-  "absolute hidden items-center gap-2 rounded-card border border-border bg-popover p-3 text-popover-foreground shadow-overlay transition-[opacity,translate,rotate] duration-250 ease-out hover:-translate-y-1 hover:rotate-0 sm:flex";
+  "absolute hidden items-center gap-2 rounded-card border border-border bg-popover p-3 text-popover-foreground shadow-overlay transition-[opacity,translate,rotate,scale] duration-250 ease-out hover:-translate-y-1 hover:rotate-0 sm:flex";
+
+/** Lifted while the matching benefit on the login page is pointed at. */
+const liftedForBenefit = {
+  plan: "group-has-[[data-benefit=plan]:hover]/login:-translate-y-1 group-has-[[data-benefit=plan]:hover]/login:outline-primary-foreground",
+  practice:
+    "group-has-[[data-benefit=practice]:hover]/login:-translate-y-1 group-has-[[data-benefit=practice]:hover]/login:scale-105 group-has-[[data-benefit=practice]:hover]/login:rotate-0",
+  doubts:
+    "group-has-[[data-benefit=doubts]:hover]/login:-translate-y-1 group-has-[[data-benefit=doubts]:hover]/login:scale-105 group-has-[[data-benefit=doubts]:hover]/login:rotate-0",
+};
 
 function prefersReducedMotion(): boolean {
   return (
@@ -204,10 +225,16 @@ export function StudyPreview() {
     <div
       ref={rootRef}
       aria-hidden
-      className="relative mx-auto h-full w-full max-w-lg select-none"
+      className="relative mx-auto h-full w-full max-w-lg select-none lg:max-w-md"
     >
       {/* The plan: as tall as its box, which runs past the panel's foot, so it is always cropped. */}
-      <div className="h-full overflow-hidden rounded-card border border-border bg-card text-card-foreground shadow-overlay motion-safe:animate-in motion-safe:duration-250 motion-safe:fade-in motion-safe:slide-in-from-bottom-3">
+      <div
+        className={cn(
+          "h-full overflow-hidden rounded-card border border-border bg-card text-card-foreground shadow-overlay outline-2 outline-offset-4 outline-transparent transition-[translate,outline-color] duration-250 ease-out",
+          liftedForBenefit.plan,
+          "motion-safe:animate-in motion-safe:duration-250 motion-safe:fade-in motion-safe:slide-in-from-bottom-3"
+        )}
+      >
         <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
           <div className="flex flex-col gap-2">
             <span className="font-display text-xl font-semibold">
@@ -325,6 +352,7 @@ export function StudyPreview() {
       <div
         className={cn(
           stickerClasses,
+          liftedForBenefit.practice,
           "top-64 -left-10 flex-col items-start",
           isCardShown
             ? "translate-x-0 -rotate-2 opacity-100"
@@ -337,11 +365,13 @@ export function StudyPreview() {
         </span>
       </div>
 
-      {/* A second note on the right edge, over the grey rows' empty ends: doubts get answers. */}
+      {/* A second note on the right edge, over the grey rows' empty ends: doubts get answers. Held
+          from the bottom (the box runs 2rem past the panel's foot), so it is never cropped. */}
       <div
         className={cn(
           stickerClasses,
-          "top-[24rem] -right-8",
+          liftedForBenefit.doubts,
+          "-right-8 bottom-14",
           isDoubtShown
             ? "translate-x-0 rotate-3 opacity-100"
             : "pointer-events-none translate-x-2 rotate-3 opacity-0"

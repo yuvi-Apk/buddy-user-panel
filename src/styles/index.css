@@ -56,6 +56,18 @@
   /* Widths: comfortable reading lines, and the app's content column on laptops. */
   --container-reading: 68ch;
   --container-content: 70rem;
+
+  /* A line that draws itself once (an SVG path with pathLength="1" and stroke-dasharray: 1). */
+  --animate-draw-line: draw-line 1.4s ease-out 0.3s both;
+
+  @keyframes draw-line {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
 }
 
 /*
