@@ -63,6 +63,15 @@
   it (class `peer`) has focus, a value or a browser-filled value, or the label has `data-raised`.
   See components/ui/field.tsx.
 */
+/*
+  `text-trim` centers a short label on its letters (cap height to baseline), not on its line box,
+  so initials in a circle or a number in a ring sit in the middle. Use it only where the box size
+  is fixed by something else: browsers without `text-box` keep the normal line box.
+*/
+@utility text-trim {
+  text-box: trim-both cap alphabetic;
+}
+
 @custom-variant label-raised (&:where([data-raised], .peer:focus ~ *, .peer:not(:placeholder-shown) ~ *, .peer:autofill ~ *));
 
 /* Colors and shadows come from tokens.css, which switches them per theme and mode. */

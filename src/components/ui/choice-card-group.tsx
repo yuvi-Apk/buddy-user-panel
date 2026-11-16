@@ -74,7 +74,7 @@ export function ChoiceCardGroup({
             </span>
             <CircleCheck
               aria-hidden
-              className="size-5 shrink-0 text-primary opacity-0 group-data-[state=checked]:opacity-100"
+              className="size-5 shrink-0 text-primary opacity-0 transition-opacity duration-150 group-data-[state=checked]:opacity-100"
             />
           </RadioGroupPrimitive.Item>
         ))}

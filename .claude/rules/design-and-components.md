@@ -43,6 +43,14 @@ variants, `cn`, `data-slot`), but the look is ours: it must not look like stock 
 - Fonts: Lexend for headings, Atkinson Hyperlegible Next for text, both self-hosted. Text is 16px,
   never under 14px. Long reading text sits in `<Page width="reading">`.
 - Motion is 150–250ms and stops under `prefers-reduced-motion`.
+- Every state change moves, nothing pops: a mark (tick, radio dot) stays mounted and fades and
+  scales in (`forceMount` + `data-[state]`); a chosen option's highlight slides to it; a label or
+  icon that changes crossfades in one slot; new content opens its height and carries what is
+  below it.
+- A control keeps its size when its state changes: a loading `Button` covers its label with the
+  spinner instead of adding one beside it.
+- A short label centered in a fixed box (initials, a ring's number) uses `text-trim`, so it sits
+  on its letters, not its line box.
 
 ## Components
 

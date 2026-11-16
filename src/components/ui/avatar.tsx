@@ -48,7 +48,9 @@ export function Avatar({
         />
       ) : null}
       <AvatarPrimitive.Fallback>
-        <span aria-hidden>{getInitials(name)}</span>
+        <span aria-hidden className="text-trim">
+          {getInitials(name)}
+        </span>
         <span className="sr-only">{name}</span>
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>

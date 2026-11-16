@@ -38,7 +38,10 @@ export function Checkbox({
         )}
         {...props}
       >
-        <CheckboxPrimitive.Indicator>
+        <CheckboxPrimitive.Indicator
+          forceMount
+          className="transition-[opacity,scale] duration-150 ease-out data-[state=unchecked]:scale-50 data-[state=unchecked]:opacity-0"
+        >
           <Check aria-hidden className="size-4" strokeWidth={3} />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>

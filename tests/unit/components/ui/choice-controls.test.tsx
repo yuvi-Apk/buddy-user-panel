@@ -41,6 +41,19 @@ describe("Checkbox", () => {
   });
 });
 
+describe("Checkbox mark", () => {
+  it("stays in place and changes state, so it can fade in and out", async () => {
+    const { container } = render(<Checkbox label="Remember me" />);
+    const mark = () => container.querySelector("button [data-state]");
+    expect(mark()).toHaveAttribute("data-state", "unchecked");
+
+    await userEvent.click(
+      screen.getByRole("checkbox", { name: "Remember me" })
+    );
+    expect(mark()).toHaveAttribute("data-state", "checked");
+  });
+});
+
 describe("Switch", () => {
   it("turns on and off, by click and with the Space key", async () => {
     const onCheckedChange = vi.fn();
@@ -150,5 +163,34 @@ describe("SegmentedControl", () => {
       expect(screen.getByRole("radio", { name: "Dark" })).toBeChecked()
     );
     await userEvent.keyboard("{/ArrowLeft}");
+  });
+
+  it("has one highlight, hidden only when no option matches the value", () => {
+    const options = [
+      { value: "light", label: "Light" },
+      { value: "dark", label: "Dark" },
+    ];
+    const highlight = (container: HTMLElement) =>
+      container.querySelector('[data-slot="segmented-control-highlight"]');
+
+    const { container, rerender } = render(
+      <SegmentedControl
+        label="Mode"
+        value="dark"
+        onValueChange={vi.fn()}
+        options={options}
+      />
+    );
+    expect(highlight(container)).not.toHaveClass("opacity-0");
+
+    rerender(
+      <SegmentedControl
+        label="Mode"
+        value="sepia"
+        onValueChange={vi.fn()}
+        options={options}
+      />
+    );
+    expect(highlight(container)).toHaveClass("opacity-0");
   });
 });

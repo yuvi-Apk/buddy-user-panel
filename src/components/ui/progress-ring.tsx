@@ -88,7 +88,7 @@ export function ProgressRing({
       </svg>
       <span
         aria-hidden
-        className={cn("absolute font-display font-semibold tabular-nums", text)}
+        className={cn("absolute font-display font-semibold text-trim", text)}
       >
         {fill(lang.ui.percent, { value: percent })}
       </span>

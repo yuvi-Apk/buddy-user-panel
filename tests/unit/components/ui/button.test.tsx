@@ -36,6 +36,21 @@ describe("Button", () => {
     expect(button).toHaveFocus();
   });
 
+  it("while loading, the spinner takes the label's place and the label stays its name", () => {
+    const { container, rerender } = render(<Button>Save</Button>);
+    expect(
+      container.querySelector('[data-slot="button-spinner"]')
+    ).not.toBeInTheDocument();
+
+    rerender(<Button loading>Save</Button>);
+    expect(
+      container.querySelector('[data-slot="button-spinner"]')
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save" })).toHaveTextContent(
+      "Save"
+    );
+  });
+
   it("while loading, a submit button does not send its form again", async () => {
     const onSubmit = vi.fn((event: { preventDefault: () => void }) => {
       event.preventDefault();

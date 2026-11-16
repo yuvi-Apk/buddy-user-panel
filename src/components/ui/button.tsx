@@ -2,7 +2,8 @@
 //
 //   <Button onClick={save}>{lang.common.save}</Button>
 //   <Button variant="outline" size="sm">…</Button>
-//   <Button loading={isSaving}>…</Button>            busy: spinner, clicks ignored, focus kept
+//   <Button loading={isSaving}>…</Button>            busy: the spinner takes the label's place (same
+//                                                    width), clicks ignored, focus kept
 //   <IconButton label={lang.common.close} icon={<X />} />
 //   <Button asChild><Link to="/plan">…</Link></Button>   a link that looks like a button
 import { cva, type VariantProps } from "class-variance-authority";
@@ -14,7 +15,7 @@ import { Spinner } from "./spinner";
 const buttonVariants = cva(
   [
     "relative inline-flex shrink-0 items-center justify-center gap-2 rounded-control font-semibold whitespace-nowrap select-none",
-    "transition-colors duration-150 ease-out",
+    "transition-[color,background-color,border-color,translate] duration-150 ease-out motion-safe:active:translate-y-px",
     "disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-progress",
     "[&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0",
   ],
@@ -80,8 +81,23 @@ export function Button({
       onClick={loading ? (event) => event.preventDefault() : onClick}
       {...props}
     >
-      {loading ? <Spinner /> : null}
-      {children}
+      {/* The label stays in place (and in the accessible name) while the spinner covers it. */}
+      <span
+        className={cn(
+          "inline-flex items-center justify-center gap-2 transition-opacity duration-150",
+          loading && "opacity-0"
+        )}
+      >
+        {children}
+      </span>
+      {loading ? (
+        <span
+          data-slot="button-spinner"
+          className="absolute inset-0 flex items-center justify-center motion-safe:animate-in motion-safe:duration-150 motion-safe:fade-in-0"
+        >
+          <Spinner />
+        </span>
+      ) : null}
     </button>
   );
 }

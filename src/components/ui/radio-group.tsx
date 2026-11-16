@@ -73,7 +73,10 @@ export function RadioGroup({
                   "disabled:opacity-50 data-[state=checked]:border-primary"
                 )}
               >
-                <RadioGroupPrimitive.Indicator className="size-2.5 rounded-full bg-primary" />
+                <RadioGroupPrimitive.Indicator
+                  forceMount
+                  className="size-2.5 rounded-full bg-primary transition-[opacity,scale] duration-150 ease-out data-[state=unchecked]:scale-50 data-[state=unchecked]:opacity-0"
+                />
               </RadioGroupPrimitive.Item>
               <div className="flex flex-col gap-0.5 peer-disabled:opacity-50">
                 <label htmlFor={optionId} className="text-base text-foreground">

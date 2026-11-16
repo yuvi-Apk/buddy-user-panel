@@ -38,6 +38,7 @@ Rules: `.claude/rules/design-and-components.md`. Guide for people: `docs/03-desi
 
 - [ ] No existing component could do it with a variant
 - [ ] shadcn naming: `variant`, `default`, `data-slot`, `cn`
+- [ ] Nothing pops: state changes fade, slide or open their height; the size stays when state changes
 - [ ] Only tokens; `pnpm test tests/project-rules` passes (colors and contrast)
 - [ ] Works in all four themes, light and dark; looked at in `/dev/ui`
 - [ ] Meaning is never shown by color alone
