@@ -3,11 +3,20 @@
 //   1. "Photosynthesis" is done: its tick, badge and highlight change, the ring counts 40% → 60%.
 //   2. A card says Buddy found a topic that needs practice ("Fractions").
 //   3. Fractions opens into the plan as the next task; the rows below make room.
-// The last frame is the picture: it stays, and it is all that shows with reduced motion or when
-// the browser can't tell us the panel is in view. Decorative only (hidden from screen readers);
-// built from the shared components so it follows the theme and mode.
+//   4. A note says a doubt was answered, and a "Try it" chip invites a tap.
+// Then it is a toy: tapping a grey task ticks it and the ring rolls up; the tilted cards straighten
+// when the pointer is on them. The last frame is the picture: it is all that shows with reduced
+// motion or when the browser can't tell us the panel is in view. Decorative only (hidden from
+// screen readers; the toy is pointer-only and says nothing the page doesn't); built from the
+// shared components so it follows the theme and mode.
 //   <StudyPreview />
-import { Circle, CircleCheck, CircleDot } from "lucide-react";
+import {
+  Circle,
+  CircleCheck,
+  CircleDot,
+  MessageCircleQuestion,
+  Pointer,
+} from "lucide-react";
 import {
   type ReactNode,
   type RefObject,
@@ -20,13 +29,19 @@ import { useLang } from "@/lang";
 import { cn } from "@/utils/cn";
 
 /** When each beat starts, in ms after the panel comes into view. */
-const BEATS = [900, 2300, 3100] as const;
+const BEATS = [900, 2300, 3100, 3900] as const;
 const LAST_STEP = BEATS.length;
 const RING_FROM = 40;
 const RING_TO = 60;
+/** How much the ring grows for each grey task ticked in the toy. */
+const RING_PER_TICK = 6;
 const RING_MS = 700;
 /** Widths of the grey lines in the rows nobody needs to read. */
 const PLACEHOLDER_WIDTHS = ["w-40", "w-28", "w-36", "w-24", "w-32", "w-20"];
+
+/** A small card on the brand panel: tilted at rest, it straightens and lifts under the pointer. */
+const stickerClasses =
+  "absolute hidden items-center gap-2 rounded-card border border-border bg-popover p-3 text-popover-foreground shadow-overlay transition-[opacity,translate,rotate] duration-250 ease-out hover:-translate-y-1 hover:rotate-0 sm:flex";
 
 function prefersReducedMotion(): boolean {
   return (
@@ -72,25 +87,62 @@ function useStepsWhenInView(ref: RefObject<HTMLElement | null>): {
   return { step, isPlaying: canPlay };
 }
 
-/** Counts from `from` to `to` once `isRunning` turns true, so the ring's number rolls. */
-function useCountUp(from: number, to: number, isRunning: boolean): number {
-  const [value, setValue] = useState(from);
+/**
+ * Rolls the shown number to `target` whenever it changes, from wherever it is now. Without
+ * `shouldAnimate` (reduced motion) it is just `target`.
+ */
+function useRollingNumber(target: number, shouldAnimate: boolean): number {
+  const [shown, setShown] = useState(target);
+  const shownRef = useRef(target);
 
   useEffect(() => {
-    if (!isRunning) return;
+    if (!shouldAnimate) return;
+    const from = shownRef.current;
+    if (from === target) return;
     let frame = 0;
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / RING_MS, 1);
       const eased = 1 - (1 - t) ** 3;
-      setValue(Math.round(from + (to - from) * eased));
+      shownRef.current = Math.round(from + (target - from) * eased);
+      setShown(shownRef.current);
       if (t < 1) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [from, to, isRunning]);
+  }, [target, shouldAnimate]);
 
-  return isRunning ? value : from;
+  return shouldAnimate ? shown : target;
+}
+
+/**
+ * Which grey tasks are ticked. Taps are read from the root with one listener, so the rows stay
+ * plain list items (the toy is decorative and pointer-only).
+ */
+function useTickedRows(ref: RefObject<HTMLElement | null>): boolean[] {
+  const [ticked, setTicked] = useState(() =>
+    PLACEHOLDER_WIDTHS.map(() => false)
+  );
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const onClick = (event: MouseEvent) => {
+      const row =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>("[data-tick-row]")
+          : null;
+      const index = Number(row?.dataset.tickRow);
+      if (!row || Number.isNaN(index)) return;
+      setTicked((rows) =>
+        rows.map((isTicked, at) => (at === index ? !isTicked : isTicked))
+      );
+    };
+    element.addEventListener("click", onClick);
+    return () => element.removeEventListener("click", onClick);
+  }, [ref]);
+
+  return ticked;
 }
 
 /** Two things in one place; the shown one fades in over the other, so nothing jumps. */
@@ -104,11 +156,15 @@ function Crossfade({
   second: ReactNode;
 }) {
   const layer =
-    "col-start-1 row-start-1 flex items-center justify-end transition-opacity duration-200";
+    "col-start-1 row-start-1 flex items-center justify-end transition-[opacity,scale] duration-200";
   return (
     <span className="grid shrink-0">
-      <span className={cn(layer, showSecond && "opacity-0")}>{first}</span>
-      <span className={cn(layer, !showSecond && "opacity-0")}>{second}</span>
+      <span className={cn(layer, showSecond && "scale-75 opacity-0")}>
+        {first}
+      </span>
+      <span className={cn(layer, !showSecond && "scale-75 opacity-0")}>
+        {second}
+      </span>
     </span>
   );
 }
@@ -127,11 +183,22 @@ export function StudyPreview() {
   const { preview } = useLang().auth;
   const rootRef = useRef<HTMLDivElement>(null);
   const { step, isPlaying } = useStepsWhenInView(rootRef);
+  const ticked = useTickedRows(rootRef);
   const isNextDone = step >= 1;
   const isCardShown = step >= 2;
   const isPracticeAdded = step >= 3;
-  const countedRing = useCountUp(RING_FROM, RING_TO, isPlaying && isNextDone);
-  const ringValue = isPlaying ? countedRing : RING_TO;
+  const isDoubtShown = step >= 4;
+  const tickCount = ticked.filter(Boolean).length;
+  const ringTarget = Math.min(
+    (isNextDone ? RING_TO : RING_FROM) + tickCount * RING_PER_TICK,
+    100
+  );
+  const ringValue = useRollingNumber(
+    ringTarget,
+    isPlaying && !prefersReducedMotion()
+  );
+  // The invitation shows once the story is told, and leaves after the first tick.
+  const isHintShown = isDoubtShown && tickCount === 0;
 
   return (
     <div
@@ -214,30 +281,76 @@ export function StudyPreview() {
             </div>
           </li>
 
-          {PLACEHOLDER_WIDTHS.map((width) => (
+          {PLACEHOLDER_WIDTHS.map((width, index) => (
             <li
               key={width}
-              className={cn(rowClasses, "mt-1 border-transparent")}
+              data-tick-row={index}
+              className={cn(
+                rowClasses,
+                "mt-1 cursor-pointer border-transparent hover:border-border hover:bg-muted/50 motion-safe:active:translate-y-px"
+              )}
             >
-              <Circle className="size-5 shrink-0 text-muted-foreground" />
-              <PlaceholderLine className={width} />
+              <Crossfade
+                showSecond={ticked[index] ?? false}
+                first={<Circle className="size-5 text-muted-foreground" />}
+                second={<CircleCheck className="size-5 text-progress" />}
+              />
+              <PlaceholderLine
+                className={cn(
+                  width,
+                  "transition-opacity duration-200",
+                  ticked[index] && "opacity-40"
+                )}
+              />
             </li>
           ))}
         </ul>
       </div>
 
+      {/* "Try it": a chip on the plan's top edge, half outside, inviting the first tap. */}
+      <span
+        className={cn(
+          "absolute -top-4 right-8 flex items-center gap-2 rounded-full border border-border bg-popover px-3 py-1.5 text-sm font-semibold text-popover-foreground shadow-overlay transition-[opacity,translate,rotate] duration-250 ease-out",
+          isHintShown
+            ? "rotate-2 opacity-100"
+            : "pointer-events-none translate-y-1 rotate-2 opacity-0"
+        )}
+      >
+        <Pointer className="size-4 text-primary" />
+        {preview.tryIt}
+      </span>
+
       {/* The satellite: Buddy found a weak topic and put it in the plan, just above. It straddles
           the plan's left edge; left out on narrow phones, where it would cover the plan. */}
       <div
         className={cn(
-          "absolute top-64 -left-10 hidden flex-col items-start gap-2 rounded-card border border-border bg-popover p-3 text-popover-foreground shadow-overlay transition-[opacity,translate] duration-250 ease-out sm:flex",
-          isCardShown ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
+          stickerClasses,
+          "top-64 -left-10 flex-col items-start",
+          isCardShown
+            ? "translate-x-0 -rotate-2 opacity-100"
+            : "pointer-events-none -translate-x-2 -rotate-2 opacity-0"
         )}
       >
         <TopicChip name={preview.practiceTopic} strength="needs-practice" />
         <span className="px-1 text-sm text-muted-foreground">
           {preview.addedToPlan}
         </span>
+      </div>
+
+      {/* A second note on the right edge, over the grey rows' empty ends: doubts get answers. */}
+      <div
+        className={cn(
+          stickerClasses,
+          "top-[24rem] -right-8",
+          isDoubtShown
+            ? "translate-x-0 rotate-3 opacity-100"
+            : "pointer-events-none translate-x-2 rotate-3 opacity-0"
+        )}
+      >
+        <span className="flex size-8 items-center justify-center rounded-control bg-primary-soft text-primary-soft-foreground">
+          <MessageCircleQuestion className="size-4" />
+        </span>
+        <span className="text-sm font-semibold">{preview.doubtAnswered}</span>
       </div>
     </div>
   );

@@ -2,8 +2,10 @@
 // account. How the redirect works: ../google-sign-in.ts.
 //
 // Laptop: the login on the left, a picture of the app on a brand panel on the right.
-// Phone: the login first, the panel below it, cropped.
+// Phone: the login first, the panel below it, cropped. On a pointer screen the panel's dots light
+// up around the pointer.
 import { CalendarCheck, MessageCircleQuestion, Target } from "lucide-react";
+import { type RefObject, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router";
 import { PageHeader } from "@/components/layout";
 import { Alert, Button } from "@/components/ui";
@@ -13,12 +15,36 @@ import { GoogleMark } from "../components/google-mark";
 import { StudyPreview } from "../components/study-preview";
 import { getGoogleSignInUrl, readGoogleSignInError } from "../google-sign-in";
 
+/**
+ * Keeps `--spot-x` / `--spot-y` on the element at the pointer, for a light that follows it. Only on
+ * screens with a hovering pointer and without reduced motion.
+ */
+function usePointerSpot(ref: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const element = ref.current;
+    if (!element || typeof window.matchMedia !== "function") return;
+    const canFollow =
+      window.matchMedia("(hover: hover)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!canFollow) return;
+    const onMove = (event: PointerEvent) => {
+      const box = element.getBoundingClientRect();
+      element.style.setProperty("--spot-x", `${event.clientX - box.left}px`);
+      element.style.setProperty("--spot-y", `${event.clientY - box.top}px`);
+    };
+    element.addEventListener("pointermove", onMove);
+    return () => element.removeEventListener("pointermove", onMove);
+  }, [ref]);
+}
+
 export function LoginPage() {
   const lang = useLang();
   const isOnline = useOnlineStatus();
   const [searchParams] = useSearchParams();
   const signInError = readGoogleSignInError(searchParams.get("error"));
   const googleSignInUrl = getGoogleSignInUrl(searchParams.get("redirect"));
+  const panelRef = useRef<HTMLDivElement>(null);
+  usePointerSpot(panelRef);
 
   const benefits = [
     { icon: CalendarCheck, text: lang.auth.benefitPlan },
@@ -83,15 +109,28 @@ export function LoginPage() {
         </div>
       </div>
 
-      <div className="relative isolate flex h-[30rem] flex-col overflow-hidden rounded-sheet bg-primary text-primary-foreground lg:h-auto">
+      <div
+        ref={panelRef}
+        className="group/panel relative isolate flex h-[30rem] flex-col overflow-hidden rounded-sheet bg-primary text-primary-foreground lg:h-auto"
+      >
         {/* Dot paper, in the panel's own text color. */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10 bg-[radial-gradient(var(--color-primary-foreground)_1px,transparent_1px)] bg-size-[22px_22px] opacity-15"
         />
-        <p className="max-w-md px-6 pt-8 font-display text-2xl font-semibold text-balance md:px-10 md:pt-10 lg:px-12 lg:pt-16 lg:text-3xl">
-          {lang.auth.panelTitle}
-        </p>
+        {/* The same dots, brighter, seen only in a circle around the pointer. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(var(--color-primary-foreground)_1.5px,transparent_1.5px)] bg-size-[22px_22px] opacity-0 transition-opacity duration-250 [mask-image:radial-gradient(180px_circle_at_var(--spot-x,50%)_var(--spot-y,50%),black,transparent)] group-hover/panel:opacity-60"
+        />
+        <div className="flex max-w-md flex-col items-start gap-4 px-6 pt-8 md:px-10 md:pt-10 lg:px-12 lg:pt-16">
+          <span className="-rotate-2 rounded-full border border-primary-foreground/40 px-3 py-1 text-sm font-semibold transition-[rotate] duration-250 ease-out hover:rotate-0">
+            {lang.auth.panelEyebrow}
+          </span>
+          <p className="font-display text-2xl font-semibold text-balance lg:text-3xl">
+            {lang.auth.panelTitle}
+          </p>
+        </div>
         {/* The picture hangs from the top of what is left and is cropped at the panel's foot. */}
         <div className="relative mx-6 mt-10 flex-1 md:mx-10 lg:mx-12 lg:mt-14">
           <div className="absolute inset-x-0 top-0 -bottom-8">

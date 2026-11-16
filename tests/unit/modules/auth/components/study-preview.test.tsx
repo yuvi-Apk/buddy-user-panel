@@ -33,6 +33,24 @@ describe("StudyPreview", () => {
     );
   });
 
+  it("ticks a grey task when it is tapped, and the ring grows", () => {
+    vi.stubGlobal("IntersectionObserver", undefined);
+    const { container } = renderWithProviders(<StudyPreview />);
+    const ring = screen.getByRole("progressbar", { hidden: true });
+    const firstGreyRow = container.querySelector("[data-tick-row='0']");
+    if (!(firstGreyRow instanceof HTMLElement)) throw new Error("No grey row");
+
+    act(() => {
+      firstGreyRow.click();
+    });
+    expect(ring).toHaveAttribute("aria-valuenow", "66");
+
+    act(() => {
+      firstGreyRow.click();
+    });
+    expect(ring).toHaveAttribute("aria-valuenow", "60");
+  });
+
   it("is hidden from screen readers", () => {
     vi.stubGlobal("IntersectionObserver", undefined);
     const { container } = renderWithProviders(<StudyPreview />);

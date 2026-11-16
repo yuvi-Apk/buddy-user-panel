@@ -101,6 +101,7 @@
     "benefitPlan": "A study plan for every day",
     "benefitPractice": "Practice for the topics that need it",
     "benefitDoubts": "Answers to your doubts, any time",
+    "panelEyebrow": "Your study partner",
     "panelTitle": "Study a little every day. Buddy keeps track of the rest.",
     "preview": {
       "today": "Today",
@@ -110,7 +111,9 @@
       "nextTopic": "Photosynthesis",
       "upNext": "Up next",
       "practiceTopic": "Fractions",
-      "addedToPlan": "Added to your plan"
+      "addedToPlan": "Added to your plan",
+      "doubtAnswered": "Your doubt is answered",
+      "tryIt": "Try it: tick a task"
     },
     "continueWithGoogle": "Continue with Google",
     "newHere": "New here? Continuing with Google creates your account.",
