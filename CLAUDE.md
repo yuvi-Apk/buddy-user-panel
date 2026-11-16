@@ -25,6 +25,8 @@ matching files. Guides for people are in `docs/`.
 
 - New module folder: `new-module` skill. New screen in a module: `add-page`.
 - Talking to the backend: `add-api-hook`. A new shared component: `add-ui-component`.
+- A product illustration or animated demo (onboarding, empty state, feature card): `stageshow`.
+  Build it from `@/components` and `tokens.css`, not its `kit/` or `stageshow.css`; no new package.
 - Tests for code that already exists, or "is this tested?": `write-tests`.
 - Look at every component at `/dev/ui`; sign in as any role at `/dev/session` (dev builds only).
 

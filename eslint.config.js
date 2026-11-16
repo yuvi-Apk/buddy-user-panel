@@ -122,6 +122,8 @@ export default defineConfig(
     "playwright-report/**",
     "test-results/**",
     "public/**",
+    // Third-party skill installed with `npx skills`: its examples are reference code, not app code.
+    ".claude/skills/stageshow/**",
   ]),
 
   // TypeScript, type-checked (the same base as the backend).

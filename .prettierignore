@@ -9,4 +9,5 @@ test-results
 .env.*
 
 pnpm-lock.yaml
+.claude/skills/stageshow
 public/icons
