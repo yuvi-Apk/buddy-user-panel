@@ -41,7 +41,12 @@ describe("GoogleCallbackPage", () => {
     const sentBody = answerSignIn(makeUser({ examCategory: "SCHOOL" }));
     const { router } = renderRoute(googleCallbackUrl("/topics"));
 
-    await screen.findByRole("heading", { level: 1, name: lang.nav.topics });
+    // Sign-in, then the topics page loads its code: slower than one second on a busy run.
+    await screen.findByRole(
+      "heading",
+      { level: 1, name: lang.nav.topics },
+      { timeout: 3000 }
+    );
     expect(router.state.location.pathname).toBe("/topics");
     expect(router.state.location.hash).toBe("");
     expect(Object.keys(sentBody() ?? {})).toEqual(["idToken"]);

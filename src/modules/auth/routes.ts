@@ -1,5 +1,4 @@
-// Log in with Google (the first sign-in creates the account) and Google's way back into the app,
-// plus the sign-up, email verification and password reset placeholders.
+// Log in with Google (the first sign-in creates the account) and Google's way back into the app.
 import { createPageRoute } from "@/routing/page-route";
 import { GOOGLE_CALLBACK_PATH } from "./google-sign-in";
 
@@ -18,36 +17,5 @@ export const authRoutes = [
         (file) => file.GoogleCallbackPage
       ),
     titleKey: "pages.signingIn",
-  }),
-  createPageRoute({
-    path: "/signup",
-    access: "guest",
-    page: () => import("./pages/signup-page").then((file) => file.SignupPage),
-    titleKey: "pages.signup",
-  }),
-  createPageRoute({
-    path: "/verify-email",
-    access: "public",
-    page: () =>
-      import("./pages/verify-email-page").then((file) => file.VerifyEmailPage),
-    titleKey: "pages.verifyEmail",
-  }),
-  createPageRoute({
-    path: "/forgot-password",
-    access: "guest",
-    page: () =>
-      import("./pages/forgot-password-page").then(
-        (file) => file.ForgotPasswordPage
-      ),
-    titleKey: "pages.forgotPassword",
-  }),
-  createPageRoute({
-    path: "/reset-password",
-    access: "guest",
-    page: () =>
-      import("./pages/reset-password-page").then(
-        (file) => file.ResetPasswordPage
-      ),
-    titleKey: "pages.resetPassword",
   }),
 ];

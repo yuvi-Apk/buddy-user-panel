@@ -63,4 +63,4 @@ createPageRoute({
 - Teachers see only their own classes; the server enforces it, the UI does not filter by ID.
 - After a membership change (approved, left, invite accepted), call
   `refreshAfterMembershipChange()` so the new token carries the new Organization.
-- Invite and reset tokens arrive in the link: read once, remove from the address bar, never log.
+- Invite tokens arrive in the link: read once, remove from the address bar, never log.

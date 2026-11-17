@@ -82,10 +82,6 @@
   },
   "pages": {
     "login": "Log in",
-    "signup": "Create your account",
-    "verifyEmail": "Verify your email",
-    "forgotPassword": "Forgot your password?",
-    "resetPassword": "Choose a new password",
     "onboarding": "Set up your studies",
     "invite": "Your invitation",
     "classDetail": "Class",

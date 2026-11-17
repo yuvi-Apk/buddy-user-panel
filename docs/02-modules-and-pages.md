@@ -71,8 +71,7 @@ or change, from their token. Never send an `organizationId` to say whose data yo
 
 | Path                                                                               | Who                         | Module                    |
 | ---------------------------------------------------------------------------------- | --------------------------- | ------------------------- |
-| `/login`, `/signup`, `/forgot-password`, `/reset-password`                         | Signed-out only             | `auth`                    |
-| `/verify-email`                                                                    | Anyone                      | `auth`                    |
+| `/login`, `/auth/google/callback`                                                  | Signed-out only             | `auth`                    |
 | `/onboarding`                                                                      | Individual, student         | `onboarding`              |
 | `/today`, `/plan`                                                                  | Individual, student         | `study-plan`              |
 | `/topics`                                                                          | Individual, student         | `topics`                  |
@@ -100,5 +99,5 @@ shows both lists. A test fails if a menu item points to a page its role cannot o
 - **Consent.** Moving into an Organization asks whether to share earlier study data. The default is
   not shared.
 - **Teachers** see only their own classes. The backend enforces that.
-- **Secret links.** Invite and password-reset tokens come in the link. Read them once, remove them
+- **Secret links.** Invite tokens come in the link. Read them once, remove them
   from the address bar, never log them.

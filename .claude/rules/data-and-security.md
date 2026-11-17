@@ -30,7 +30,7 @@ paths:
 
 - Every call names a Zod schema for `data`. Response schemas are tolerant (`z.object`), so a new
   backend field never breaks the app. Bodies the app sends are checked by the form's schema.
-- Calls made while signed out (login, sign-up, password reset) pass `requiresAuth: false`.
+- Calls made while signed out (Google sign-in) pass `requiresAuth: false`.
 - Never put `organizationId`, a user ID or a role in a request to choose whose data comes back.
 
 ## Errors

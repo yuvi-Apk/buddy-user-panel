@@ -71,7 +71,7 @@ describe("getRedirectPathIfBlocked", () => {
 
   it("lets anyone open public pages", () => {
     expect(
-      getRedirectPathIfBlocked("public", signedOut, at("/verify-email"))
+      getRedirectPathIfBlocked("public", signedOut, at("/invite/abc"))
     ).toBeNull();
   });
 });

@@ -25,7 +25,7 @@ export interface ApiRequestOptions {
   signal?: AbortSignal;
   timeoutMs?: number;
   /**
-   * false for calls made while signed out (login, sign-up, password reset): no token is sent and
+   * false for calls made while signed out (Google sign-in): no token is sent and
    * a 401 is just an answer, not a reason to refresh.
    */
   requiresAuth?: boolean;
