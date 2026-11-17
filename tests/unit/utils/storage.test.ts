@@ -14,6 +14,7 @@ describe("storage", () => {
       theme: "buddy.theme",
       language: "buddy.language",
       signedOut: "buddy.signed-out",
+      googleSignIn: "buddy.google-sign-in",
     });
   });
 

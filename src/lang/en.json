@@ -92,7 +92,8 @@
     "studentDetail": "Student",
     "notFound": "Page not found",
     "devUi": "UI gallery",
-    "devSession": "Dev sessions"
+    "devSession": "Dev sessions",
+    "signingIn": "Logging you in"
   },
   "auth": {
     "loginTitle": "Welcome to Buddy",
@@ -121,7 +122,8 @@
     "googleCancelledTitle": "Google sign-in was closed",
     "googleCancelledBody": "No problem. Continue with Google when you're ready.",
     "googleFailedTitle": "We couldn't log you in",
-    "googleFailedBody": "Something went wrong with Google sign-in. Please try again."
+    "googleFailedBody": "Something went wrong with Google sign-in. Please try again.",
+    "signingIn": "Logging you in…"
   },
   "roles": {
     "individual": "Individual",
@@ -153,5 +155,23 @@
     "installButton": "Install Buddy",
     "iosHint": "On iPhone or iPad: tap the Share button, then \"Add to Home Screen\".",
     "installed": "Buddy is installed on this device."
+  },
+  "onboarding": {
+    "title": "How will you study with Buddy?",
+    "intro": "Pick one to start. You can change this later.",
+    "choiceLabel": "I'm studying",
+    "onMyOwnTitle": "On my own",
+    "onMyOwnBody": "Get a study plan for your exam. You can join your school or coaching later.",
+    "withOrganizationTitle": "With my school or coaching",
+    "withOrganizationBody": "Ask to join with the code they gave you. You keep studying on your own until they accept.",
+    "inviteHint": "Got an invite email from your school or coaching? Open the link in it to join.",
+    "continue": "Continue"
+  },
+  "account": {
+    "title": "Your account",
+    "description": "Signed in with Google.",
+    "signOutEverywhere": "Sign out of all devices",
+    "signOutEverywhereBody": "Use this if you signed in on a shared or lost phone or computer. You'll need to log in again everywhere, this device too.",
+    "signOutEverywhereConfirm": "Sign out everywhere"
   }
 }

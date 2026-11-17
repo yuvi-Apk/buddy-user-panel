@@ -13,6 +13,15 @@ const envSchema = z.object({
     .min(1)
     .default("/api/v1")
     .transform((url) => url.replace(/\/+$/, "")),
+  /**
+   * The Google OAuth client ID ("…apps.googleusercontent.com"). Public by design. It must also be
+   * in the backend's GOOGLE_CLIENT_IDS. Without it, "Continue with Google" shows an error.
+   */
+  VITE_GOOGLE_CLIENT_ID: z
+    .string()
+    .trim()
+    .optional()
+    .transform((clientId) => clientId || null),
 });
 
 /** Checks the raw values and stops the app with a clear message when one is wrong. */
@@ -28,6 +37,7 @@ const parsedEnv = parseEnv(import.meta.env);
 
 export const env = {
   apiBaseUrl: parsedEnv.VITE_API_BASE_URL,
+  googleClientId: parsedEnv.VITE_GOOGLE_CLIENT_ID,
   /** True in `pnpm dev` and in tests. */
   isDev: import.meta.env.DEV,
   /** True while `pnpm test` runs. */

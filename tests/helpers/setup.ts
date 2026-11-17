@@ -41,6 +41,7 @@ afterEach(() => {
   cleanup();
   resetMediaQueries();
   window.localStorage.clear();
+  window.sessionStorage.clear();
   server.resetHandlers();
   // Each test starts as the app does: session unknown ("restoring"), nothing cached.
   resetSessionForTests();

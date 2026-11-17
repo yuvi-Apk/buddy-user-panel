@@ -22,30 +22,15 @@ describe("LoginPage", () => {
         name: lang.auth.loginTitle,
       })
     ).toBeVisible();
-    expect(await googleLink()).toHaveAttribute(
-      "href",
-      "/api/v1/user/auth/google"
+    const href = (await googleLink()).getAttribute("href") ?? "";
+    const url = new URL(href);
+    expect(url.origin).toBe("https://accounts.google.com");
+    expect(url.searchParams.get("response_type")).toBe("id_token");
+    expect(url.searchParams.get("redirect_uri")).toBe(
+      `${window.location.origin}/auth/google/callback`
     );
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-  });
-
-  it("passes a same-site redirect on to the backend", async () => {
-    renderRoute("/login?redirect=%2Fplan%3Fweek%3D2");
-
-    expect(await googleLink()).toHaveAttribute(
-      "href",
-      "/api/v1/user/auth/google?redirect=%2Fplan%3Fweek%3D2"
-    );
-  });
-
-  it("drops a redirect to another site", async () => {
-    renderRoute("/login?redirect=https%3A%2F%2Fevil.example");
-
-    expect(await googleLink()).toHaveAttribute(
-      "href",
-      "/api/v1/user/auth/google"
-    );
   });
 
   it("explains calmly when the person closed Google sign-in", async () => {

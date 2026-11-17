@@ -6,7 +6,7 @@
 // up around the pointer, a growth line climbs behind the picture, and the left side's parts rise in
 // one after another (skipped with reduced motion).
 import { CalendarCheck, MessageCircleQuestion, Target } from "lucide-react";
-import { type RefObject, useEffect, useRef } from "react";
+import { type RefObject, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router";
 import { PageHeader } from "@/components/layout";
 import { Alert, Button } from "@/components/ui";
@@ -16,7 +16,10 @@ import { cn } from "@/utils/cn";
 import { GoogleMark } from "../components/google-mark";
 import { GrowthLine } from "../components/growth-line";
 import { StudyPreview } from "../components/study-preview";
-import { getGoogleSignInUrl, readGoogleSignInError } from "../google-sign-in";
+import {
+  createGoogleSignInRequest,
+  readGoogleSignInError,
+} from "../google-sign-in";
 
 /**
  * Keeps `--spot-x` / `--spot-y` on the element at the pointer, for a light that follows it. Only on
@@ -49,7 +52,11 @@ export function LoginPage() {
   const isOnline = useOnlineStatus();
   const [searchParams] = useSearchParams();
   const signInError = readGoogleSignInError(searchParams.get("error"));
-  const googleSignInUrl = getGoogleSignInUrl(searchParams.get("redirect"));
+  const redirect = searchParams.get("redirect");
+  const googleSignIn = useMemo(
+    () => createGoogleSignInRequest(redirect),
+    [redirect]
+  );
   const panelRef = useRef<HTMLDivElement>(null);
   usePointerSpot(panelRef);
 
@@ -89,7 +96,7 @@ export function LoginPage() {
           <div className={cn("flex flex-col gap-3", enterClasses, "delay-100")}>
             {isOnline ? (
               <Button asChild size="lg" fullWidth>
-                <a href={googleSignInUrl}>
+                <a href={googleSignIn.url} onClick={googleSignIn.remember}>
                   <GoogleMark />
                   {lang.auth.continueWithGoogle}
                 </a>

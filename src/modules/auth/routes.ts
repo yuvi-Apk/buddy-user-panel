@@ -1,5 +1,7 @@
-// Log in (with Google only), plus the sign-up, email verification and password reset placeholders.
+// Log in with Google (the first sign-in creates the account) and Google's way back into the app,
+// plus the sign-up, email verification and password reset placeholders.
 import { createPageRoute } from "@/routing/page-route";
+import { GOOGLE_CALLBACK_PATH } from "./google-sign-in";
 
 export const authRoutes = [
   createPageRoute({
@@ -7,6 +9,15 @@ export const authRoutes = [
     access: "guest",
     page: () => import("./pages/login-page").then((file) => file.LoginPage),
     titleKey: "pages.login",
+  }),
+  createPageRoute({
+    path: GOOGLE_CALLBACK_PATH,
+    access: "guest",
+    page: () =>
+      import("./pages/google-callback-page").then(
+        (file) => file.GoogleCallbackPage
+      ),
+    titleKey: "pages.signingIn",
   }),
   createPageRoute({
     path: "/signup",

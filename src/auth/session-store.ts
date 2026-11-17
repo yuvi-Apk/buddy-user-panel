@@ -7,9 +7,11 @@
 // status: "restoring" while the app starts and asks the server, then "signed-in" or "signed-out".
 // Route loaders wait for it with waitUntilSessionIsKnown().
 //
-// The schemas describe what the backend sends about the signed-in person:
-//   POST /user/auth/login, POST /user/auth/refresh → { accessToken, user }
-//   GET  /user/auth/me                             → user
+// The schemas describe what the backend sends about the signed-in person
+// (backend/src/modules/user-auth):
+//   POST /user/auth/google, POST /user/auth/refresh → { accessToken, user }
+//   GET  /user/auth/me                              → user
+// The refresh token never comes in a body: it is the httpOnly userRefreshToken cookie.
 import { z } from "zod";
 import { createStore, useStore } from "zustand";
 import { userRoleSchema } from "./roles";
@@ -26,15 +28,20 @@ export const pendingRequestSchema = z.object({
   status: z.string(),
 });
 
+/**
+ * The backend sends no role, Organization or pending request yet: until it does, everyone is
+ * INDIVIDUAL with none (a join request stays pending until approved, core-rules #11). When the
+ * backend adds these fields they are used as they come, with no change here.
+ */
 export const sessionUserSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
-  role: userRoleSchema,
-  emailVerifiedAt: z.string().nullable(),
+  role: userRoleSchema.default("INDIVIDUAL"),
+  /** null until the person has set up their studies (onboarding). */
   examCategory: z.string().nullable(),
-  organization: sessionOrganizationSchema.nullable(),
-  pendingRequest: pendingRequestSchema.nullable(),
+  organization: sessionOrganizationSchema.nullable().default(null),
+  pendingRequest: pendingRequestSchema.nullable().default(null),
 });
 
 export type SessionUser = z.output<typeof sessionUserSchema>;

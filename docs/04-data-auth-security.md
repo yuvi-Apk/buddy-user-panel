@@ -75,10 +75,12 @@ leaves as `{ success: false, message, errors: [{ field, message }] }`.
 
 ## Session
 
-- People log in with Google only, through the backend (no Google script in the app). The button
-  links to `GET /user/auth/google?redirect=…`; the backend sets the refresh cookie and sends the
-  person back to `/login?redirect=…`, or to `/login?error=google-cancelled|google-failed`.
-  Details in `src/modules/auth/google-sign-in.ts`.
+- People log in with Google only, with a plain redirect (no Google script in the app). The button
+  links to Google's sign-in page; Google sends the person back to `/auth/google/callback` with an
+  ID token, which the app checks (`state`, `nonce`) and sends to `POST /user/auth/google`. The
+  backend answers with the session and sets the refresh cookie. The first sign-in creates the
+  account and opens `/onboarding` (on my own, or with a school or coaching). Details in
+  `src/modules/auth/google-sign-in.ts`. Needs `VITE_GOOGLE_CLIENT_ID` (see `.env.sample`).
 - The **access token** is kept in memory only. It is gone when the tab closes.
 - The **refresh token** is an httpOnly cookie. JavaScript cannot read it.
 - At start, one silent refresh restores the session. Route checks wait for it.

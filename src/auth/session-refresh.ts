@@ -5,42 +5,55 @@
 // whole session, so two refreshes at the same time would sign the person out.
 import { isApiError } from "@/api/api-error";
 import { sendHttpRequest } from "@/api/http-request";
-import { sessionResponseSchema, markSignedIn } from "./session-store";
+import {
+  markSignedIn,
+  type SessionResponse,
+  sessionResponseSchema,
+} from "./session-store";
 
 export const AUTH_API_PATHS = {
+  googleSignIn: "/user/auth/google",
   refresh: "/user/auth/refresh",
   logout: "/user/auth/logout",
+  logoutAllDevices: "/user/auth/logout-all",
 } as const;
 
 const LOCK_NAME = "buddy.session-refresh";
 
-let refreshInProgress: Promise<boolean> | null = null;
+let refreshInProgress: Promise<SessionResponse | null> | null = null;
 
 /**
  * True when the server gave a new token (the session store now holds it); false when it refused
  * (the session is over). Network trouble throws an ApiError instead: nothing is known yet.
  * Calls made while a refresh is running share it.
  */
-export function refreshAccessToken(): Promise<boolean> {
-  refreshInProgress ??= runWithCrossTabLock(requestNewAccessToken).finally(
-    () => {
-      refreshInProgress = null;
-    }
-  );
+export async function refreshAccessToken(): Promise<boolean> {
+  const session = await requestFreshSession();
+  if (!session) return false;
+  markSignedIn(session.accessToken, session.user);
+  return true;
+}
+
+/**
+ * A new access token from the refresh cookie, without signing in with it (sign-out uses it to
+ * reach the server once more). null when the server refused: there is no session.
+ */
+export function requestFreshSession(): Promise<SessionResponse | null> {
+  refreshInProgress ??= runWithCrossTabLock(sendRefreshRequest).finally(() => {
+    refreshInProgress = null;
+  });
   return refreshInProgress;
 }
 
-async function requestNewAccessToken(): Promise<boolean> {
+async function sendRefreshRequest(): Promise<SessionResponse | null> {
   try {
-    const session = await sendHttpRequest(
+    return await sendHttpRequest(
       "POST",
       AUTH_API_PATHS.refresh,
       sessionResponseSchema
     );
-    markSignedIn(session.accessToken, session.user);
-    return true;
   } catch (error) {
-    if (isApiError(error) && error.isClientError) return false;
+    if (isApiError(error) && error.isClientError) return null;
     throw error;
   }
 }

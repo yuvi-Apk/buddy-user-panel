@@ -3,6 +3,7 @@
 // Only the keys below can be stored, and none of them may ever hold a token, an email, a name,
 // an answer or any study data: phones and school computers are often shared. Every call is safe
 // when storage is blocked or full (private browsing): reads give null, writes are skipped.
+// Keys in TAB_ONLY_KEYS live in sessionStorage (this tab, until it closes); the rest in localStorage.
 const KEYS = {
   /** { mode, accent } chosen in Settings → Appearance. Also read by public/theme-boot.js. */
   theme: "buddy.theme",
@@ -13,15 +14,26 @@ const KEYS = {
    * server sign-out is retried once back online (src/auth/session.ts). Only a flag.
    */
   signedOut: "buddy.signed-out",
+  /**
+   * { state, nonce, redirect } while the person is away at Google (src/modules/auth/google-sign-in.ts):
+   * two random values and a path in this app. Tab only, and removed when they come back.
+   */
+  googleSignIn: "buddy.google-sign-in",
 } as const;
 
 export type StorageKey = keyof typeof KEYS;
 
 export const STORAGE_KEYS: Readonly<Record<StorageKey, string>> = KEYS;
 
+const TAB_ONLY_KEYS: ReadonlySet<StorageKey> = new Set(["googleSignIn"]);
+
+function storageFor(key: StorageKey): Storage {
+  return TAB_ONLY_KEYS.has(key) ? window.sessionStorage : window.localStorage;
+}
+
 export function readFromStorage(key: StorageKey): string | null {
   try {
-    return window.localStorage.getItem(KEYS[key]);
+    return storageFor(key).getItem(KEYS[key]);
   } catch {
     return null;
   }
@@ -29,7 +41,7 @@ export function readFromStorage(key: StorageKey): string | null {
 
 export function writeToStorage(key: StorageKey, value: string): void {
   try {
-    window.localStorage.setItem(KEYS[key], value);
+    storageFor(key).setItem(KEYS[key], value);
   } catch {
     // Storage is blocked or full: the setting just won't be remembered.
   }
@@ -37,7 +49,7 @@ export function writeToStorage(key: StorageKey, value: string): void {
 
 export function removeFromStorage(key: StorageKey): void {
   try {
-    window.localStorage.removeItem(KEYS[key]);
+    storageFor(key).removeItem(KEYS[key]);
   } catch {
     // Nothing to remove when storage is blocked.
   }

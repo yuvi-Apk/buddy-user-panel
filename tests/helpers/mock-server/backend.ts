@@ -57,7 +57,6 @@ export function makeUser(overrides: Partial<SessionUser> = {}): SessionUser {
     name: "Asha Verma",
     email: "asha@example.com",
     role: "INDIVIDUAL",
-    emailVerifiedAt: "2026-01-01T00:00:00.000Z",
     examCategory: null,
     organization: null,
     pendingRequest: null,

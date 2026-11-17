@@ -10,6 +10,11 @@ export default defineConfig((configEnv) =>
       // Every vi.spyOn() and vi.stubGlobal() is undone after each test, so no test leaks into the next.
       restoreMocks: true,
       unstubGlobals: true,
+      // The same values on every machine, whatever the local env file says.
+      env: {
+        VITE_API_BASE_URL: "/api/v1",
+        VITE_GOOGLE_CLIENT_ID: "test-client.apps.googleusercontent.com",
+      },
       projects: [
         {
           extends: true,

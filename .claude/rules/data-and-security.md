@@ -54,8 +54,9 @@ Every failed call throws `ApiError` (`src/api/api-error.ts`): `status`, `kind` (
 
 ## Session
 
-- Login is email + password. The access token is kept in memory (`src/auth/session-store.ts`);
-  the refresh token is an httpOnly cookie.
+- Login is Google only, by redirect (`src/modules/auth/google-sign-in.ts`). The access token is
+  kept in memory (`src/auth/session-store.ts`); the refresh token is the httpOnly
+  `userRefreshToken` cookie, sent only to `/api/v1/user/auth`.
 - A 401 triggers one shared refresh and one retry (`api-client.ts`). If the refresh is refused,
   the person is signed out and the router sends them to `/login`.
 - Refresh runs under `navigator.locks`, and sign-in / sign-out is told to other tabs.

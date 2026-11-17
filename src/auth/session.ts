@@ -1,7 +1,8 @@
 // Starting and ending a session. Screens call these; they never touch the store directly.
 //
-//   signIn(await api.post("/user/auth/login", sessionResponseSchema, values, { requiresAuth: false }))
+//   signIn(session)                       after POST /user/auth/google (src/modules/auth/api)
 //   await signOut()
+//   await signOutEverywhere()             every device of this person (Settings)
 //   await refreshAfterMembershipChange()   request approved, Organization left, invite accepted
 //   initializeSession()                         once, in main.tsx
 //
@@ -21,7 +22,11 @@ import {
   removeFromStorage,
   writeToStorage,
 } from "@/utils/storage";
-import { AUTH_API_PATHS, refreshAccessToken } from "./session-refresh";
+import {
+  AUTH_API_PATHS,
+  refreshAccessToken,
+  requestFreshSession,
+} from "./session-refresh";
 import {
   markSignedOut,
   getAccessToken,
@@ -73,7 +78,7 @@ export function listenToOtherTabs(
 
 // ---- Sign in and sign out ----
 
-/** After a successful login or sign-up: keep the token in memory and tell the other tabs. */
+/** After a successful sign-in: keep the token in memory and tell the other tabs. */
 export function signIn(session: SessionResponse): void {
   removeFromStorage("signedOut");
   queryClient.clear();
@@ -90,9 +95,7 @@ export async function signOut(): Promise<void> {
   const accessToken = getAccessToken();
   endLocalSession();
   try {
-    await sendHttpRequest("POST", AUTH_API_PATHS.logout, z.unknown(), {
-      accessToken,
-    });
+    await postWithSessionToken(AUTH_API_PATHS.logout, accessToken);
     removeFromStorage("signedOut");
   } catch (error) {
     if (shouldRetrySignOutLater(error)) writeToStorage("signedOut", "1");
@@ -117,11 +120,45 @@ export function hasPendingSignOut(): boolean {
 export async function finishPendingSignOut(): Promise<void> {
   if (!hasPendingSignOut()) return;
   try {
-    await sendHttpRequest("POST", AUTH_API_PATHS.logout, z.unknown());
+    await postWithSessionToken(AUTH_API_PATHS.logout, null);
     removeFromStorage("signedOut");
   } catch (error) {
     if (!shouldRetrySignOutLater(error)) removeFromStorage("signedOut");
   }
+}
+
+/**
+ * Ends the session on every device of this person, this one included. Throws (and this device
+ * stays signed in) when the server can't be reached, so the screen can say so.
+ */
+export async function signOutEverywhere(): Promise<void> {
+  await postWithSessionToken(AUTH_API_PATHS.logoutAllDevices, getAccessToken());
+  removeFromStorage("signedOut");
+  endLocalSession();
+}
+
+/**
+ * POSTs to a sign-out path with the access token. The server needs a valid one, so when it is
+ * missing or expired (401) a fresh one comes from the refresh cookie, without signing in with it.
+ * When the server refuses that too, there is no session left to end: done.
+ */
+async function postWithSessionToken(
+  path: string,
+  accessToken: string | null
+): Promise<void> {
+  if (accessToken) {
+    try {
+      await sendHttpRequest("POST", path, z.unknown(), { accessToken });
+      return;
+    } catch (error) {
+      if (!isApiError(error) || error.status !== 401) throw error;
+    }
+  }
+  const session = await requestFreshSession();
+  if (!session) return;
+  await sendHttpRequest("POST", path, z.unknown(), {
+    accessToken: session.accessToken,
+  });
 }
 
 /**
