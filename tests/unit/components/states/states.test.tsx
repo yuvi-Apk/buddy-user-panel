@@ -1,9 +1,16 @@
-// ErrorState and OfflineBanner.
+// ErrorState, OfflineBanner, and EmptyState with a picture.
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { fill, getLang } from "@/lang";
-import { ErrorState, OfflineBanner } from "@/components/states";
+import {
+  ComingSoonPage,
+  EmptyState,
+  ErrorState,
+  OfflineBanner,
+  TodayIllustration,
+} from "@/components/states";
+import { renderWithProviders } from "@tests/helpers/render";
 
 const { common, feedback } = getLang();
 
@@ -50,5 +57,35 @@ describe("OfflineBanner", () => {
 
     act(() => setOnline(true));
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+});
+
+describe("EmptyState with an illustration", () => {
+  it("shows the picture instead of the icon, hidden from screen readers", () => {
+    const { container } = renderWithProviders(
+      <EmptyState
+        icon={<span data-testid="icon" />}
+        illustration={<TodayIllustration />}
+        title="Nothing planned yet"
+      />
+    );
+
+    expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+    const picture = container.querySelector('[data-slot="illustration"]');
+    expect(picture).toHaveAttribute("aria-hidden", "true");
+    // Its words are not read out: the only heading is the empty state's own.
+    expect(screen.getByRole("heading")).toHaveTextContent(
+      "Nothing planned yet"
+    );
+  });
+
+  it("passes through ComingSoonPage", () => {
+    const { container } = renderWithProviders(
+      <ComingSoonPage title="Today" illustration={<TodayIllustration />} />
+    );
+    expect(
+      container.querySelector('[data-slot="illustration"]')
+    ).toBeInTheDocument();
+    expect(screen.getByText(feedback.comingSoonTitle)).toBeVisible();
   });
 });

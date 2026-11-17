@@ -28,8 +28,9 @@ matching files. Guides for people are in `docs/`.
 - Shared components follow the shadcn/ui pattern in our own Paper & Ink look: Radix behaviour,
   `cva` with `variant` / `size` (`default` is the base), `cn` for classes, `data-slot` on parts.
   Add to `src/components/ui` only what a screen needs; form fields (`Input` on `field.tsx`) are ours.
-- A product illustration or animated demo (onboarding, empty state, feature card): `stageshow`.
-  Build it from `@/components` and `tokens.css`, not its `kit/` or `stageshow.css`; no new package.
+- Any UI picture or animated demo (coming-soon, empty state, onboarding, feature card, login
+  panel): always the `stageshow` skill. Build it from `@/components` and `tokens.css`, not its
+  `kit/` or `stageshow.css`; no new package. Rules: "Illustrations" in `design-and-components.md`.
 - Tests for code that already exists, or "is this tested?": `write-tests`.
 - Look at every component at `/dev/ui`; sign in as any role at `/dev/session` (dev builds only).
 

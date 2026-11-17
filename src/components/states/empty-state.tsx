@@ -1,9 +1,12 @@
-// What a screen shows when there is nothing yet: an icon, a title, one sentence, one action.
+// What a screen shows when there is nothing yet: an icon (or a small picture of the screen from
+// ./illustrations), a title, one sentence, one action.
 import type { ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
 export interface EmptyStateProps {
   icon?: ReactNode;
+  /** A picture of the screen, shown instead of the icon (see ./illustrations). */
+  illustration?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
   /** Usually one Button: the next step. */
@@ -15,6 +18,7 @@ export interface EmptyStateProps {
 
 export function EmptyState({
   icon,
+  illustration,
   title,
   description,
   action,
@@ -28,7 +32,9 @@ export function EmptyState({
         className
       )}
     >
-      {icon ? (
+      {illustration ? (
+        <div className="mb-2 w-full">{illustration}</div>
+      ) : icon ? (
         <div
           aria-hidden
           className={cn(

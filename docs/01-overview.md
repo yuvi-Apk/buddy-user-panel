@@ -17,20 +17,20 @@ How the app is put together, in the order things happen when someone opens it.
 
 ## The pieces
 
-| Piece        | Where                       | Job                                                                       |
-| ------------ | --------------------------- | ------------------------------------------------------------------------- |
-| Router       | `src/app/router.ts`         | Collects every module's routes into one tree with two layouts             |
-| Shell layout | `src/app/layouts`           | Signed-in screens: top bar and bottom tabs on phones, sidebar from 1024px |
-| Focus layout | `src/app/layouts`           | Login, sign-up, invite links, 404: one calm centered column               |
-| Modules      | `src/modules/<name>`        | One feature each: routes, pages, components, API hooks                    |
-| Page route   | `src/routing`               | `createPageRoute`: access check, lazy loading, title                      |
-| Navigation   | `src/config/navigation.ts`  | The menu of each role                                                     |
-| Session      | `src/auth`                  | Who is signed in; sign-in, sign-out, refresh, sync across tabs            |
-| API client   | `src/api`                   | The only `fetch`; checks every response; one error shape                  |
-| Server data  | TanStack Query              | Caching, retries, refresh when you come back to the tab                   |
-| Text         | `src/lang`                  | Every sentence on screen, typed from `en.json`                            |
-| Theme        | `src/theme`, `src/styles`   | Four themes × light / dark / system, all from `tokens.css`                |
-| PWA          | `src/pwa`, `tooling/pwa.ts` | Installable; asks before updating; caches static files only               |
+| Piece        | Where                       | Job                                                                                                           |
+| ------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Router       | `src/app/router.ts`         | Collects every module's routes into one tree with two layouts                                                 |
+| Shell layout | `src/app/layouts`           | Signed-in screens: top bar (light / dark, avatar menu) everywhere; bottom tabs on phones, sidebar from 1024px |
+| Focus layout | `src/app/layouts`           | Login, sign-up, invite links, 404: one calm centered column                                                   |
+| Modules      | `src/modules/<name>`        | One feature each: routes, pages, components, API hooks                                                        |
+| Page route   | `src/routing`               | `createPageRoute`: access check, lazy loading, title                                                          |
+| Navigation   | `src/config/navigation.ts`  | The menu of each role                                                                                         |
+| Session      | `src/auth`                  | Who is signed in; sign-in, sign-out, refresh, sync across tabs                                                |
+| API client   | `src/api`                   | The only `fetch`; checks every response; one error shape                                                      |
+| Server data  | TanStack Query              | Caching, retries, refresh when you come back to the tab                                                       |
+| Text         | `src/lang`                  | Every sentence on screen, typed from `en.json`                                                                |
+| Theme        | `src/theme`, `src/styles`   | Four themes × light / dark / system, all from `tokens.css`                                                    |
+| PWA          | `src/pwa`, `tooling/pwa.ts` | Installable; asks before updating; caches static files only                                                   |
 
 ## Who may import what
 

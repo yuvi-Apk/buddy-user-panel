@@ -3,5 +3,6 @@
 export * from "./coming-soon";
 export * from "./empty-state";
 export * from "./error-state";
+export * from "./illustrations";
 export * from "./loading-state";
 export * from "./offline-banner";

@@ -2,11 +2,19 @@
 import { BookOpen, CircleCheck, Flame, Sprout } from "lucide-react";
 import { useState } from "react";
 import {
+  AskIllustration,
   ComingSoon,
+  DashboardIllustration,
   EmptyState,
   ErrorState,
   LoadingState,
   OfflineBanner,
+  PeopleIllustration,
+  PlanIllustration,
+  ProfileIllustration,
+  JoinIllustration,
+  TodayIllustration,
+  TopicsIllustration,
 } from "@/components/states";
 import { Grid, Inline, Stack } from "@/components/layout";
 import {
@@ -193,6 +201,24 @@ export function GalleryFeedback() {
         <Card>
           <ComingSoon />
         </Card>
+      </Grid>
+
+      {/* The pictures for coming-soon and empty states (src/components/states/illustrations.tsx). */}
+      <Grid columns={{ base: 1, md: 2 }}>
+        {[
+          <TodayIllustration key="today" />,
+          <PlanIllustration key="plan" />,
+          <TopicsIllustration key="topics" />,
+          <AskIllustration key="ask" />,
+          <DashboardIllustration key="dashboard" />,
+          <PeopleIllustration key="people" />,
+          <ProfileIllustration key="profile" />,
+          <JoinIllustration key="join" />,
+        ].map((picture) => (
+          <Card key={picture.key} className="py-6">
+            {picture}
+          </Card>
+        ))}
       </Grid>
 
       <p className="text-sm text-muted-foreground">

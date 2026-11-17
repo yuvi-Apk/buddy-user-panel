@@ -28,6 +28,33 @@
     "comingSoonTitle": "Coming soon",
     "comingSoonBody": "We're building this screen. Check back soon."
   },
+  "illustrations": {
+    "today": "Today",
+    "progress": "Today's progress",
+    "onTrack": "You're on track",
+    "doneTopic": "Linear equations",
+    "nextTopic": "Photosynthesis",
+    "upNext": "Up next",
+    "practiceTopic": "Fractions",
+    "thisWeek": "This week",
+    "examIn": "Exam in 24 days",
+    "yourTopics": "Your topics",
+    "ask": "Ask a doubt",
+    "question": "Why are leaves green?",
+    "answered": "Answered in seconds",
+    "className": "Class 8A",
+    "averageProgress": "Average progress",
+    "averageValue": "72%",
+    "students": "32 students",
+    "personOne": "Asha Rao",
+    "personTwo": "Ravi Kumar",
+    "newRequest": "New request to join",
+    "strongTopics": "12 topics strong",
+    "joinTitle": "Join an Organization",
+    "codeLabel": "Organization code",
+    "codeValue": "AB12CD",
+    "requestSent": "Request sent"
+  },
   "theme": {
     "title": "Appearance",
     "description": "Pick the look that feels right for long study sessions.",
@@ -59,7 +86,9 @@
         "mood": "Minimal",
         "description": "Quiet and clean. Color appears only when it means something."
       }
-    }
+    },
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode"
   },
   "nav": {
     "main": "Main menu",
@@ -78,7 +107,13 @@
     "invites": "Invites",
     "organizationSettings": "Organization settings",
     "more": "More",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "accountMenu": "Your account",
+    "sectionMain": "Menu"
+  },
+  "footer": {
+    "tagline": "Made for learners: one calm step a day.",
+    "copyright": "© {year} {appName}"
   },
   "pages": {
     "login": "Log in",

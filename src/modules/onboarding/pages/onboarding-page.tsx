@@ -2,13 +2,17 @@
 // their school or coaching. "With my school or coaching" goes to /join, which only sends a
 // request: the person stays INDIVIDUAL until the Organization accepts (core-rules #11).
 // The exam category step comes here once the backend can save it.
-import { Building, Mail, UserRound } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Page, PageHeader } from "@/components/layout";
 import { Button, ChoiceCardGroup } from "@/components/ui";
 import { getHomePathForRole } from "@/config/navigation";
 import { useLang } from "@/lang";
+import {
+  OnMyOwnPicture,
+  WithOrganizationPicture,
+} from "../components/choice-pictures";
 
 type StudyChoice = "on-my-own" | "with-organization";
 
@@ -24,13 +28,13 @@ export function OnboardingPage() {
       value: "on-my-own",
       title: lang.onboarding.onMyOwnTitle,
       description: lang.onboarding.onMyOwnBody,
-      media: <UserRound className="size-6 text-primary" />,
+      media: <OnMyOwnPicture />,
     },
     {
       value: "with-organization",
       title: lang.onboarding.withOrganizationTitle,
       description: lang.onboarding.withOrganizationBody,
-      media: <Building className="size-6 text-primary" />,
+      media: <WithOrganizationPicture />,
     },
   ];
 

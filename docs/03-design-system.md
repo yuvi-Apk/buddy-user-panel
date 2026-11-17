@@ -46,13 +46,13 @@ each in light, dark or "follow my phone". A theme changes only the `primary` fam
 
 ## Shape and size
 
-| Thing    | Values                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------- |
-| Corners  | `rounded-sm` 2px, `rounded-control` 4px, `rounded-card` 6px, `rounded-sheet` 12px, `rounded-full` |
-| Controls | `sm` 36px (44px on touch screens), `default` 44px, `lg` 52px                                      |
-| Fonts    | Lexend for headings, Atkinson Hyperlegible Next for text, both served by the app                  |
-| Text     | 16px; never smaller than 14px                                                                     |
-| Layout   | Under 1024px: top bar and bottom tabs. From 1024px: sidebar                                       |
+| Thing    | Values                                                                                                 |
+| -------- | ------------------------------------------------------------------------------------------------------ |
+| Corners  | `rounded-sm` 2px, `rounded-control` 4px, `rounded-card` 6px, `rounded-sheet` 12px, `rounded-full`      |
+| Controls | `sm` 36px (44px on touch screens), `default` 44px, `lg` 52px                                           |
+| Fonts    | Lexend for headings, Atkinson Hyperlegible Next for text, both served by the app                       |
+| Text     | 16px; never smaller than 14px                                                                          |
+| Layout   | Top bar everywhere (light / dark switch, avatar menu). Under 1024px: bottom tabs. From 1024px: sidebar |
 
 ## Components
 

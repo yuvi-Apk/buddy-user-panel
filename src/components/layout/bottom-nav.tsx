@@ -1,5 +1,6 @@
 // The tab bar on phones and tablets (under lg): the role's main tabs, then "More" when the role
 // has more items. "More" opens a bottom sheet with the rest, who is signed in, and Sign out.
+// The selected tab's pill is one shared part that slides to the tab, instead of popping.
 import { Ellipsis, LogOut } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { NavLink, useLocation } from "react-router";
@@ -23,33 +24,30 @@ export interface BottomNavProps {
   className?: string;
 }
 
+// The icon sits 6px from the tab's top, so the sliding pill (top-2.5 = 4px bar padding + 6px)
+// lines up with it.
 function getTabClasses(isActive: boolean): string {
   return cn(
-    "flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-1 text-sm font-semibold transition-colors duration-150",
-    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+    "relative flex min-h-14 flex-1 flex-col items-center justify-start gap-0.5 rounded-control px-1 pt-1.5 text-sm font-semibold transition-colors duration-200",
+    isActive
+      ? "text-primary-soft-foreground"
+      : "text-muted-foreground hover:text-foreground"
   );
 }
 
-/** The icon of a tab. The selected tab also gets a tinted pill, so it is not shown by color alone. */
-function TabIcon({
-  active,
-  children,
-}: {
-  active: boolean;
-  children: ReactNode;
-}) {
+function TabIcon({ children }: { children: ReactNode }) {
   return (
     <span
       aria-hidden
-      className={cn(
-        "flex h-7 w-12 items-center justify-center rounded-full transition-colors duration-150 [&_svg]:size-6",
-        active && "bg-primary-soft text-primary-soft-foreground"
-      )}
+      className="flex h-7 w-12 items-center justify-center [&_svg]:size-6"
     >
       {children}
     </span>
   );
 }
+
+const isPathActive = (pathname: string, path: string) =>
+  pathname === path || pathname.startsWith(`${path}/`);
 
 export function BottomNav({
   navigation,
@@ -60,41 +58,59 @@ export function BottomNav({
   const lang = useLang();
   const { pathname } = useLocation();
   const [moreOpen, setMoreOpen] = useState(false);
-  const moreActive = navigation.more.some(
-    (item) => pathname === item.path || pathname.startsWith(`${item.path}/`)
+  const moreActive = navigation.more.some((item) =>
+    isPathActive(pathname, item.path)
   );
+  const hasMore = navigation.more.length > 0;
+  const slotCount = navigation.tabs.length + (hasMore ? 1 : 0);
+  const tabIndex = navigation.tabs.findIndex((item) =>
+    isPathActive(pathname, item.path)
+  );
+  const activeIndex =
+    tabIndex >= 0 ? tabIndex : moreActive ? slotCount - 1 : -1;
 
   return (
     <nav
       aria-label={lang.nav.main}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card pb-[env(safe-area-inset-bottom)] lg:hidden",
+        "fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden",
         className
       )}
     >
-      <ul className="mx-auto flex max-w-content items-stretch gap-1 px-2 py-1">
+      <ul className="relative mx-auto flex max-w-content items-stretch px-2 py-1">
+        {/* The selected tab's pill: one part that slides between the tabs. Besides the color,
+            it marks the tab by shape; the link also has aria-current="page". */}
+        <li
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute start-2 top-2.5 flex justify-center transition-[translate,opacity] duration-250 ease-out motion-reduce:transition-none",
+            activeIndex < 0 && "opacity-0"
+          )}
+          style={{
+            width: `calc((100% - 1rem) / ${String(slotCount)})`,
+            translate: `${String(Math.max(activeIndex, 0) * 100)}% 0`,
+          }}
+        >
+          <span className="h-7 w-12 rounded-full bg-primary-soft" />
+        </li>
         {navigation.tabs.map(({ path, labelKey, icon: Icon }) => (
           <li key={path} className="flex flex-1">
             <NavLink
               to={path}
               className={({ isActive }) => getTabClasses(isActive)}
             >
-              {({ isActive }) => (
-                <>
-                  <TabIcon active={isActive}>
-                    <Icon />
-                  </TabIcon>
-                  {textAt(lang, labelKey)}
-                </>
-              )}
+              <TabIcon>
+                <Icon />
+              </TabIcon>
+              {textAt(lang, labelKey)}
             </NavLink>
           </li>
         ))}
-        {navigation.more.length > 0 ? (
+        {hasMore ? (
           <li className="flex flex-1">
             <ResponsiveDialog open={moreOpen} onOpenChange={setMoreOpen}>
               <ResponsiveDialogTrigger className={getTabClasses(moreActive)}>
-                <TabIcon active={moreActive}>
+                <TabIcon>
                   <Ellipsis />
                 </TabIcon>
                 {lang.nav.more}

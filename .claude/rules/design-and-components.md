@@ -77,6 +77,19 @@ variants, `cn`, `data-slot`), but the look is ours: it must not look like stock 
   on touch screens. `IconButton` needs a `label`.
 - Data screens show `LoadingState` / skeletons, `EmptyState`, `ErrorState` and the offline banner.
 
+## Illustrations
+
+- Any picture of the product (a coming-soon or empty state, an onboarding choice, a feature card,
+  a login or marketing panel) is built with the `stageshow` skill: one window or card, cropped
+  with intent, real words only on what the picture is about, grey lines for the rest.
+- Build it from `@/components` and tokens, never the skill's `kit/` or `stageshow.css`, and no
+  new package. No image, SVG or font from another site.
+- It is decorative: `aria-hidden`, and it says nothing the page doesn't. Its words are in
+  `en.json` like all text. Motion runs once, follows the motion rules above, and stops under
+  `prefers-reduced-motion`: the still frame tells the story on its own.
+- Shared pictures live in `src/components/states/illustrations.tsx` and plug into `EmptyState` /
+  `ComingSoonPage` through `illustration`. A picture used by one module lives in its `components/`.
+
 ## Text
 
 - All screen text is in `src/lang/en.json`, grouped by screen, camelCase keys.

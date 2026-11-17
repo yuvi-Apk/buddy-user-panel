@@ -1,18 +1,21 @@
 // The frame around every signed-in screen:
 //   phones and tablets (under lg)   top bar + content + bottom tab bar
-//   laptops (lg and up)             sidebar + content
-// Plus the skip link and the offline banner. The menus come from src/config/navigation.ts.
+//   laptops (lg and up)             sidebar + top bar + content
+// The top bar always has the light / dark switch and the avatar menu. Plus the skip link and the
+// offline banner. The menus come from src/config/navigation.ts.
 //
 // FocusShell is the calm frame for everything else (login, invite links, 404): the name of the
-// app and the content, nothing to wander off to.
+// app, the light / dark switch, the content and a small footer, nothing to wander off to.
 import type { ReactNode } from "react";
 import { OfflineBanner } from "@/components/states";
 import { NAVIGATION_BY_ROLE } from "@/config/navigation";
 import type { SessionUser } from "@/auth/session-store";
+import { AppFooter } from "./app-footer";
 import { BottomNav } from "./bottom-nav";
 import { BrandMark } from "./brand-mark";
 import { SideNav } from "./side-nav";
 import { MAIN_CONTENT_ID, SkipLink } from "./skip-link";
+import { ThemeToggle } from "./theme-toggle";
 import { TopBar } from "./top-bar";
 
 export interface AppShellProps {
@@ -29,8 +32,8 @@ export function AppShell({ user, onSignOut, children }: AppShellProps) {
       <SkipLink />
       <SideNav navigation={navigation} user={user} onSignOut={onSignOut} />
       <div className="flex min-h-dvh flex-col lg:ps-64">
-        <TopBar />
-        <OfflineBanner className="sticky top-14 z-20 lg:top-0" />
+        <TopBar user={user} onSignOut={onSignOut} />
+        <OfflineBanner className="sticky top-14 z-20 lg:top-16" />
         <main
           id={MAIN_CONTENT_ID}
           tabIndex={-1}
@@ -48,17 +51,15 @@ export function FocusShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col bg-background">
       <SkipLink />
-      <header className="flex min-h-14 items-center px-4 pt-[env(safe-area-inset-top)] md:px-6 lg:px-8">
+      <header className="flex min-h-14 items-center justify-between gap-3 px-4 pt-[env(safe-area-inset-top)] md:px-6 lg:px-8">
         <BrandMark />
+        <ThemeToggle />
       </header>
       <OfflineBanner />
-      <main
-        id={MAIN_CONTENT_ID}
-        tabIndex={-1}
-        className="flex-1 pb-[env(safe-area-inset-bottom)] outline-none"
-      >
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="flex-1 outline-none">
         {children}
       </main>
+      <AppFooter className="pb-[calc(1.25rem+env(safe-area-inset-bottom))]" />
     </div>
   );
 }

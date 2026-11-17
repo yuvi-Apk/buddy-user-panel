@@ -1,4 +1,5 @@
-// The sidebar on laptops (lg and up): every menu item of the role, then who is signed in.
+// The sidebar on laptops (lg and up): every menu item of the role in two labelled groups, then who
+// is signed in, Sign out and the footer.
 import { LogOut } from "lucide-react";
 import { NavLink } from "react-router";
 import { Button, Divider } from "@/components/ui";
@@ -7,6 +8,7 @@ import { textAt, useLang } from "@/lang";
 import type { SessionUser } from "@/auth/session-store";
 import { cn } from "@/utils/cn";
 import { AccountSummary } from "./account-summary";
+import { AppFooter } from "./app-footer";
 import { BrandMark } from "./brand-mark";
 import { getNavItemClasses } from "./nav-styles";
 
@@ -37,10 +39,12 @@ export function SideNav({
         aria-label={lang.nav.main}
         className="flex flex-1 flex-col gap-1 overflow-y-auto"
       >
+        <NavHeading>{lang.nav.sectionMain}</NavHeading>
         <NavList items={navigation.tabs} />
         {navigation.more.length > 0 ? (
           <>
             <Divider className="my-2" />
+            <NavHeading>{lang.nav.more}</NavHeading>
             <NavList items={navigation.more} />
           </>
         ) : null}
@@ -56,8 +60,21 @@ export function SideNav({
           <LogOut aria-hidden />
           {lang.nav.signOut}
         </Button>
+        <AppFooter variant="compact" />
       </div>
     </aside>
+  );
+}
+
+/** A small label above a group of menu items. Decorative: the links carry their own names. */
+function NavHeading({ children }: { children: string }) {
+  return (
+    <span
+      aria-hidden
+      className="px-3 pt-1 pb-1 text-sm font-semibold text-muted-foreground"
+    >
+      {children}
+    </span>
   );
 }
 

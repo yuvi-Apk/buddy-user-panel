@@ -8,6 +8,7 @@ export * from "./card";
 export * from "./checkbox";
 export * from "./choice-card-group";
 export * from "./divider";
+export * from "./dropdown-menu";
 export * from "./field";
 export * from "./form";
 export * from "./progress-ring";

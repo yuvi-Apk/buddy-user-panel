@@ -16,8 +16,13 @@ const lang = getLang();
 
 async function confirmSignOutEverywhere() {
   const user = userEvent.setup();
+  // The settings page loads its code first: slower than one second on a busy run.
   await user.click(
-    await screen.findByRole("button", { name: lang.account.signOutEverywhere })
+    await screen.findByRole(
+      "button",
+      { name: lang.account.signOutEverywhere },
+      { timeout: 3000 }
+    )
   );
   const dialog = await screen.findByRole("dialog");
   await user.click(
