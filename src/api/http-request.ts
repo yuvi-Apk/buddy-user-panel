@@ -16,7 +16,7 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type QueryParamValue = string | number | boolean | null | undefined;
 
 export interface HttpRequestOptions {
-  /** Sent as JSON. */
+  /** Sent as JSON, or as multipart form data when it is a FormData (a file upload). */
   body?: unknown;
   /** Added to the URL; null and undefined values are left out. */
   query?: Record<string, QueryParamValue>;
@@ -46,6 +46,22 @@ export function buildApiUrl(
   return `${env.apiBaseUrl}${path}${search}`;
 }
 
+/** Where the backend serves the images it stored (backend PUBLIC_IMAGES_URL). */
+const OWN_IMAGES_PATH = "/images/";
+
+/**
+ * An image URL the app may show: only images stored by our backend ("/images/profile/x.webp"),
+ * on the API's site. Anything else (a Google photo, null) gives undefined, so the caller shows
+ * its fallback: nothing is loaded from another site (core-rules #8).
+ *   <Avatar name={user.name} src={getOwnImageUrl(user.avatarUrl)} />
+ */
+export function getOwnImageUrl(path: string | null): string | undefined {
+  if (!path?.startsWith(OWN_IMAGES_PATH)) return undefined;
+  return env.apiBaseUrl.startsWith("http")
+    ? new URL(path, env.apiBaseUrl).href
+    : path;
+}
+
 export async function sendHttpRequest<Schema extends z.ZodType>(
   method: HttpMethod,
   path: string,
@@ -60,8 +76,10 @@ export async function sendHttpRequest<Schema extends z.ZodType>(
     options.signal,
     options.timeoutMs
   );
+  // FormData sets its own multipart Content-Type (with the boundary) when the browser sends it.
+  const isFormData = options.body instanceof FormData;
   const headers = new Headers({ Accept: "application/json" });
-  if (options.body !== undefined)
+  if (options.body !== undefined && !isFormData)
     headers.set("Content-Type", "application/json");
   if (options.accessToken)
     headers.set("Authorization", `Bearer ${options.accessToken}`);
@@ -73,8 +91,7 @@ export async function sendHttpRequest<Schema extends z.ZodType>(
     response = await fetch(url, {
       method,
       headers,
-      body:
-        options.body === undefined ? undefined : JSON.stringify(options.body),
+      body: getRequestBody(options.body),
       // The refresh cookie must travel with auth calls, also when the API is on another subdomain.
       credentials: "include",
       signal,
@@ -96,6 +113,12 @@ export async function sendHttpRequest<Schema extends z.ZodType>(
   } finally {
     cancel();
   }
+}
+
+function getRequestBody(body: unknown): BodyInit | undefined {
+  if (body === undefined) return undefined;
+  if (body instanceof FormData) return body;
+  return JSON.stringify(body);
 }
 
 async function parseApiResponse<Schema extends z.ZodType>(

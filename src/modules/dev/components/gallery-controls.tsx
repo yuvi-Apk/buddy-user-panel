@@ -1,6 +1,6 @@
 // Buttons, fields, choices and a working form, in every variant.
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Plus, Settings, Trash2 } from "lucide-react";
+import { ArrowRight, ImageUp, Plus, Settings, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import {
   IconButton,
   Checkbox,
   ChoiceCardGroup,
+  FileButton,
   Form,
   SubmitButton,
   RadioGroup,
@@ -55,6 +56,19 @@ export function GalleryButtons() {
         <Button disabled>Disabled</Button>
         <IconButton label="Settings" icon={<Settings />} />
         <IconButton label="Delete" variant="destructive" icon={<Trash2 />} />
+      </Inline>
+      <Inline gap={2}>
+        <FileButton
+          variant="outline"
+          accept="image/jpeg,image/png,image/webp"
+          onFileSelect={(file) => toast({ title: `Picked ${file.name}` })}
+        >
+          <ImageUp aria-hidden />
+          FileButton
+        </FileButton>
+        <FileButton variant="outline" loading onFileSelect={() => undefined}>
+          Uploading
+        </FileButton>
       </Inline>
       <Button fullWidth size="lg">
         Full width (phones)

@@ -2,6 +2,7 @@
 //   <AccountMenu user={user} onSignOut={signOut} />
 import { CircleUser, LogOut, Settings } from "lucide-react";
 import { Link } from "react-router";
+import { getOwnImageUrl } from "@/api/http-request";
 import {
   Avatar,
   DropdownMenu,
@@ -34,7 +35,11 @@ export function AccountMenu({ user, onSignOut, className }: AccountMenuProps) {
           className
         )}
       >
-        <Avatar name={user.name} size="sm" />
+        <Avatar
+          name={user.name}
+          src={getOwnImageUrl(user.avatarUrl)}
+          size="sm"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>

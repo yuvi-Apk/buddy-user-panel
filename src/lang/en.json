@@ -204,5 +204,26 @@
     "signOutEverywhere": "Sign out of all devices",
     "signOutEverywhereBody": "Use this if you signed in on a shared or lost phone or computer. You'll need to log in again everywhere, this device too.",
     "signOutEverywhereConfirm": "Sign out everywhere"
+  },
+  "profile": {
+    "description": "How you appear in Buddy.",
+    "photoTitle": "Photo",
+    "photoDescription": "Shown on your account, and to your class when you study with an Organization.",
+    "changePhoto": "Change photo",
+    "removePhoto": "Remove photo",
+    "photoHint": "JPEG, PNG or WebP, up to 5 MB.",
+    "photoWrongType": "Choose a JPEG, PNG or WebP image.",
+    "photoTooBig": "This photo is over 5 MB. Choose a smaller one.",
+    "photoUpdated": "Photo updated",
+    "photoRemoved": "Photo removed",
+    "detailsTitle": "Your details",
+    "detailsDescription": "Your name as others see it. Your email comes from Google.",
+    "nameLabel": "Your name",
+    "nameRequired": "Enter your name.",
+    "nameTooLong": "Use {max} characters or fewer.",
+    "emailLabel": "Email",
+    "emailHint": "Your Google account's email. It can't be changed here.",
+    "save": "Save",
+    "nameSaved": "Name saved"
   }
 }

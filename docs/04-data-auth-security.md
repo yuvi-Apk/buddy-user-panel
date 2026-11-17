@@ -99,18 +99,19 @@ After the person's membership changes (request approved, left, invite accepted) 
 
 ## Security rules
 
-| Area            | Rule                                                                                          |
-| --------------- | --------------------------------------------------------------------------------------------- |
-| Access          | The backend decides. A role in the app only hides or shows screens                            |
-| Browser storage | Only through `src/utils/storage.ts`, only its listed keys. Never a token or personal data     |
-| HTML            | No `dangerouslySetInnerHTML`, no `eval`. AI and markdown text renders without raw HTML        |
-| Redirects       | `?redirect=` accepts only paths on this site (`getSafeRedirectPath`)                          |
-| Other sites     | No script, font, CDN, analytics or tracker from another site                                  |
-| Headers         | A strict Content-Security-Policy and friends, built in `tooling/security-headers.ts`          |
-| Service worker  | Stores only the app's own static files. Never an `/api` answer                                |
-| Secret links    | Invite tokens and Google's ID token are read once, removed from the address bar, never logged |
-| Logs            | Through `src/utils/logger.ts`; never a token, email, name or answer                           |
-| Login screens   | One message for a wrong email or a wrong password. Password managers must work                |
+| Area            | Rule                                                                                                                                                                    |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Access          | The backend decides. A role in the app only hides or shows screens                                                                                                      |
+| Browser storage | Only through `src/utils/storage.ts`, only its listed keys. Never a token or personal data                                                                               |
+| HTML            | No `dangerouslySetInnerHTML`, no `eval`. AI and markdown text renders without raw HTML                                                                                  |
+| Redirects       | `?redirect=` accepts only paths on this site (`getSafeRedirectPath`)                                                                                                    |
+| Other sites     | No script, font, CDN, analytics or tracker from another site                                                                                                            |
+| Images          | Only photos our backend stored (`/images/…`, through `getOwnImageUrl`); a Google photo shows initials. `/images` must reach the backend like `/api` (Vite proxies both) |
+| Headers         | A strict Content-Security-Policy and friends, built in `tooling/security-headers.ts`                                                                                    |
+| Service worker  | Stores only the app's own static files. Never an `/api` answer                                                                                                          |
+| Secret links    | Invite tokens and Google's ID token are read once, removed from the address bar, never logged                                                                           |
+| Logs            | Through `src/utils/logger.ts`; never a token, email, name or answer                                                                                                     |
+| Login screens   | One message for a wrong email or a wrong password. Password managers must work                                                                                          |
 
 ESLint and `tests/project-rules/` enforce most of these.
 

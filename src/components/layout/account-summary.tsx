@@ -1,4 +1,5 @@
 // Who is signed in: picture or initials, name, and role. Shown in the sidebar and the "More" sheet.
+import { getOwnImageUrl } from "@/api/http-request";
 import { Avatar } from "@/components/ui";
 import { ROLE_LABEL_KEYS } from "@/config/navigation";
 import { textAt, useLang } from "@/lang";
@@ -18,7 +19,7 @@ export function AccountSummary({
 
   return (
     <div className={cn("flex min-w-0 items-center gap-3", className)}>
-      <Avatar name={user.name} size="sm" />
+      <Avatar name={user.name} src={getOwnImageUrl(user.avatarUrl)} size="sm" />
       <div className="flex min-w-0 flex-col">
         <span className="truncate font-semibold">{user.name}</span>
         <span className="truncate text-sm text-muted-foreground">

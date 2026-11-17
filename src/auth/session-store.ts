@@ -40,6 +40,8 @@ export const sessionUserSchema = z.object({
   role: userRoleSchema.default("INDIVIDUAL"),
   /** null until the person has set up their studies (onboarding). */
   examCategory: z.string().nullable(),
+  /** "/images/profile/…" once they upload a photo; Google's photo URL before that (not shown). */
+  avatarUrl: z.string().nullable().default(null),
   organization: sessionOrganizationSchema.nullable().default(null),
   pendingRequest: pendingRequestSchema.nullable().default(null),
 });
@@ -88,6 +90,13 @@ export function getAccessToken(): string | null {
 
 export function markSignedIn(accessToken: string, user: SessionUser): void {
   sessionStore.setState({ status: "signed-in", accessToken, user }, true);
+}
+
+/** The person changed their own details (name, photo): show them everywhere at once. */
+export function updateSessionUser(user: SessionUser): void {
+  const session = sessionStore.getState();
+  if (session.status !== "signed-in") return;
+  sessionStore.setState({ ...session, user }, true);
 }
 
 /** Forgets the person in this tab. Use signOut() (session.ts) to end the session everywhere. */

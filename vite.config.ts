@@ -48,7 +48,11 @@ export function createViteConfig({ mode }: ConfigEnv): UserConfig {
   const apiOrigin = apiBaseUrl.startsWith("http")
     ? new URL(apiBaseUrl).origin
     : undefined;
-  const proxy = { "/api": { target: proxyTarget, changeOrigin: false } };
+  // /images: the photos the backend stores (served next to the API, outside /api).
+  const proxy = {
+    "/api": { target: proxyTarget, changeOrigin: false },
+    "/images": { target: proxyTarget, changeOrigin: false },
+  };
 
   return {
     plugins: [
