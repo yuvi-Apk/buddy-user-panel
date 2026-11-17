@@ -31,6 +31,7 @@ export function AccountSettings() {
 
   return (
     <Section
+      variant="split"
       title={lang.account.title}
       description={lang.account.description}
     >

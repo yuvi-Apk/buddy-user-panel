@@ -10,9 +10,13 @@ export function SettingsPage() {
   const lang = useLang();
 
   return (
-    <Page width="reading">
+    <Page>
       <PageHeader title={lang.nav.settings} />
-      <Section title={lang.theme.title} description={lang.theme.description}>
+      <Section
+        variant="split"
+        title={lang.theme.title}
+        description={lang.theme.description}
+      >
         <Card>
           <CardContent>
             <AppearanceSettings />

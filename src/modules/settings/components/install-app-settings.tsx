@@ -14,7 +14,11 @@ export function InstallAppSettings() {
   if (status === "unavailable") return null;
 
   return (
-    <Section title={lang.pwa.installTitle} description={lang.pwa.installBody}>
+    <Section
+      variant="split"
+      title={lang.pwa.installTitle}
+      description={lang.pwa.installBody}
+    >
       <Card>
         <CardContent className="flex flex-col items-start gap-3">
           {status === "available" ? (

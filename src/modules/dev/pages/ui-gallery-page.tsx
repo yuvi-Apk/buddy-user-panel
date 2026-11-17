@@ -21,7 +21,11 @@ export function UiGalleryPage() {
         title="UI gallery"
         description="Every shared component in every variant. Switch the theme and the mode to check them all."
       />
-      <Section title="Appearance">
+      <Section
+        variant="split"
+        title="Appearance"
+        description='Section variant="split": the heading beside the content on laptops, as in Settings.'
+      >
         <Card>
           <CardContent>
             <AppearanceSettings />
